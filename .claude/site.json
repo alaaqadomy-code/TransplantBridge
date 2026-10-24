@@ -4,5 +4,19 @@
   "domain": null,
   "hosting": null,
   "gscProperty": null,
-  "created": "2026-10-24"
+  "created": "2026-10-24",
+  "scope": "زراعة الكلى وزراعة الكبد في تركيا — عربي فقط",
+  "language": "ar",
+  "stack": "Astro 7 + Tailwind 3 (RTL)",
+  "audience": [
+    "JO",
+    "SA",
+    "AE",
+    "EG",
+    "KW",
+    "QA",
+    "IQ"
+  ],
+  "research": "TransplantBridge-Keyword-Research/ (2026-10-24)",
+  "updated": "2026-10-24"
 }
