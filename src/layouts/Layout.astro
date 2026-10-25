@@ -13,11 +13,9 @@ interface Props {
   path: string;
   jsonLd?: string;
   noindex?: boolean;
-  /** ترويسة شفافة فوق قسم بطل داكن، تتحوّل إلى صلبة عند التمرير */
-  darkHeader?: boolean;
 }
 
-const { title, description, path, jsonLd, noindex, darkHeader = false } = Astro.props;
+const { title, description, path, jsonLd, noindex } = Astro.props;
 ---
 
 <!doctype html>
@@ -29,12 +27,24 @@ const { title, description, path, jsonLd, noindex, darkHeader = false } = Astro.
   </head>
 
   <body class="min-h-screen">
+    <!--
+      خلفية واحدة متصلة خلف الموقع كله: ثابتة (fixed) فلا تنقطع بين الأقسام
+      ولا بين الصفحات. تدرّج داكن + شبكة + توهّجات + حُبيبات — كلها CSS، صفر صور.
+    -->
+    <div class="pointer-events-none fixed inset-0 -z-10 bg-deep-900 bg-grain" aria-hidden="true">
+      <div class="absolute inset-0 bg-grid"></div>
+      <div class="absolute -right-48 -top-48 h-[44rem] w-[44rem] rounded-full bg-shifa-500/18 blur-[140px] animate-breathe"></div>
+      <div class="absolute -left-56 top-1/3 h-[34rem] w-[34rem] rounded-full bg-amal/[.07] blur-[130px] animate-drift"></div>
+      <div class="absolute bottom-0 left-1/4 h-[26rem] w-[38rem] rounded-full bg-shifa-400/10 blur-[120px] animate-drift" style="animation-delay:-8s"></div>
+    </div>
+
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-shifa-700 focus:px-5 focus:py-3 focus:text-white"
-    >تخطَّ إلى المحتوى</a>
+      class="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-shifa-400 focus:px-5 focus:py-3 focus:font-display focus:font-semibold focus:text-deep-950"
+      >تخطَّ إلى المحتوى</a
+    >
 
-    <Header dark={darkHeader} />
+    <Header />
 
     <main id="main">
       <slot />
@@ -44,8 +54,8 @@ const { title, description, path, jsonLd, noindex, darkHeader = false } = Astro.
     <WhatsAppButton />
 
     <script is:inline>
-      /* الظهور التدريجي عند التمرير — transform/opacity فقط، وبلا JS يبقى المحتوى ظاهراً.
-         يحترم prefers-reduced-motion عبر CSS. */
+      /* الظهور التدريجي عند التمرير — transform/opacity فقط.
+         بلا JavaScript يبقى كل المحتوى ظاهراً. يحترم prefers-reduced-motion عبر CSS. */
       (() => {
         const els = document.querySelectorAll("[data-reveal]");
         if (!els.length) return;

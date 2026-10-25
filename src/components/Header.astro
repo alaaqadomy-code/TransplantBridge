@@ -1,23 +1,13 @@
 ---
 import { SITE, NAV, WHATSAPP } from "../lib/site";
 
-interface Props {
-  /** شفافة فوق بطل داكن، تصير صلبة عند التمرير */
-  dark?: boolean;
-}
-const { dark = false } = Astro.props;
-
 const path = Astro.url.pathname.replace(/\.html$/, "") || "/";
 const isActive = (href: string) => path === href || path.startsWith(href + "/");
 ---
 
 <header
   id="siteHeader"
-  data-dark={dark ? "true" : "false"}
-  class:list={[
-    "fixed inset-x-0 top-0 z-40 transition-all duration-500",
-    dark ? "bg-transparent" : "border-b border-ink-200/50 bg-paper/85 backdrop-blur-md",
-  ]}
+  class="fixed inset-x-0 top-0 z-40 border-b border-transparent transition-all duration-500"
 >
   <div class="wrap flex h-[4.75rem] items-center justify-between gap-4">
     <!-- الشعار -->
@@ -29,8 +19,8 @@ const isActive = (href: string) => path === href || path.startsWith(href + "/");
         </svg>
       </span>
       <span class="flex flex-col leading-none">
-        <span class="hdr-brand font-display text-[1.0625rem] font-bold tracking-tightest">{SITE.name}</span>
-        <span class="hdr-sub mt-1 text-[0.6875rem]">{SITE.tagline}</span>
+        <span class="font-display text-[1.0625rem] font-bold tracking-tightest text-white">{SITE.name}</span>
+        <span class="mt-1 text-[0.6875rem] text-shifa-200/70">{SITE.tagline}</span>
       </span>
     </a>
 
@@ -40,7 +30,12 @@ const isActive = (href: string) => path === href || path.startsWith(href + "/");
         <a
           href={item.href}
           aria-current={isActive(item.href) ? "page" : undefined}
-          class:list={["hdr-link rounded-full px-4 py-2.5 font-display text-[0.9375rem] font-medium transition-all duration-200", isActive(item.href) && "is-active"]}
+          class:list={[
+            "rounded-full px-4 py-2.5 font-display text-[0.9375rem] font-medium transition-all duration-200",
+            isActive(item.href)
+              ? "bg-white/[.12] text-white"
+              : "text-white/75 hover:bg-white/[.08] hover:text-white",
+          ]}
         >{item.label}</a>
       ))}
     </nav>
@@ -65,7 +60,7 @@ const isActive = (href: string) => path === href || path.startsWith(href + "/");
         id="navToggle"
         aria-expanded="false"
         aria-controls="navMobile"
-        class="hdr-burger grid h-11 w-11 place-items-center rounded-2xl border transition-colors lg:hidden"
+        class="grid h-11 w-11 place-items-center rounded-2xl border border-white/15 bg-white/[.06] text-white transition-colors hover:bg-white/[.12] lg:hidden"
       >
         <span class="sr-only">فتح القائمة</span>
         <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -76,7 +71,7 @@ const isActive = (href: string) => path === href || path.startsWith(href + "/");
   </div>
 
   <!-- القائمة — هاتف -->
-  <nav id="navMobile" hidden class="border-t border-ink-200/50 bg-white lg:hidden" aria-label="القائمة الرئيسية للهاتف">
+  <nav id="navMobile" hidden class="border-t border-white/10 bg-deep-800/95 backdrop-blur-md lg:hidden" aria-label="القائمة الرئيسية للهاتف">
     <div class="wrap flex flex-col gap-1 py-4">
       {NAV.map((item) => (
         <a
@@ -84,7 +79,7 @@ const isActive = (href: string) => path === href || path.startsWith(href + "/");
           aria-current={isActive(item.href) ? "page" : undefined}
           class:list={[
             "rounded-2xl px-4 py-3 font-display text-base font-medium transition-colors",
-            isActive(item.href) ? "bg-shifa-50 text-shifa-800" : "text-ink-700 hover:bg-shifa-50/70",
+            isActive(item.href) ? "bg-white/[.12] text-white" : "text-white/80 hover:bg-white/[.07]",
           ]}
         >{item.label}</a>
       ))}
@@ -92,30 +87,12 @@ const isActive = (href: string) => path === href || path.startsWith(href + "/");
   </nav>
 </header>
 
-<!-- مساحة تعويض الترويسة الثابتة في الصفحات غير الداكنة -->
-{!dark && <div class="h-[4.75rem]" aria-hidden="true"></div>}
-
 <style>
-  /* الحالة الداكنة: نص أبيض فوق البطل */
-  #siteHeader[data-dark="true"]:not(.is-stuck) .hdr-brand { color: #fff; }
-  #siteHeader[data-dark="true"]:not(.is-stuck) .hdr-sub { color: rgba(255, 255, 255, 0.55); }
-  #siteHeader[data-dark="true"]:not(.is-stuck) .hdr-link { color: rgba(255, 255, 255, 0.78); }
-  #siteHeader[data-dark="true"]:not(.is-stuck) .hdr-link:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
-  #siteHeader[data-dark="true"]:not(.is-stuck) .hdr-link.is-active { color: #fff; background: rgba(255, 255, 255, 0.12); }
-  #siteHeader[data-dark="true"]:not(.is-stuck) .hdr-burger { color: #fff; border-color: rgba(255, 255, 255, 0.18); background: rgba(255, 255, 255, 0.06); }
-
-  /* الحالة الفاتحة أو بعد التمرير */
-  #siteHeader .hdr-brand { color: theme("colors.ink.900"); }
-  #siteHeader .hdr-sub { color: theme("colors.ink.400"); }
-  #siteHeader .hdr-link { color: theme("colors.ink.600"); }
-  #siteHeader .hdr-link:hover { color: theme("colors.shifa.800"); background: theme("colors.shifa.50"); }
-  #siteHeader .hdr-link.is-active { color: theme("colors.shifa.800"); background: theme("colors.shifa.50"); }
-  #siteHeader .hdr-burger { color: theme("colors.ink.700"); border-color: theme("colors.ink.200"); background: #fff; }
-
+  /* عند التمرير: تمويه وحدّ خفيف، بلا تغيير لون النص (الثيم داكن في كل الحالات) */
   #siteHeader.is-stuck {
-    border-bottom: 1px solid rgb(200 213 220 / 0.5);
-    background: rgb(246 251 251 / 0.88);
-    backdrop-filter: blur(12px);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    background: rgba(6, 18, 29, 0.75);
+    backdrop-filter: blur(14px);
   }
 </style>
 

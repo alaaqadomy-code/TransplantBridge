@@ -3,26 +3,26 @@ import { SITE, FOOTER_LINKS, ROLE, DISCLAIMER, WHATSAPP } from "../lib/site";
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-24 border-t border-shifa-100 bg-white">
-  <div class="wrap py-14">
-    <div class="grid gap-10 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
+<footer class="mt-28 border-t border-white/10">
+  <div class="wrap py-16">
+    <div class="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
       <!-- الهوية -->
       <div>
-        <div class="flex items-center gap-2.5">
-          <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-shifa-500 to-shifa-700">
-            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" aria-hidden="true">
-              <path d="M3 16c0-5 4-8 9-8s9 3 9 8" stroke="white" stroke-width="2" stroke-linecap="round" />
-              <path d="M3 16h18M8 16v-4M16 16v-4M12 16v-6" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity=".85" />
+        <div class="flex items-center gap-3">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-shifa-400 to-shifa-700">
+            <svg viewBox="0 0 24 24" class="h-[1.125rem] w-[1.125rem]" fill="none" aria-hidden="true">
+              <path d="M3 16c0-5 4-8 9-8s9 3 9 8" stroke="white" stroke-width="2.1" stroke-linecap="round"/>
+              <path d="M3 16h18M8 16v-4M16 16v-4M12 16v-6" stroke="white" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
             </svg>
           </span>
-          <span class="font-display text-base font-semibold text-ink-900">{SITE.name}</span>
+          <span class="font-display text-base font-bold tracking-tightest text-white">{SITE.name}</span>
         </div>
-        <p class="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-ink-500">{ROLE.weAre}</p>
+        <p class="mt-5 max-w-sm text-[0.9375rem] leading-relaxed text-ink-300">{ROLE.weAre}</p>
         <a
           href={WHATSAPP.link(WHATSAPP.defaultMessage)}
           target="_blank"
           rel="noopener"
-          class="btn-ghost mt-5 !px-5 !py-2.5 !text-[0.9375rem]"
+          class="btn-ghost mt-6 !px-5 !py-2.5 !text-[0.9375rem]"
           data-wa="footer"
         >تواصل عبر واتساب</a>
       </div>
@@ -30,11 +30,11 @@ const year = new Date().getFullYear();
       <!-- الروابط -->
       {FOOTER_LINKS.map((col) => (
         <div>
-          <h2 class="font-display text-sm font-semibold uppercase tracking-wide text-ink-900">{col.title}</h2>
-          <ul class="mt-4 space-y-2.5">
+          <h2 class="font-display text-[0.8125rem] font-bold uppercase tracking-[0.14em] text-shifa-200">{col.title}</h2>
+          <ul class="mt-5 space-y-3">
             {col.links.map((l) => (
               <li>
-                <a href={l.href} class="text-[0.9375rem] text-ink-500 transition-colors hover:text-shifa-700">{l.label}</a>
+                <a href={l.href} class="text-[0.9375rem] text-ink-300 transition-colors hover:text-shifa-200">{l.label}</a>
               </li>
             ))}
           </ul>
@@ -43,15 +43,15 @@ const year = new Date().getFullYear();
     </div>
 
     <!-- إخلاء المسؤولية والموقف القانوني -->
-    <div class="mt-12 space-y-3 rounded-4xl border border-shifa-100 bg-paper p-6 text-[0.8125rem] leading-relaxed text-ink-500">
-      <p><strong class="text-ink-700">إخلاء مسؤولية طبية:</strong> {DISCLAIMER}</p>
-      <p><strong class="text-ink-700">حدود دورنا:</strong> {ROLE.weAreNot}</p>
-      <p><strong class="text-ink-700">موقفنا:</strong> {ROLE.noTrafficking}</p>
+    <div class="mt-14 space-y-3.5 rounded-4xl border border-white/10 bg-white/[.03] p-6 text-[0.8125rem] leading-relaxed text-ink-300 sm:p-7">
+      <p><strong class="font-semibold text-white">إخلاء مسؤولية طبية:</strong> {DISCLAIMER}</p>
+      <p><strong class="font-semibold text-white">حدود دورنا:</strong> {ROLE.weAreNot}</p>
+      <p><strong class="font-semibold text-white">موقفنا:</strong> {ROLE.noTrafficking}</p>
     </div>
 
-    <div class="mt-8 flex flex-col items-center justify-between gap-3 border-t border-shifa-100 pt-6 text-[0.8125rem] text-ink-400 sm:flex-row">
+    <div class="mt-9 flex flex-col items-center justify-between gap-3 border-t border-white/[.07] pt-7 text-[0.8125rem] text-ink-400 sm:flex-row">
       <p>© <span class="num">{year}</span> {SITE.name}</p>
-      <p>{SITE.tagline}</p>
+      <p class="text-shifa-200/70">{SITE.tagline}</p>
     </div>
   </div>
 </footer>
