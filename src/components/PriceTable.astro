@@ -1,0 +1,55 @@
+---
+import type { PriceRow } from "../content/prices";
+import { PRICES_CHECKED } from "../content/prices";
+
+interface Props {
+  rows: PriceRow[];
+  caption: string;
+}
+const { rows, caption } = Astro.props;
+---
+
+<figure class="my-9">
+  <figcaption class="mb-4 text-[0.9375rem] font-semibold text-shifa-100">{caption}</figcaption>
+
+  <!-- تحذير قبل الأرقام لا بعدها -->
+  <p class="mb-5 rounded-3xl border border-amal/30 bg-amal/[.08] p-5 text-[0.875rem] leading-relaxed text-ink-100">
+    <strong class="font-bold text-amal-light">اقرأ هذا قبل الأرقام:</strong>
+    كل رقم في الجدول <strong class="text-white">منقول عن جهة نشرته</strong>، وليس من عندنا ولا هو عرض سعر.
+    وكل هذه الجهات مواقع سياحة طبية تجارية لا مستشفيات. والأرقام متناقضة بينها — وهذا بذاته
+    أهم ما يجب أن تعرفه. <strong class="text-white">السعر الوحيد الذي يعنيك هو عرض مكتوب من المستشفى لحالتك أنت.</strong>
+  </p>
+
+  <div class="-mx-2 overflow-x-auto px-2">
+    <table class="w-full border-collapse text-[0.9375rem]">
+      <thead>
+        <tr>
+          <th scope="col" class="border-b border-white/15 pb-3 text-right font-display font-semibold text-shifa-100">النطاق المنشور</th>
+          <th scope="col" class="border-b border-white/15 pb-3 text-right font-display font-semibold text-shifa-100">الجهة الناشرة</th>
+          <th scope="col" class="border-b border-white/15 pb-3 text-right font-display font-semibold text-shifa-100">ما ذكرته الجهة</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td class="border-b border-white/[.07] py-3.5 align-top">
+              <span class="font-display font-bold text-white">{r.range}</span>
+            </td>
+            <td class="border-b border-white/[.07] py-3.5 align-top text-ink-200">
+              <span>{r.source}</span>
+              <span class="mt-1 block text-[0.75rem] text-ink-400">رُصد: {r.observed}</span>
+            </td>
+            <td class="border-b border-white/[.07] py-3.5 align-top text-[0.875rem] leading-relaxed text-ink-300">
+              {r.includes ?? "لم تبيّن الجهة ما يشمله"}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="mt-4 text-[0.8125rem] leading-relaxed text-ink-400">
+    آخر رصد شامل للأسعار المنشورة: {PRICES_CHECKED}. الأسعار تتغير، والجهات تعدّل صفحاتها
+    دون إشعار. وإن وجدت رقماً مختلفاً اليوم فأخبرنا لنحدّث الجدول.
+  </p>
+</figure>

@@ -79,8 +79,8 @@ export const KEYWORD_MAP: [string, string, Tier][] = [
   ["زراعة الكلى كيف تتم", "kidney-transplant", 2],
   ["عملية زراعة الكلى كم تستغرق", "kidney-transplant", 2],
   ["زراعة الكلى بالروبوت", "kidney-transplant", 2],
-  ["هل زراعة الكلى افضل من الغسيل", "kidney-transplant", 2],
-  ["هل يمكن زراعة الكلى قبل الغسيل", "kidney-transplant", 2],
+  ["هل زراعة الكلى افضل من الغسيل", "dialysis-vs-transplant", 2],
+  ["هل يمكن زراعة الكلى قبل الغسيل", "dialysis-vs-transplant", 2],
   ["طريقة التبرع بالكلى", "kidney-donation", 2],
   ["إجراءات التبرع بالكلى", "kidney-donation", 2],
   ["عملية تبرع بالكلى", "kidney-donation", 2],
@@ -137,6 +137,18 @@ export const KEYWORD_MAP: [string, string, Tier][] = [
   ["أفضل مستشفى لزراعة الكبد في تركيا", "transplant-hospitals-turkey", 2],
   ["دكتور زراعة كبد", "transplant-hospitals-turkey", 2],
   ["دكتور زراعة كلى", "transplant-hospitals-turkey", 2],
+  // ───────── الصفحات المضافة (الموجة الثانية) ─────────
+  ["زراعة الكبد للأطفال", "pediatric-liver-transplant", 1],
+  ["زراعة الكبد للاطفال الرضع", "pediatric-liver-transplant", 1],
+  ["مخاطر زراعة الكبد للأطفال", "pediatric-liver-transplant", 1],
+  ["اسباب زراعة الكبد للاطفال", "pediatric-liver-transplant", 2],
+  ["الحياة بعد زراعة الكبد", "after-liver-transplant", 2],
+  ["زراعة الكبد لكبار السن", "transplant-elderly", 2],
+  ["زراعة الكلى لكبار السن", "transplant-elderly", 2],
+  ["نسبة نجاح زراعة الكبد لكبار السن", "transplant-elderly", 1],
+  ["نسبة نجاح زراعة الكلى لكبار السن", "transplant-elderly", 1],
+  ["زراعة الكبد لمريض السرطان", "liver-transplant-cancer", 2],
+  ["زراعة الكبد لمرضى سرطان الكبد", "liver-transplant-cancer", 2],
 ];
 
 /**

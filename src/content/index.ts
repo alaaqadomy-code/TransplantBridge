@@ -2,10 +2,11 @@ import type { ContentPage } from "./types";
 import { LIVER } from "./liver";
 import { KIDNEY } from "./kidney";
 import { DECISION } from "./decision";
+import { EXTRA } from "./extra";
 import { KEYWORD_MAP, norm } from "./keywords";
 
 /** كل صفحات المحتوى — 18 صفحة. */
-export const PAGES: ContentPage[] = [...LIVER, ...KIDNEY, ...DECISION];
+export const PAGES: ContentPage[] = [...LIVER, ...KIDNEY, ...DECISION, ...EXTRA];
 
 export const bySlug = (slug: string): ContentPage | undefined =>
   PAGES.find((p) => p.slug === slug);

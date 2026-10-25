@@ -4,6 +4,8 @@ import Layout from "../layouts/Layout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Disclaimer from "../components/Disclaimer.astro";
 import Cta from "../components/Cta.astro";
+import PriceTable from "../components/PriceTable.astro";
+import { LIVER_PRICES, KIDNEY_PRICES, COUNTRY_LIVER, COUNTRY_KIDNEY, COUNTRY_SOURCE } from "../content/prices";
 import { PAGES, bySlug } from "../content";
 import { IS_LOCAL } from "../lib/site";
 import { graph, organization, website, webPage, breadcrumbs, faqPage } from "../lib/schema";
@@ -87,6 +89,42 @@ const REVIEW_LABEL: Record<string, string> = {
                     </tbody>
                   </table>
                 </div>
+              )}
+              {s.priceTable === "liver" && (
+                <PriceTable rows={LIVER_PRICES} caption="النطاقات المنشورة لتكلفة زرع الكبد في تركيا — منقولة عن مصادرها" />
+              )}
+              {s.priceTable === "kidney" && (
+                <PriceTable rows={KIDNEY_PRICES} caption="النطاقات المنشورة لتكلفة زراعة الكلى في تركيا — منقولة عن مصادرها" />
+              )}
+              {(s.priceTable === "countryLiver" || s.priceTable === "countryKidney") && (
+                <figure class="my-9">
+                  <figcaption class="mb-4 text-[0.9375rem] font-semibold text-shifa-100">
+                    {s.priceTable === "countryLiver"
+                      ? "مقارنة تكلفة زرع الكبد بين الدول — كما نشرتها Safak Medical"
+                      : "مقارنة تكلفة زراعة الكلى بين الدول — كما نشرتها Safak Medical"}
+                  </figcaption>
+                  <div class="-mx-2 overflow-x-auto px-2">
+                    <table class="w-full border-collapse text-[0.9375rem]">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="border-b border-white/15 pb-3 text-right font-display font-semibold text-shifa-100">الدولة</th>
+                          <th scope="col" class="border-b border-white/15 pb-3 text-right font-display font-semibold text-shifa-100">النطاق المنشور</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(s.priceTable === "countryLiver" ? COUNTRY_LIVER : COUNTRY_KIDNEY).map((c) => (
+                          <tr>
+                            <td class="border-b border-white/[.07] py-3 align-top text-ink-200">{c.country}</td>
+                            <td class="border-b border-white/[.07] py-3 align-top font-display font-bold text-white">{c.range}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="mt-4 text-[0.8125rem] leading-relaxed text-ink-400">
+                    {COUNTRY_SOURCE.note} رُصد: {COUNTRY_SOURCE.observed}.
+                  </p>
+                </figure>
               )}
               {s.note && (
                 <p class="my-6 rounded-3xl border border-shifa-300/25 bg-shifa-400/[.07] p-5 text-[0.9375rem] leading-relaxed text-shifa-100">

@@ -17,6 +17,11 @@ export type Section = {
   note?: string;
   /** جدول مقارنة */
   table?: { head: string[]; rows: string[][] };
+  /**
+   * جدول أسعار موثّق — الأرقام منقولة عن مصادرها لا من عندنا.
+   * يُسمح به في صفحات التكلفة والوجهة فقط.
+   */
+  priceTable?: "liver" | "kidney" | "countryLiver" | "countryKidney";
 };
 
 export type ContentPage = {
