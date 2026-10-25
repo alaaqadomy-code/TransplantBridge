@@ -7,7 +7,7 @@
  *   عناوين أو بيانات اتصال لم يقدّمها المالك.
  * وكل ما يُكتب هنا يجب أن يطابق المحتوى الظاهر على الصفحة.
  */
-import { SITE, SITE_URL, IS_LOCAL, abs } from "./site";
+import { SITE, SITE_URL, IS_LOCAL, WHATSAPP, abs } from "./site";
 
 type Json = Record<string, unknown>;
 
@@ -21,8 +21,23 @@ export const organization = (): Json => ({
   name: SITE.name,
   alternateName: SITE.nameAr,
   description: SITE.description,
-  ...(IS_LOCAL ? {} : { url: SITE_URL }),
+  ...(IS_LOCAL
+    ? {}
+    : {
+        url: SITE_URL,
+        // شعار الموقع — يقوّي تعريف الكيان في نتائج Google ومحركات الإجابة
+        logo: { "@type": "ImageObject", url: `${SITE_URL}/og.png`, width: 1200, height: 630 },
+        image: `${SITE_URL}/og.png`,
+      }),
   knowsLanguage: "ar",
+  // قناة التواصل الوحيدة المعلنة: واتساب. لا بريد ولا عنوان — فلا نخترع ما ليس لنا.
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    telephone: `+${WHATSAPP.digits}`,
+    availableLanguage: ["ar"],
+    areaServed: ["JO", "SA", "AE", "KW", "QA", "IQ", "EG", "OM", "BH"],
+  },
 });
 
 export const website = (): Json => ({

@@ -19,5 +19,10 @@
   ],
   "research": "TransplantBridge-Keyword-Research/ (2026-10-24)",
   "updated": "2026-10-25",
-  "live": "https://transplantbridge.com"
+  "live": "https://transplantbridge.com",
+  "ga4": {
+    "measurementId": "G-GXJ7PCCX0H",
+    "propertyId": "560703516",
+    "keyEvent": "whatsapp_click"
+  }
 }

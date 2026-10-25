@@ -1,0 +1,46 @@
+---
+/**
+ * قياس GA4 — يُحمَّل فقط حين يكون الدومين معتمداً والمعرّف مضبوطاً.
+ * فلا يُرسَل شيء أثناء التطوير المحلي ولا في بناء بلا دومين.
+ *
+ * الحدث الوحيد المخصّص: `whatsapp_click`.
+ * كل روابط واتساب في الموقع تحمل `data-wa="<الموضع>"`، فيلتقطها مستمع
+ * واحد مفوَّض على المستند بدل سكربت لكل زر.
+ */
+import { IS_LOCAL } from "../lib/site";
+
+const GA_ID = (import.meta.env.PUBLIC_GA_MEASUREMENT_ID || "").trim();
+const enabled = !IS_LOCAL && /^G-[A-Z0-9]+$/.test(GA_ID);
+---
+
+{
+  enabled && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+      <script is:inline define:vars={{ GA_ID }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag("js", new Date());
+        gtag("config", GA_ID);
+
+        /* نقرة واتساب = التحويل الوحيد في هذا الموقع.
+           مستمع مفوَّض يلتقط أي رابط يحمل data-wa مهما أُضيف لاحقاً،
+           ويعمل مع النقر بالزر الأوسط وفتح تبويب جديد أيضاً. */
+        document.addEventListener(
+          "click",
+          (e) => {
+            const a = e.target instanceof Element ? e.target.closest("a[data-wa]") : null;
+            if (!a) return;
+            gtag("event", "whatsapp_click", {
+              placement: a.getAttribute("data-wa") || "unknown",
+              page_path: location.pathname,
+              page_title: document.title,
+            });
+          },
+          { capture: true, passive: true },
+        );
+      </script>
+    </>
+  )
+}

@@ -23,6 +23,8 @@ export const SITE = {
 const WA_DIGITS = "962795827790";
 export const WHATSAPP = {
   display: "+962 7 9582 7790",
+  /** الأرقام وحدها بصيغة دولية بلا + — تُستعمل في روابط wa.me وفي السكيما */
+  digits: WA_DIGITS,
   link: (text?: string) =>
     `https://wa.me/${WA_DIGITS}${text ? `?text=${encodeURIComponent(text)}` : ""}`,
   defaultMessage:
