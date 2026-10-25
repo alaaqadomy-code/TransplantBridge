@@ -19,6 +19,7 @@ export const DECISION: ContentPage[] = [
     cluster: "decision",
     clusterLabel: "اختيار الوجهة",
     review: ["medical", "legal"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا لا نرتّب لك الدول؟",
@@ -105,7 +106,7 @@ export const DECISION: ContentPage[] = [
     slug: "liver-transplant-turkey",
     keyword: "زرع الكبد في تركيا",
     volume: "10 – 100",
-    title: "زرع الكبد في تركيا: ما يجب معرفته أولاً",
+    title: "زرع الكبد في تركيا 2026: ما يجب معرفته أولاً",
     description:
       "زرع الكبد في تركيا: شرط المتبرع الحي للمرضى الأجانب، وما يشمله عرض السعر وما يستثنيه، ومدة الإقامة والمستندات المطلوبة.",
     h1: "زرع الكبد في تركيا",
@@ -114,6 +115,7 @@ export const DECISION: ContentPage[] = [
     cluster: "decision",
     clusterLabel: "اختيار الوجهة",
     review: ["medical", "legal", "commercial"],
+    numbered: true,
     sections: [
       {
         h2: "الشرط الذي يسبق كل شيء",
@@ -383,7 +385,7 @@ export const DECISION: ContentPage[] = [
     slug: "kidney-transplant-turkey",
     keyword: "زراعة الكلى في تركيا",
     volume: "10 – 100",
-    title: "زراعة الكلى في تركيا: الشروط والإجراءات",
+    title: "زراعة الكلى في تركيا 2026: الشروط والإجراءات",
     description:
       "زراعة الكلى في تركيا: شرط المتبرع القريب للمرضى الأجانب، والمستندات والفحوصات المطلوبة، وما يجب أن يوضحه أي عرض سعر.",
     h1: "زراعة الكلى في تركيا",
@@ -392,6 +394,7 @@ export const DECISION: ContentPage[] = [
     cluster: "decision",
     clusterLabel: "اختيار الوجهة",
     review: ["medical", "legal", "commercial"],
+    numbered: true,
     sections: [
       {
         h2: "ابدأ من هنا: هل معك متبرع؟",
@@ -620,7 +623,7 @@ export const DECISION: ContentPage[] = [
     slug: "transplant-cost",
     keyword: "تكلفة زراعة الكلى",
     volume: "10 – 100",
-    title: "تكلفة زراعة الكلى: كيف تقرأ عرض السعر",
+    title: "تكلفة زراعة الكلى والكبد في تركيا 2026",
     description:
       "تكلفة زراعة الكلى والكبد: لماذا تتناقض الأرقام المنشورة، وما البنود التي يجب أن يشملها أي عرض، وما الذي يُستثنى عادةً فيفاجئك لاحقاً.",
     h1: "تكلفة الزراعة: كيف تقرأ عرض السعر؟",
@@ -629,6 +632,7 @@ export const DECISION: ContentPage[] = [
     cluster: "decision",
     clusterLabel: "اختيار الوجهة",
     review: ["commercial"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا تتناقض الأرقام المنشورة؟",
@@ -817,7 +821,7 @@ export const DECISION: ContentPage[] = [
     slug: "transplant-hospitals-turkey",
     keyword: "مستشفيات زراعة الكلى في تركيا",
     volume: "10 – 100 · منافسة متوسطة",
-    title: "مستشفيات زراعة الكلى في تركيا: كيف تختار",
+    title: "مستشفيات زراعة الكلى في تركيا 2026: كيف تختار",
     description:
       "مستشفيات زراعة الكلى والكبد في تركيا: معايير اختيار المركز، والأسئلة التي تطرحها قبل الحجز، وعلامات التحذير التي يجب الانتباه لها.",
     h1: "كيف تختار مستشفى لزراعة الكلى أو الكبد؟",
@@ -826,6 +830,7 @@ export const DECISION: ContentPage[] = [
     cluster: "decision",
     clusterLabel: "اختيار الوجهة",
     review: ["commercial"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا لا نرتّب لك المستشفيات؟",

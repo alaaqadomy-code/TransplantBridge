@@ -16,6 +16,11 @@ export const getStaticPaths = (() =>
 const { page } = Astro.props;
 const path = `/${page.slug}`;
 
+/** أرقام عربية-هندية لترقيم العناوين حين تطلبه الصفحة */
+const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+const arNum = (n: number) => String(n).split("").map((d) => AR_DIGITS[+d]).join("");
+const headingOf = (i: number, h2: string) => (page.numbered ? `${arNum(i + 1)}. ${h2}` : h2);
+
 const crumbs = [
   { name: "الرئيسية", path: "/" },
   { name: page.clusterLabel, path: `/${page.cluster === "liver" ? "liver-transplant" : page.cluster === "kidney" ? "kidney-transplant" : "best-country-kidney-transplant"}` },
@@ -67,9 +72,9 @@ const REVIEW_LABEL: Record<string, string> = {
 
       <div class="panel mt-8">
         <div class="prose-ar">
-          {page.sections.map((s) => (
+          {page.sections.map((s, i) => (
             <section>
-              <h2>{s.h2}</h2>
+              <h2>{headingOf(i, s.h2)}</h2>
               {s.body?.map((p) => <p set:html={p} />)}
               {s.list && (
                 <ul>

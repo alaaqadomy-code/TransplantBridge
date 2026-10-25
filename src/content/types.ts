@@ -42,6 +42,8 @@ export type ContentPage = {
   /** اسم العنقود كما يظهر في مسار التنقل */
   clusterLabel: string;
   sections: Section[];
+  /** ترقيم عناوين H2 تلقائياً (١. ٢. ٣.) — لتسهيل استخراج المقتطفات */
+  numbered?: boolean;
   faqs?: { q: string; a: string }[];
   /** slugs صفحات مرتبطة — تُعرض في «اقرأ أيضاً» */
   related?: string[];

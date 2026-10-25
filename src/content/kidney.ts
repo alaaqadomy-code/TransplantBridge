@@ -19,6 +19,7 @@ export const KIDNEY: ContentPage[] = [
     cluster: "kidney",
     clusterLabel: "زراعة الكلى",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "ما هي زراعة الكلى؟",
@@ -246,6 +247,7 @@ export const KIDNEY: ContentPage[] = [
     cluster: "kidney",
     clusterLabel: "زراعة الكلى",
     review: ["medical", "legal"],
+    numbered: true,
     sections: [
       {
         h2: "كيف يمكن العيش بكلية واحدة؟",
@@ -327,6 +329,7 @@ export const KIDNEY: ContentPage[] = [
     cluster: "kidney",
     clusterLabel: "زراعة الكلى",
     review: ["medical", "legal"],
+    numbered: true,
     sections: [
       {
         h2: "من هو متبرع الكلى المؤهَّل؟",
@@ -477,6 +480,7 @@ export const KIDNEY: ContentPage[] = [
     cluster: "kidney",
     clusterLabel: "زراعة الكلى",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا نذكر المخاطر بوضوح؟",
@@ -572,7 +576,7 @@ export const KIDNEY: ContentPage[] = [
     slug: "kidney-transplant-success-rate",
     keyword: "نسبة نجاح عملية زراعة الكلى",
     volume: "100 – 1,000",
-    title: "نسبة نجاح زراعة الكلى وعمر الكلية المزروعة",
+    title: "نسبة نجاح زراعة الكلى 2026 وعمر الكلية المزروعة",
     description:
       "نسبة نجاح عملية زراعة الكلى: ماذا تعني الأرقام المنشورة، والفرق بين بقاء المريض وبقاء العضو، وكم تدوم الكلية المزروعة.",
     h1: "نسبة نجاح زراعة الكلى وعمر الكلية المزروعة",
@@ -581,6 +585,7 @@ export const KIDNEY: ContentPage[] = [
     cluster: "kidney",
     clusterLabel: "زراعة الكلى",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا لا نعطيك رقماً؟",
@@ -675,6 +680,7 @@ export const KIDNEY: ContentPage[] = [
     cluster: "kidney",
     clusterLabel: "زراعة الكلى",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا تلزم فترة احتياطات مشددة؟",
@@ -764,6 +770,7 @@ export const KIDNEY: ContentPage[] = [
     cluster: "kidney",
     clusterLabel: "زراعة الكلى",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "متى تُطرح إعادة الزراعة؟",

@@ -19,6 +19,7 @@ export const LIVER: ContentPage[] = [
     cluster: "liver",
     clusterLabel: "زرع الكبد",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "ما هو زرع الكبد؟",
@@ -312,6 +313,7 @@ export const LIVER: ContentPage[] = [
     cluster: "liver",
     clusterLabel: "زرع الكبد",
     review: ["medical", "legal"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا التبرع بالكبد ممكن أصلاً؟",
@@ -402,6 +404,7 @@ export const LIVER: ContentPage[] = [
     cluster: "liver",
     clusterLabel: "زرع الكبد",
     review: ["medical", "legal"],
+    numbered: true,
     sections: [
       {
         h2: "من هو متبرع الكبد المؤهَّل؟",
@@ -647,6 +650,7 @@ export const LIVER: ContentPage[] = [
     cluster: "liver",
     clusterLabel: "زرع الكبد",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا نتكلم عن المخاطر بصراحة؟",
@@ -734,6 +738,7 @@ export const LIVER: ContentPage[] = [
     cluster: "liver",
     clusterLabel: "زرع الكبد",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا هي الخيار العملي للمريض الأجنبي؟",
@@ -812,7 +817,7 @@ export const LIVER: ContentPage[] = [
     slug: "liver-transplant-success-rate",
     keyword: "نسبة نجاح زراعة الكبد",
     volume: "10 – 100",
-    title: "نسبة نجاح زراعة الكبد: كيف تُقرأ الأرقام",
+    title: "نسبة نجاح زراعة الكبد 2026: كيف تُقرأ الأرقام",
     description:
       "نسبة نجاح زراعة الكبد: ماذا تعني الأرقام المنشورة فعلاً، والفرق بين بقاء المريض وبقاء العضو، ولماذا لا يصلح رقم واحد لكل الحالات.",
     h1: "نسبة نجاح زراعة الكبد: كيف تقرأ الأرقام؟",
@@ -821,6 +826,7 @@ export const LIVER: ContentPage[] = [
     cluster: "liver",
     clusterLabel: "زرع الكبد",
     review: ["medical"],
+    numbered: true,
     sections: [
       {
         h2: "لماذا لا نعطيك رقماً؟",
