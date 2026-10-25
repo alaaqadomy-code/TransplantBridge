@@ -1,8 +1,8 @@
 {
   "name": "TransplantBridge",
   "repo": "alaaqadomy-code/TransplantBridge",
-  "domain": null,
-  "hosting": null,
+  "domain": "transplantbridge.com",
+  "hosting": "Cloudflare Pages (مشروع doctor-tajmeel منفصل تماماً — لا تنشر إليه)",
   "gscProperty": null,
   "created": "2026-10-24",
   "scope": "زراعة الكلى وزراعة الكبد في تركيا — عربي فقط",
@@ -18,5 +18,5 @@
     "IQ"
   ],
   "research": "TransplantBridge-Keyword-Research/ (2026-10-24)",
-  "updated": "2026-10-24"
+  "updated": "2026-10-25"
 }

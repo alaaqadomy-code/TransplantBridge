@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import { loadEnv } from "vite";
 
 /**
  * حرس الدومين (PLAN.md §6):
@@ -8,7 +9,9 @@ import sitemap from "@astrojs/sitemap";
  * ويُخرج robots.txt منع زحف كامل. فلا يدخل الموقع فهرسة Google بالخطأ،
  * ولا يوجد عنوان إنتاج وهمي في أي ملف. وبضبط المتغيّر ينقلب الثلاثة معاً.
  */
-const RAW_SITE = (process.env.PUBLIC_SITE_URL || "").trim();
+// ملف الإعداد لا يرى .env تلقائياً، فنحمّله صراحةً وإلا بقي الموقع «محلياً» بلا sitemap.
+const ENV = loadEnv(process.env.NODE_ENV || "production", process.cwd(), "PUBLIC_");
+const RAW_SITE = (ENV.PUBLIC_SITE_URL || process.env.PUBLIC_SITE_URL || "").trim();
 const SITE_URL = RAW_SITE ? RAW_SITE.replace(/\/+$/, "") : undefined;
 const IS_LOCAL = !SITE_URL;
 
