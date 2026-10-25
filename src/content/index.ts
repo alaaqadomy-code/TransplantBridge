@@ -2,6 +2,7 @@ import type { ContentPage } from "./types";
 import { LIVER } from "./liver";
 import { KIDNEY } from "./kidney";
 import { DECISION } from "./decision";
+import { KEYWORD_MAP, norm } from "./keywords";
 
 /** كل صفحات المحتوى — 18 صفحة. */
 export const PAGES: ContentPage[] = [...LIVER, ...KIDNEY, ...DECISION];
@@ -40,6 +41,49 @@ for (const p of PAGES) {
   }
 }
 
+/**
+ * فحص السيطرة على الكلمات: كل كلمة في KEYWORD_MAP يجب أن ترد فعلاً
+ * في نص صفحتها (العنوان أو H1 أو المقدمة أو الأقسام أو الأسئلة).
+ * المقارنة بعد التطبيع، فتكفي صيغة واحدة لتغطية رسماتها.
+ */
+const pageText = (p: ContentPage): string =>
+  norm(
+    [
+      // لا نُدرج p.keyword لأنه لا يُطبع على الصفحة — الفحص يجب أن يقيس
+      // ما يراه الزائر ومحرك البحث فعلاً، لا ما في بيانات المصدر.
+      p.title,
+      p.description,
+      p.h1,
+      p.lead,
+      ...p.sections.flatMap((s) => [
+        s.h2,
+        ...(s.body ?? []),
+        ...(s.list ?? []),
+        s.note ?? "",
+        ...(s.table ? [...s.table.head, ...s.table.rows.flat()] : []),
+      ]),
+      ...(p.faqs ?? []).flatMap((f) => [f.q, f.a]),
+    ]
+      .join(" · ")
+      .replace(/<[^>]+>/g, " ")
+  );
+
+const textCache = new Map<string, string>();
+for (const p of PAGES) textCache.set(p.slug, pageText(p));
+
+const missing: string[] = [];
+for (const [kw, slug, tier] of KEYWORD_MAP) {
+  const t = textCache.get(slug);
+  if (t === undefined) {
+    problems.push(`كلمة «${kw}» مسندة إلى صفحة غير موجودة: ${slug}`);
+    continue;
+  }
+  if (!t.includes(norm(kw))) missing.push(`[فئة ${tier}] «${kw}» غائبة عن /${slug}`);
+}
+if (missing.length) problems.push(...missing);
+
 if (problems.length) {
-  throw new Error(`فحص المحتوى فشل:\n - ${problems.join("\n - ")}`);
+  throw new Error(
+    `فحص المحتوى فشل (${problems.length}):\n - ${problems.join("\n - ")}`
+  );
 }
