@@ -2,13 +2,99 @@
 import Layout from "../layouts/Layout.astro";
 import Cta from "../components/Cta.astro";
 import { ROLE, WHATSAPP } from "../lib/site";
-import { graph, organization, website, webPage } from "../lib/schema";
+import { graph, organization, website, webPage, faqPage } from "../lib/schema";
 
 const title = "زرع الكبد وزراعة الكلى: دليل وتنسيق العلاج";
 const description =
   "دليل عربي لزرع الكبد وزراعة الكلى: شروط المتبرع والمخاطر ونسب النجاح وما بعد العملية، مع تنسيق التواصل مع المستشفى. معلومات موثقة بلا وعود.";
 
-const jsonLd = graph([organization(), website(), webPage({ path: "/", title, description })]);
+const homeFaqs = [
+  {
+    q: "هل أستطيع زراعة كلية أو كبد في تركيا بلا متبرع؟",
+    a: "في الغالب لا. المريض القادم من خارج تركيا لا يُدرج عادةً على قوائم المتبرعين المتوفين هناك لأنها مخصصة لمواطني الدولة، فيبقى المتبرع الحي من الأقارب هو الطريق العملي. ولا نوفّر متبرعاً ولا نساعد في إيجاده.",
+  },
+  {
+    q: "كم تكلفة زراعة الكبد أو الكلى في تركيا؟",
+    a: "لا ننشر رقماً من عندنا لأن الأرقام المنشورة متناقضة وكل منها يقيس شيئاً مختلفاً ويستثني بنوداً مختلفة. نشرح لك بدلاً من ذلك ما يجب أن يحتويه أي عرض سعر، ثم نساعدك في الحصول على عرض مكتوب من المستشفى لحالتك أنت.",
+  },
+  {
+    q: "ما نسبة نجاح زراعة الكبد أو الكلى؟",
+    a: "لا نعطي نسبة بلا مصدر طبي محكّم ومؤرَّخ، لأن الرقم بلا سياق يضلّل في قرار مصيري. نشرح لك الفرق بين بقاء المريض وبقاء العضو، وماذا تطلب من المستشفى بالضبط.",
+  },
+  {
+    q: "ما أول خطوة عملية؟",
+    a: "أرسل التقارير الطبية المتوفرة وفصيلة دم المتبرع المحتمل عبر واتساب. نقرأ الملف ونخبرك بما ينقصه وبخطوتك التالية، قبل أي كلام عن التكلفة وبلا أي التزام.",
+  },
+  {
+    q: "هل أنتم مستشفى؟",
+    a: "لا. نحن جهة تنسيق مستقلة: نقرأ الملف ونجهّزه ونوصلك إلى المنسق الدولي في المستشفى ونتابع معك. لا نشخّص ولا نصف علاجاً ولا نتخذ قراراً طبياً، ولا نضمن قبولاً ولا نتيجة.",
+  },
+  {
+    q: "كم تستغرق الإجراءات؟",
+    a: "تعتمد على اكتمال تقاريرك وتقارير المتبرع، وسرعة الفحوصات المناعية، وإنجاز المستندات الرسمية والتأشيرات. أسرع ما يمكنك فعله الآن هو إرسال ما لديك لنحدد الناقص بدقة.",
+  },
+];
+
+const jsonLd = graph([
+  organization(),
+  website(),
+  webPage({ path: "/", title, description }),
+  faqPage(homeFaqs),
+]);
+
+/** العناقيد الثلاثة — خريطة الموقع كاملة من الرئيسية (عمق زحف وربط داخلي) */
+const siteMap = [
+  {
+    t: "عنقود الكبد",
+    links: [
+      { l: "زرع الكبد: الدليل الكامل", h: "/liver-transplant" },
+      { l: "التبرع بالكبد", h: "/liver-donation" },
+      { l: "شروط التبرع بالكبد", h: "/liver-donor-requirements" },
+      { l: "خطورة التبرع بالكبد على المتبرع", h: "/liver-donor-risks" },
+      { l: "زراعة الكبد من متبرع حي", h: "/living-donor-liver-transplant" },
+      { l: "نسبة نجاح زراعة الكبد", h: "/liver-transplant-success-rate" },
+    ],
+  },
+  {
+    t: "عنقود الكلى",
+    links: [
+      { l: "زراعة الكلى: الدليل الكامل", h: "/kidney-transplant" },
+      { l: "التبرع بالكلى", h: "/kidney-donation" },
+      { l: "شروط التبرع بالكلى", h: "/kidney-donor-requirements" },
+      { l: "أضرار التبرع بالكلى على المتبرع", h: "/kidney-donor-risks" },
+      { l: "نسبة نجاح عملية زراعة الكلى", h: "/kidney-transplant-success-rate" },
+      { l: "فترة العزل بعد زراعة الكلى", h: "/after-kidney-transplant" },
+      { l: "زراعة الكلى للمرة الثانية", h: "/repeat-kidney-transplant" },
+    ],
+  },
+  {
+    t: "الوجهة والتكلفة",
+    links: [
+      { l: "أفضل دولة لزراعة الكلى", h: "/best-country-kidney-transplant" },
+      { l: "زرع الكبد في تركيا", h: "/liver-transplant-turkey" },
+      { l: "زراعة الكلى في تركيا", h: "/kidney-transplant-turkey" },
+      { l: "تكلفة الزراعة: كيف تقرأ عرض السعر", h: "/transplant-cost" },
+      { l: "كيف تختار مستشفى زراعة أعضاء", h: "/transplant-hospitals-turkey" },
+      { l: "اطلب تقييم حالتك", h: "/request-evaluation" },
+    ],
+  },
+];
+
+const audience = [
+  {
+    t: "المريض",
+    d: "من وصل إلى الفشل الكبدي أو الكلوي ويريد أن يفهم خياراته قبل أن يقرر: هل الزراعة مناسبة له، وما الذي يسبقها، وما الذي يليها.",
+  },
+  {
+    t: "الأسرة",
+    d: "من يبحث نيابةً عن أب أو أم أو ابن، ويحتاج أن يفهم بسرعة ما المطلوب وما المستندات وما الخطوة التالية بدل أن يتوه بين المواقع.",
+  },
+  {
+    t: "المتبرع المحتمل",
+    d: "من عرض أن يتبرع لقريبه ويريد أن يعرف بصدق: هل أصلح؟ وما المخاطر عليّ أنا؟ وماذا بعد العملية؟ — له عندنا صفحات كاملة لا سطور.",
+  },
+];
+
 
 const steps = [
   { n: "١", t: "ترسل ملفك", d: "التقارير الطبية والتحاليل والأشعة عبر واتساب، ووصف مختصر لحالتك." },
@@ -217,6 +303,52 @@ const clusters = [
     </div>
   </section>
 
+  <!-- ══════════ العلاج في تركيا ══════════ -->
+  <section class="wrap py-24 sm:py-28">
+    <div class="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+      <div data-reveal>
+        <p class="chip">الوجهة</p>
+        <h2 class="mt-5 text-[2rem] font-bold sm:text-[2.5rem]">العلاج في تركيا: ما الذي يسأل عنه المرضى العرب</h2>
+        <p class="mt-5 text-[1.0625rem] leading-[1.95] text-ink-200">
+          تركيا من أكثر الوجهات التي يسأل عنها المريض العربي لزراعة الأعضاء، لقربها وتوفر
+          مراكز متخصصة فيها ووجود منسقين يتحدثون العربية. لكن قبل أي مقارنة سعر، هناك شرط
+          واحد يحسم إن كان المسار ممكناً أصلاً.
+        </p>
+        <p class="mt-4 text-[1.0625rem] leading-[1.95] text-ink-200">
+          المريض القادم من خارج تركيا <strong class="font-bold text-white">لا يُدرج عادةً على
+          قوائم المتبرعين المتوفين</strong> هناك، لأن تلك القوائم مخصصة لمواطني الدولة.
+          ومعنى ذلك عملياً أنك تحتاج في الغالب <strong class="font-bold text-white">متبرعاً
+          حيّاً من أقاربك</strong> — وهذا أول ما يسأل عنه فريق الزراعة، لا آخره.
+        </p>
+        <p class="mt-4 text-[1.0625rem] leading-[1.95] text-ink-200">
+          ولهذا نبدأ معك من الملف لا من السعر: نقرأ تقاريرك وتقارير المتبرع المحتمل، ونخبرك
+          إن كان المسار متاحاً لك قبل أن تُنفق أسبوعاً في مقارنة عروض.
+        </p>
+      </div>
+
+      <div class="grid gap-4 self-center" data-reveal>
+        {[
+          { t: "زرع الكبد في تركيا", d: "من يبحث عن زراعة الكبد في تركيا يبدأ من هنا: الشرط الذي يسبق كل شيء، والمستندات، ومدة الإقامة.", h: "/liver-transplant-turkey" },
+          { t: "زراعة الكلى في تركيا", d: "شرط المتبرع القريب، والتوافق النسيجي، وماذا لو كان المتبرع غير متوافق.", h: "/kidney-transplant-turkey" },
+          { t: "تكلفة زراعة الكلى وتكلفة زراعة الكبد", d: "لماذا تتناقض الأرقام المنشورة، وما يجب أن يوضحه أي عرض سعر قبل أن تقارن.", h: "/transplant-cost" },
+          { t: "مستشفيات زراعة الكلى في تركيا", d: "معايير اختيار المركز، وعلامات التحذير.", h: "/transplant-hospitals-turkey" },
+        ].map((c) => (
+          <a href={c.h} class="card card-lift group !p-6">
+            <div class="relative flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-display text-[1.0625rem] font-bold text-white transition-colors group-hover:text-shifa-200">{c.t}</h3>
+                <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-300">{c.d}</p>
+              </div>
+              <svg viewBox="0 0 24 24" class="mt-1 h-4 w-4 shrink-0 rotate-180 text-shifa-300 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- ══════════ كيف نعمل ══════════ -->
   <section class="wrap py-24 sm:py-28">
     <div class="max-w-2xl" data-reveal>
@@ -235,6 +367,25 @@ const clusters = [
         </li>
       ))}
     </ol>
+  </section>
+
+  <!-- ══════════ لمن هذا الموقع ══════════ -->
+  <section class="wrap pb-24 sm:pb-28">
+    <div class="max-w-2xl" data-reveal>
+      <p class="chip">الجمهور</p>
+      <h2 class="mt-5 text-[2rem] font-bold sm:text-[2.5rem]">لمن هذا الموقع؟</h2>
+      <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-300">
+        ثلاثة أشخاص يصلون إلينا، ولكل منهم سؤال مختلف — ولكل منهم صفحات مكتوبة له هو.
+      </p>
+    </div>
+    <div class="mt-12 grid gap-6 lg:grid-cols-3">
+      {audience.map((a) => (
+        <article class="card card-lift" data-reveal>
+          <h3 class="font-display text-xl font-bold text-white">{a.t}</h3>
+          <p class="mt-3.5 text-[0.9375rem] leading-relaxed text-ink-300">{a.d}</p>
+        </article>
+      ))}
+    </div>
   </section>
 
   <!-- ══════════ الصراحة ══════════ -->
@@ -283,6 +434,59 @@ const clusters = [
           </div>
         </a>
       ))}
+    </div>
+  </section>
+
+  <!-- ══════════ خريطة الموقع كاملة ══════════ -->
+  <section class="wrap pb-24 sm:pb-28">
+    <div class="max-w-2xl" data-reveal>
+      <p class="chip">كل الصفحات</p>
+      <h2 class="mt-5 text-[2rem] font-bold sm:text-[2.5rem]">الطريق كاملاً أمامك</h2>
+      <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-300">
+        لا نخفي صفحات خلف نماذج ولا نطلب بياناتك لتقرأ. كل ما كتبناه مفتوح من هنا.
+      </p>
+    </div>
+    <div class="mt-12 grid gap-6 lg:grid-cols-3">
+      {siteMap.map((col) => (
+        <div class="card !p-7" data-reveal>
+          <h3 class="font-display text-[1.0625rem] font-bold text-shifa-200">{col.t}</h3>
+          <ul class="mt-5 space-y-3">
+            {col.links.map((l) => (
+              <li>
+                <a href={l.h} class="group flex items-start gap-2 text-[0.9375rem] leading-snug text-ink-200 transition-colors hover:text-white">
+                  <svg viewBox="0 0 24 24" class="mt-[.3em] h-3.5 w-3.5 shrink-0 rotate-180 text-shifa-400 transition-transform duration-300 group-hover:-translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true">
+                    <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>{l.l}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ══════════ أسئلة شائعة ══════════ -->
+  <section class="wrap pb-24 sm:pb-28">
+    <div class="mx-auto max-w-[52rem]">
+      <div class="max-w-2xl" data-reveal>
+        <p class="chip">أسئلة شائعة</p>
+        <h2 class="mt-5 text-[2rem] font-bold sm:text-[2.5rem]">الأسئلة التي يبدأ بها معظم من يراسلنا</h2>
+      </div>
+      <div class="mt-10 space-y-3">
+        {homeFaqs.map((f) => (
+          <details class="group rounded-3xl border border-white/10 bg-white/[.04] px-6 py-5 transition-colors open:border-shifa-300/30 open:bg-white/[.06]" data-reveal>
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-4 font-display text-[1.0625rem] font-semibold text-white">
+              <span>{f.q}</span>
+              <svg viewBox="0 0 24 24" class="mt-1 h-4 w-4 shrink-0 text-shifa-300 transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <p class="mt-4 text-[0.9375rem] leading-[1.95] text-ink-200">{f.a}</p>
+          </details>
+        ))}
+      </div>
     </div>
   </section>
 
