@@ -1,0 +1,154 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Disclaimer from "../components/Disclaimer.astro";
+import { WHATSAPP, ROLE } from "../lib/site";
+import { graph, organization, website, webPage, breadcrumbs } from "../lib/schema";
+
+const title = "اطلب تقييم حالتك — TransplantBridge";
+const description =
+  "اطلب تقييم حالتك لزرع الكبد أو زراعة الكلى: ما المستندات المطلوبة بالضبط، وكيف ترسلها، وماذا يحدث بعد إرسالها.";
+const path = "/request-evaluation";
+
+const crumbs = [
+  { name: "الرئيسية", path: "/" },
+  { name: "اطلب تقييم حالتك", path },
+];
+
+const jsonLd = graph([
+  organization(),
+  website(),
+  webPage({ path, title, description }),
+  breadcrumbs(crumbs),
+]);
+
+const patientDocs = [
+  "تقرير الطبيب المعالج الأخير وتشخيص الحالة",
+  "تحاليل الدم الحديثة: وظائف الكبد أو الكلى، والتخثر، وصورة الدم",
+  "تقارير التصوير: سونار أو مقطعي أو رنين، مع الصور إن أمكن",
+  "فصيلة الدم",
+  "قائمة الأدوية الحالية بالجرعات",
+  "تقرير الغسيل الكلوي إن كان المريض عليه: منذ متى وكم جلسة أسبوعياً",
+  "تقارير أي جراحات أو زراعات سابقة",
+  "العمر والوزن والطول والأمراض المزمنة",
+];
+
+const donorDocs = [
+  "فصيلة الدم — أهم فحص وأسرعه وأقلها كلفة",
+  "العمر والوزن والطول",
+  "تحاليل وظائف الكبد أو الكلى",
+  "فحوصات العدوى الأساسية",
+  "ضغط الدم والسكر",
+  "صلة القرابة بالمريض بالضبط",
+  "أي أمراض مزمنة أو أدوية يأخذها",
+];
+
+const steps = [
+  { n: "١", t: "ترسل ما لديك", d: "لا تنتظر اكتمال كل شيء — أرسل الموجود وسنحدد الناقص." },
+  { n: "٢", t: "نقرأ ونردّ", d: "نوضّح لك ما ينقص الملف وما هي خطوتك التالية." },
+  { n: "٣", t: "نجهّز الملف", d: "نرتّبه بالشكل الذي يطلبه فريق الزراعة." },
+  { n: "٤", t: "نوصلك للمنسق", d: "إحالة إلى المنسق الدولي في المستشفى وتسجيل حالتك باسمك." },
+];
+
+const msg =
+  "السلام عليكم، أريد تقييم حالة لزرع الكبد أو زراعة الكلى.\n" +
+  "اسم المريض:\nالعمر:\nالتشخيص:\nهل على غسيل كلوي:\n" +
+  "هل يوجد متبرع من الأقارب: نعم / لا / لا أعرف\nصلة القرابة:\nفصيلة دم المريض:\nالدولة:";
+---
+
+<Layout title={title} description={description} path={path} jsonLd={jsonLd}>
+  <article class="wrap pt-32 pb-8 sm:pt-36">
+    <div class="mx-auto max-w-[52rem]">
+      <Breadcrumbs items={crumbs} />
+
+      <header>
+        <p class="chip">الخطوة الأولى</p>
+        <h1 class="mt-5 font-display text-[2.125rem] font-extrabold leading-[1.3] tracking-tightest text-white sm:text-[2.75rem]">
+          اطلب تقييم حالتك
+        </h1>
+        <p class="mt-6 text-[1.0625rem] leading-[1.95] text-ink-100 sm:text-lg">
+          أرسل ما لديك من تقارير عبر واتساب. نقرأ الملف ونخبرك بما ينقصه وما هي خطوتك
+          التالية — <strong class="font-bold text-white">قبل أي كلام عن التكلفة</strong>،
+          وبلا أي التزام منك.
+        </p>
+      </header>
+
+      <div class="mt-8"><Disclaimer /></div>
+
+      <!-- زر الإرسال -->
+      <div class="mt-10 rounded-5xl border border-shifa-300/25 bg-gradient-to-bl from-shifa-500/[.14] via-white/[.03] to-amal/[.06] p-8 sm:p-10">
+        <h2 class="font-display text-[1.5rem] font-bold text-white sm:text-[1.75rem]">أرسل الآن عبر واتساب</h2>
+        <p class="mt-3 text-[1.0625rem] leading-relaxed text-ink-200">
+          اضغط الزر وستجد رسالة جاهزة فيها الحقول المطلوبة — املأها وأرفق التقارير.
+        </p>
+        <a
+          href={WHATSAPP.link(msg)}
+          target="_blank"
+          rel="noopener"
+          data-wa="request-evaluation"
+          class="btn-primary mt-7 !px-8 !py-4 !text-base"
+        >
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
+            <path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.39a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.02a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.05-.2-.31a8.22 8.22 0 1 1 6.98 3.87Z"/>
+          </svg>
+          فتح واتساب برسالة جاهزة
+        </a>
+        <p class="mt-5 text-[0.8125rem] text-ink-300">
+          الرقم: <span class="num font-semibold text-shifa-200">{WHATSAPP.display}</span>
+        </p>
+      </div>
+
+      <div class="panel mt-10">
+        <div class="prose-ar">
+          <h2>ما نحتاجه عن المريض</h2>
+          <p>لا تنتظر اكتمال القائمة. أرسل الموجود، ونخبرك بالناقص بدقة.</p>
+          <ul>{patientDocs.map((t) => <li set:html={t} />)}</ul>
+
+          <h2>ما نحتاجه عن المتبرع المحتمل</h2>
+          <p>
+            هذا الجزء هو ما يُغفل غالباً، وهو الذي يحسم إن كان المسار ممكناً. فالمريض
+            القادم من خارج البلد يحتاج في الغالب متبرعاً حيّاً من أقاربه.
+          </p>
+          <ul>{donorDocs.map((t) => <li set:html={t} />)}</ul>
+          <p>
+            وإن لم يكن لديك متبرع بعد، أرسل ملف المريض وقل ذلك صراحةً — نوضّح لك الشروط
+            والخيارات قبل أن تُنفق وقتاً في الاتجاه الخطأ. والتفصيل في
+            <a href="/kidney-donor-requirements">شروط التبرع بالكلى</a> و<a href="/liver-donor-requirements">شروط التبرع بالكبد</a>.
+          </p>
+
+          <h2>ماذا لا نطلب منك</h2>
+          <ul>
+            <li>لا نطلب أي دفعة قبل أن يُقرأ ملفك ويُعرف إن كان المسار ممكناً.</li>
+            <li>لا نطلب بيانات بنكية ولا صور بطاقات ولا كلمات مرور — ومن يطلبها منك فاحذره.</li>
+            <li>لا نطلب منك قراراً فورياً، ولا نضع عليك ضغط وقت.</li>
+          </ul>
+
+          <h2>خصوصية ملفك</h2>
+          <p>
+            تقاريرك الطبية بيانات حساسة. لا نشرها ولا نستعملها في تسويق ولا نرسلها إلا إلى
+            الجهة الطبية المعنية بتقييم حالتك. وتفاصيل ما نحتفظ به ومدته في
+            <a href="/privacy">سياسة الخصوصية</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- الخطوات -->
+      <section class="mt-14">
+        <h2 class="font-display text-[1.625rem] font-bold text-white sm:text-[1.875rem]">ماذا يحدث بعد الإرسال؟</h2>
+        <ol class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((s) => (
+            <li class="card card-lift !p-6" data-reveal>
+              <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-shifa-400 to-shifa-700 font-display text-lg font-bold text-white shadow-glow">{s.n}</span>
+              <h3 class="mt-5 font-display text-[1.0625rem] font-bold text-white">{s.t}</h3>
+              <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-300">{s.d}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <p class="mt-12 rounded-4xl border border-white/10 bg-white/[.03] p-6 text-[0.875rem] leading-relaxed text-ink-300">
+        {ROLE.weAreNot} و{ROLE.noTrafficking}
+      </p>
+    </div>
+  </article>
+</Layout>

@@ -18,7 +18,9 @@ if (!existsSync(join(DIST, "index.html"))) {
   process.exit(1);
 }
 
-let html = readFileSync(join(DIST, "index.html"), "utf8");
+const TARGETS = process.argv.slice(2).length ? process.argv.slice(2) : ["index.html"];
+for (const TARGET of TARGETS) {
+let html = readFileSync(join(DIST, TARGET), "utf8");
 
 // 1) دمج ملفات CSS داخل الصفحة
 let cssInlined = 0;
@@ -54,14 +56,15 @@ html = html.replace(/href="(\/[^"#][^"]*)"/g, 'data-local-href="$1" href="#"');
 // 5) لافتة توضّح أن هذه معاينة شكلية
 const banner = `<div style="position:fixed;top:0;left:0;right:0;z-index:99999;background:#0F766E;color:#fff;
 font:600 13px/1.6 system-ui,sans-serif;text-align:center;padding:7px 12px;direction:rtl">
-معاينة شكلية للصفحة الرئيسية — الروابط معطّلة هنا. للتصفّح الكامل افتح http://localhost:4330
+معاينة شكلية — الروابط معطّلة في هذا الملف. للتصفّح الكامل افتح http://localhost:4330
 </div><div style="height:34px"></div>`;
 html = html.replace(/<body([^>]*)>/, `<body$1>${banner}`);
 
 mkdirSync(OUT_DIR, { recursive: true });
-const out = join(OUT_DIR, "TransplantBridge-preview.html");
+const out = join(OUT_DIR, "preview-" + TARGET);
 writeFileSync(out, html);
 
 console.log(`CSS مدمج: ${cssInlined} | خطوط مدمجة: ${fontsInlined}`);
 console.log(`الحجم: ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB`);
 console.log(out);
+}
