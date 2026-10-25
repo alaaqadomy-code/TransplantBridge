@@ -3,9 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    color-scheme: light;
-  }
+  :root { color-scheme: light; }
 
   html {
     scroll-behavior: smooth;
@@ -13,108 +11,167 @@
   }
 
   body {
-    @apply bg-paper font-body text-ink-700 antialiased;
+    @apply bg-paper font-body text-ink-600 antialiased;
     font-size: 1.0625rem;
-    line-height: 1.85;
+    line-height: 1.9;
     text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4 {
     @apply font-display text-ink-900;
-    line-height: 1.3;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
   p { text-wrap: pretty; }
 
-  /* الأرقام اللاتينية داخل نص عربي تبقى متصلة الاتجاه */
   .num { direction: ltr; unicode-bidi: isolate; display: inline-block; }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-shifa-500 ring-offset-2 ring-offset-paper;
-    border-radius: 4px;
+    @apply outline-none ring-2 ring-shifa-400 ring-offset-2 ring-offset-paper;
+    border-radius: 6px;
   }
 
   ::selection {
-    background-color: theme("colors.shifa.200");
-    color: theme("colors.ink.900");
+    background-color: theme("colors.shifa.300");
+    color: theme("colors.deep.900");
   }
 }
 
 @layer components {
-  /* ===== الحاويات ===== */
   .wrap { @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8; }
   .wrap-prose { @apply mx-auto w-full max-w-3xl px-5 sm:px-6; }
 
   /* ===== الأزرار ===== */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3
-           font-display text-base font-medium transition-all duration-300
-           will-change-transform;
-  }
-  .btn-primary {
-    @apply btn bg-shifa-600 text-white shadow-lift
-           hover:bg-shifa-700 hover:-translate-y-0.5 active:translate-y-0;
-  }
-  .btn-ghost {
-    @apply btn border border-shifa-200 bg-white/70 text-shifa-800
-           hover:border-shifa-300 hover:bg-white hover:-translate-y-0.5;
+    @apply relative inline-flex items-center justify-center gap-2.5 rounded-full
+           px-7 py-3.5 font-display text-[0.9375rem] font-semibold
+           transition-all duration-300 will-change-transform;
   }
 
-  /* ===== البطاقات ===== */
+  /* زر رئيسي بلمعة تمر عند التحويم */
+  .btn-primary {
+    @apply btn overflow-hidden text-deep-950 shadow-glow
+           hover:-translate-y-0.5 active:translate-y-0;
+    background-image: linear-gradient(135deg, theme("colors.shifa.300"), theme("colors.shifa.400") 45%, theme("colors.shifa.200"));
+  }
+  .btn-primary::after {
+    content: "";
+    @apply pointer-events-none absolute inset-0 -translate-x-full;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-primary:hover::after { @apply translate-x-full; }
+
+  .btn-ghost {
+    @apply btn border border-ink-200/70 bg-white/60 text-ink-800 backdrop-blur
+           hover:-translate-y-0.5 hover:border-shifa-300 hover:bg-white;
+  }
+
+  /* زر على خلفية داكنة */
+  .btn-onDark {
+    @apply btn border border-white/15 bg-white/5 text-white backdrop-blur-sm
+           hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/10;
+  }
+
+  /* ===== البطاقات بحدّ متدرّج ===== */
   .card {
-    @apply rounded-4xl border border-shifa-100/80 bg-white p-6 shadow-soft
+    @apply relative rounded-4xl bg-white p-7 shadow-soft
            transition-all duration-500 will-change-transform sm:p-8;
   }
-  .card-lift { @apply hover:-translate-y-1 hover:border-shifa-200 hover:shadow-lift; }
+  .card::before {
+    content: "";
+    @apply pointer-events-none absolute inset-0 rounded-4xl;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(15, 191, 164, 0.35), rgba(15, 191, 164, 0.04) 45%, rgba(233, 182, 97, 0.18));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.8;
+    transition: opacity 0.5s;
+  }
+  .card-lift:hover { @apply -translate-y-1.5 shadow-lift; }
+  .card-lift:hover::before { opacity: 1; }
+
+  /* بطاقة على خلفية داكنة */
+  .card-dark {
+    @apply relative rounded-4xl border border-white/10 bg-white/[.04] p-7 shadow-ring
+           backdrop-blur-sm transition-all duration-500 sm:p-8;
+  }
+  .card-dark:hover { @apply -translate-y-1.5 border-shifa-400/40 bg-white/[.07]; }
 
   /* ===== الشارة ===== */
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-shifa-200/70
-           bg-shifa-50 px-4 py-1.5 font-display text-sm text-shifa-800;
+    @apply inline-flex items-center gap-2.5 rounded-full border border-shifa-300/40
+           bg-shifa-400/10 px-4 py-2 font-display text-[0.8125rem] font-medium text-shifa-200;
+  }
+  .chip-light {
+    @apply inline-flex items-center gap-2.5 rounded-full border border-shifa-200
+           bg-shifa-50 px-4 py-2 font-display text-[0.8125rem] font-medium text-shifa-800;
   }
 
   /* ===== نص المقال ===== */
-  .prose-ar { @apply text-[1.0625rem] leading-[1.95] text-ink-700; }
-  .prose-ar h2 {
-    @apply mt-14 mb-4 text-2xl font-semibold text-ink-900 sm:text-[1.75rem];
-  }
-  .prose-ar h3 { @apply mt-10 mb-3 text-xl font-semibold text-ink-800; }
+  .prose-ar { @apply text-[1.0625rem] leading-[2] text-ink-600; }
+  .prose-ar h2 { @apply mt-16 mb-5 text-[1.625rem] font-bold text-ink-900 sm:text-3xl; }
+  .prose-ar h3 { @apply mt-11 mb-3.5 text-xl font-bold text-ink-800; }
   .prose-ar p { @apply mb-5; }
-  .prose-ar ul { @apply mb-6 space-y-2.5; }
-  .prose-ar li { @apply relative pr-6; }
+  .prose-ar ul { @apply mb-6 space-y-3; }
+  .prose-ar li { @apply relative pr-7; }
   .prose-ar li::before {
     content: "";
-    @apply absolute right-0 top-[.7em] h-1.5 w-1.5 rounded-full bg-shifa-400;
+    @apply absolute right-0 top-[.75em] h-2 w-2 rounded-full;
+    background-image: linear-gradient(135deg, theme("colors.shifa.400"), theme("colors.shifa.600"));
   }
   .prose-ar a {
-    @apply font-medium text-shifa-700 underline decoration-shifa-300
-           underline-offset-4 transition-colors hover:text-shifa-800 hover:decoration-shifa-500;
+    @apply font-semibold text-shifa-700 underline decoration-shifa-300
+           decoration-2 underline-offset-4 transition-colors
+           hover:text-shifa-800 hover:decoration-shifa-500;
   }
-  .prose-ar strong { @apply font-semibold text-ink-900; }
+  .prose-ar strong { @apply font-bold text-ink-900; }
 }
 
 @layer utilities {
-  /* تدرّج النص للعناوين البارزة */
+  /* تدرّج النص */
   .text-gradient {
-    @apply bg-gradient-to-l from-shifa-700 via-shifa-500 to-shifa-700 bg-clip-text text-transparent;
-    background-size: 200% auto;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, theme("colors.shifa.300"), theme("colors.shifa.100") 30%, theme("colors.shifa.300") 55%, theme("colors.amal.light") 85%, theme("colors.shifa.300"));
+    background-size: 220% auto;
+  }
+  .text-gradient-dark {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(100deg, theme("colors.shifa.700"), theme("colors.deep.800") 40%, theme("colors.shifa.700"));
+    background-size: 220% auto;
   }
 
-  /* ===== الظهور عند التمرير =====
-     المحتوى ظاهر افتراضياً. السكربت يضيف .reveal-ready فيُخفيه ثم يكشفه،
-     فإن تعطّل JavaScript بقي كل شيء مقروءاً. */
-  .reveal-ready [data-reveal] { opacity: 0; transform: translate3d(0, 18px, 0); }
+  /* شبكة خفيفة خلف الأقسام الداكنة — CSS خالص */
+  .bg-grid {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 55%, transparent 100%);
+  }
+
+  /* حُبيبات ناعمة تمنع تحزّم التدرجات — SVG مضمّن، بايتات قليلة */
+  .bg-grain::after {
+    content: "";
+    @apply pointer-events-none absolute inset-0;
+    opacity: 0.22;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== الظهور عند التمرير ===== */
+  .reveal-ready [data-reveal] { opacity: 0; transform: translate3d(0, 22px, 0); }
   .reveal-ready [data-reveal].is-in {
     opacity: 1;
     transform: none;
-    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     transition-delay: var(--d, 0ms);
   }
 }
 
-/* ===== احترام تفضيل تقليل الحركة ===== */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {

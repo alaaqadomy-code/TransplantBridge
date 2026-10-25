@@ -1,40 +1,20 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Cta from "../components/Cta.astro";
-import { SITE, ROLE, WHATSAPP } from "../lib/site";
+import { ROLE, WHATSAPP } from "../lib/site";
 import { graph, organization, website, webPage } from "../lib/schema";
 
 const title = "زرع الكبد وزراعة الكلى — دليل عربي وتنسيق العلاج | TransplantBridge";
 const description =
   "دليل عربي لزرع الكبد وزراعة الكلى: شروط المتبرع والمخاطر ونسب النجاح وما بعد العملية، مع تنسيق التواصل مع المستشفى. معلومات موثقة بلا وعود.";
 
-const jsonLd = graph([
-  organization(),
-  website(),
-  webPage({ path: "/", title, description }),
-]);
+const jsonLd = graph([organization(), website(), webPage({ path: "/", title, description })]);
 
 const steps = [
-  {
-    n: "١",
-    t: "ترسل ملفك",
-    d: "التقارير الطبية والتحاليل والأشعة عبر واتساب، ووصف مختصر لحالتك.",
-  },
-  {
-    n: "٢",
-    t: "نقرأه ونجهّزه",
-    d: "نرتّب الملف بالشكل الذي يطلبه فريق الزراعة، ونوضّح لك ما ينقصه.",
-  },
-  {
-    n: "٣",
-    t: "نوصلك للمنسق",
-    d: "نحيلك إلى المنسق الدولي في المستشفى المتخصص، ونسجّل حالتك باسمك.",
-  },
-  {
-    n: "٤",
-    t: "نتابع معك",
-    d: "نبقى على تواصل معك ومع المنسق بعد الإحالة، حتى تستقر خطوتك التالية.",
-  },
+  { n: "١", t: "ترسل ملفك", d: "التقارير الطبية والتحاليل والأشعة عبر واتساب، ووصف مختصر لحالتك." },
+  { n: "٢", t: "نقرأه ونجهّزه", d: "نرتّب الملف بالشكل الذي يطلبه فريق الزراعة، ونوضّح لك ما ينقصه." },
+  { n: "٣", t: "نوصلك للمنسق", d: "نحيلك إلى المنسق الدولي في المستشفى المتخصص، ونسجّل حالتك باسمك." },
+  { n: "٤", t: "نتابع معك", d: "نبقى على تواصل معك ومع المنسق بعد الإحالة، حتى تستقر خطوتك التالية." },
 ];
 
 const honesty = [
@@ -68,130 +48,175 @@ const clusters = [
 ];
 ---
 
-<Layout title={title} description={description} path="/" jsonLd={jsonLd}>
-  <!-- ===== Hero ===== -->
-  <section class="relative overflow-hidden">
-    <!-- أشكال عضوية ناعمة توحي بالتجدد -->
-    <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-      <div class="absolute -right-24 -top-32 h-[30rem] w-[30rem] rounded-full bg-shifa-200/40 blur-3xl animate-drift"></div>
-      <div class="absolute -left-32 top-24 h-[22rem] w-[22rem] rounded-full bg-amal-light/20 blur-3xl animate-drift" style="animation-delay:-5s"></div>
-      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-l from-transparent via-shifa-200 to-transparent"></div>
+<Layout title={title} description={description} path="/" jsonLd={jsonLd} darkHeader={true}>
+  <!-- ══════════ البطل — خلفية داكنة فاخرة ══════════ -->
+  <section class="relative overflow-hidden bg-deep-900 bg-grain">
+    <!-- الشبكة والتوهّجات: CSS خالص، صفر صور -->
+    <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div class="absolute -right-32 -top-40 h-[34rem] w-[34rem] rounded-full bg-shifa-500/25 blur-[110px] animate-breathe"></div>
+      <div class="absolute -left-40 top-32 h-[26rem] w-[26rem] rounded-full bg-amal/10 blur-[100px] animate-drift"></div>
+      <div class="absolute bottom-0 left-1/3 h-[18rem] w-[30rem] rounded-full bg-shifa-400/12 blur-[90px] animate-drift" style="animation-delay:-7s"></div>
     </div>
 
-    <div class="wrap py-20 sm:py-28 lg:py-32">
-      <div class="max-w-3xl">
-        <p class="chip animate-rise">
-          <span class="h-1.5 w-1.5 rounded-full bg-shifa-500"></span>
-          دليل عربي مستقل · زرع الكبد وزراعة الكلى
-        </p>
+    <div class="wrap relative pt-16 pb-24 sm:pt-20 sm:pb-28 lg:pt-24 lg:pb-36">
+      <div class="grid items-center gap-14 lg:grid-cols-[1.15fr_1fr]">
+        <!-- النص -->
+        <div>
+          <p class="chip animate-rise">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full rounded-full bg-shifa-300 opacity-70 animate-halo"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-shifa-300"></span>
+            </span>
+            دليل عربي مستقل · زرع الكبد وزراعة الكلى
+          </p>
 
-        <h1 class="mt-6 text-[2.5rem] font-semibold leading-[1.15] sm:text-6xl lg:text-[4.25rem]">
-          <span class="text-gradient animate-shimmer">التعافي يبدأ من هنا</span>
-        </h1>
+          <h1 class="mt-7 font-display text-[2.75rem] font-extrabold leading-[1.28] tracking-tightest text-white sm:text-6xl sm:leading-[1.24] lg:text-[4.25rem]">
+            التعافي <span class="text-gradient animate-shimmer inline-block pb-[0.12em]">يبدأ من هنا</span>
+          </h1>
 
-        <p class="mt-6 max-w-2xl text-lg leading-[1.9] text-ink-600 sm:text-xl">
-          معلومات واضحة وموثقة عن <strong class="font-semibold text-ink-900">زرع الكبد</strong> و<strong class="font-semibold text-ink-900">زراعة الكلى</strong>: من يصلح متبرعاً، وما المخاطر، وماذا تقول المصادر عن النتائج، وما الذي يحدث بعد العملية — ثم نساعدك في تجهيز ملفك وإيصاله إلى المستشفى.
-        </p>
+          <p class="mt-7 max-w-xl text-[1.0625rem] leading-[1.95] text-ink-200 sm:text-lg">
+            معلومات واضحة وموثقة عن <strong class="font-bold text-white">زرع الكبد</strong> و<strong class="font-bold text-white">زراعة الكلى</strong>: من يصلح متبرعاً، وما المخاطر، وماذا تقول المصادر عن النتائج، وما الذي يحدث بعد العملية — ثم نساعدك في تجهيز ملفك وإيصاله إلى المستشفى.
+          </p>
 
-        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a href={WHATSAPP.link(WHATSAPP.defaultMessage)} target="_blank" rel="noopener" data-wa="hero" class="btn-primary !px-7 !py-3.5 !text-[1.0625rem]">
-            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
-              <path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.39a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.02a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.05-.2-.31a8.22 8.22 0 1 1 6.98 3.87Z"/>
-            </svg>
-            اطلب تقييم حالتك
-          </a>
-          <a href="#clusters" class="btn-ghost !px-7 !py-3.5 !text-[1.0625rem]">تصفّح المعلومات أولاً</a>
+          <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a href={WHATSAPP.link(WHATSAPP.defaultMessage)} target="_blank" rel="noopener" data-wa="hero" class="btn-primary !px-8 !py-4 !text-base">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
+                <path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.39a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.02a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.05-.2-.31a8.22 8.22 0 1 1 6.98 3.87Z"/>
+              </svg>
+              اطلب تقييم حالتك
+            </a>
+            <a href="#clusters" class="btn-onDark !px-8 !py-4 !text-base">تصفّح المعلومات أولاً</a>
+          </div>
+
+          <p class="mt-8 max-w-lg text-[0.8125rem] leading-relaxed text-ink-400">{ROLE.weAreNot}</p>
         </div>
 
-        <p class="mt-6 text-[0.875rem] text-ink-400">{ROLE.weAreNot}</p>
+        <!-- الرسم التوضيحي: جسر + نبض — SVG مضمّن، لا صورة تُحمَّل -->
+        <div class="relative hidden lg:block" aria-hidden="true">
+          <div class="absolute inset-0 rounded-full bg-shifa-500/15 blur-3xl animate-breathe"></div>
+          <svg viewBox="0 0 400 320" class="relative w-full animate-float" fill="none">
+            <defs>
+              <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#5FE9D0"/>
+                <stop offset="1" stop-color="#099A85"/>
+              </linearGradient>
+              <linearGradient id="pulse" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#F6D9A4" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#F6D9A4"/>
+                <stop offset="1" stop-color="#5FE9D0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- حلقات العمق -->
+            <circle cx="200" cy="160" r="140" stroke="#5FE9D0" stroke-opacity=".10" stroke-width="1"/>
+            <circle cx="200" cy="160" r="104" stroke="#5FE9D0" stroke-opacity=".16" stroke-width="1"/>
+            <circle cx="200" cy="160" r="68" stroke="#5FE9D0" stroke-opacity=".22" stroke-width="1"/>
+
+            <!-- قوس الجسر -->
+            <path d="M48 222c0-72 68-118 152-118s152 46 152 118" stroke="url(#arc)" stroke-width="3.5" stroke-linecap="round"
+                  stroke-dasharray="1000" class="animate-draw"/>
+            <path d="M48 222h304" stroke="url(#arc)" stroke-width="2.5" stroke-linecap="round" stroke-opacity=".75"/>
+            <!-- الدعامات -->
+            <path d="M110 222v-42M200 222v-62M290 222v-42" stroke="#5FE9D0" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+
+            <!-- خط النبض يعبر الجسر -->
+            <path d="M60 170h58l14-26 18 52 16-34 14 18h48l12-22 16 40 14-26h58"
+                  stroke="url(#pulse)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-dasharray="1000" class="animate-draw" style="animation-delay:.5s"/>
+
+            <!-- نقاط حيّة -->
+            <circle cx="200" cy="104" r="7" fill="#5FE9D0"/>
+            <circle cx="200" cy="104" r="14" fill="#5FE9D0" fill-opacity=".2" class="animate-halo"/>
+            <circle cx="48" cy="222" r="5" fill="#F6D9A4"/>
+            <circle cx="352" cy="222" r="5" fill="#F6D9A4"/>
+          </svg>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- ===== المدخلان ===== -->
-  <section class="wrap pb-6">
-    <div class="grid gap-5 lg:grid-cols-2">
-      <a href="/liver-transplant" class="card card-lift group relative overflow-hidden !p-8 sm:!p-10" data-reveal>
-        <div class="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-shifa-100/70 blur-2xl transition-transform duration-700 group-hover:scale-125" aria-hidden="true"></div>
-        <div class="relative">
-          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-shifa-50 text-shifa-700">
-            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-              <path d="M4 9c2.5-3 6-4 9-4s5 1 6 2c1.4 1.5 1 4-1 5.5-1.6 1.2-2 2.3-2.3 3.6-.3 1.4-1.3 2.4-2.9 2.4-2 0-3-1.4-4.3-2.6C6.6 14.4 4 13 4 9Z" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <h2 class="mt-5 font-display text-2xl font-semibold text-ink-900 sm:text-[1.75rem]">زرع الكبد</h2>
-          <p class="mt-3 text-[1.0625rem] leading-relaxed text-ink-600">
-            ما هو زرع الكبد ومتى يلزم، وكيف تُجرى العملية، ومن المرشّح لها، وشروط المتبرع ومخاطره.
-          </p>
-          <span class="mt-5 inline-flex items-center gap-2 font-display text-[0.9375rem] font-medium text-shifa-700">
-            ادخل القسم
-            <svg viewBox="0 0 24 24" class="h-4 w-4 rotate-180 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </div>
-      </a>
-
-      <a href="/kidney-transplant" class="card card-lift group relative overflow-hidden !p-8 sm:!p-10" data-reveal>
-        <div class="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-shifa-100/70 blur-2xl transition-transform duration-700 group-hover:scale-125" aria-hidden="true"></div>
-        <div class="relative">
-          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-shifa-50 text-shifa-700">
-            <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-              <path d="M9 4c3 0 5 2.4 5 5.5 0 1.6-.6 2.3-.6 3.5 0 1.3 1 1.8 1 3.2C14.4 18.6 12.4 20 10 20c-3.3 0-6-3.2-6-8s2.7-8 5-8Z" stroke-linejoin="round"/>
-              <path d="M14 12.8c1.6-.3 2.6-1.3 2.6-2.6" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <h2 class="mt-5 font-display text-2xl font-semibold text-ink-900 sm:text-[1.75rem]">زراعة الكلى</h2>
-          <p class="mt-3 text-[1.0625rem] leading-relaxed text-ink-600">
-            خطوات العملية وشروط المتبرع ونسب النجاح وعمر العضو المزروع، وفترة العزل والحياة بعدها.
-          </p>
-          <span class="mt-5 inline-flex items-center gap-2 font-display text-[0.9375rem] font-medium text-shifa-700">
-            ادخل القسم
-            <svg viewBox="0 0 24 24" class="h-4 w-4 rotate-180 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-        </div>
-      </a>
+    <!-- انحناءة تفصل البطل عن المحتوى -->
+    <div class="pointer-events-none absolute inset-x-0 bottom-0" aria-hidden="true">
+      <svg viewBox="0 0 1440 90" class="block w-full" preserveAspectRatio="none">
+        <path d="M0 90V46c240 34 480 44 720 30S1200 18 1440 0v90Z" fill="#F6FBFB"/>
+      </svg>
     </div>
   </section>
 
-  <!-- ===== كيف نعمل ===== -->
-  <section class="wrap py-20 sm:py-24">
+  <!-- ══════════ المدخلان ══════════ -->
+  <section class="wrap -mt-6 pb-4">
+    <div class="grid gap-6 lg:grid-cols-2">
+      {[
+        { h: "زرع الكبد", d: "ما هو زرع الكبد ومتى يلزم، وكيف تُجرى العملية، ومن المرشّح لها، وشروط المتبرع ومخاطره.", href: "/liver-transplant",
+          icon: "M4 9c2.5-3 6-4 9-4s5 1 6 2c1.4 1.5 1 4-1 5.5-1.6 1.2-2 2.3-2.3 3.6-.3 1.4-1.3 2.4-2.9 2.4-2 0-3-1.4-4.3-2.6C6.6 14.4 4 13 4 9Z" },
+        { h: "زراعة الكلى", d: "خطوات العملية وشروط المتبرع ونسب النجاح وعمر العضو المزروع، وفترة العزل والحياة بعدها.", href: "/kidney-transplant",
+          icon: "M9 4c3 0 5 2.4 5 5.5 0 1.6-.6 2.3-.6 3.5 0 1.3 1 1.8 1 3.2C14.4 18.6 12.4 20 10 20c-3.3 0-6-3.2-6-8s2.7-8 5-8Z" },
+      ].map((c) => (
+        <a href={c.href} class="card card-lift group overflow-hidden !p-8 sm:!p-10" data-reveal>
+          <div class="pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-shifa-100/60 blur-2xl transition-transform duration-700 group-hover:scale-150" aria-hidden="true"></div>
+          <div class="relative">
+            <span class="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-shifa-400 to-shifa-700 text-white shadow-glow">
+              <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d={c.icon} stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <h2 class="mt-6 font-display text-[1.75rem] font-bold text-ink-900 sm:text-3xl">{c.h}</h2>
+            <p class="mt-3.5 text-[1.0625rem] leading-relaxed text-ink-500">{c.d}</p>
+            <span class="mt-6 inline-flex items-center gap-2 font-display text-[0.9375rem] font-semibold text-shifa-700">
+              ادخل القسم
+              <svg viewBox="0 0 24 24" class="h-4 w-4 rotate-180 transition-transform duration-300 group-hover:-translate-x-1.5" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ══════════ كيف نعمل ══════════ -->
+  <section class="wrap py-24 sm:py-28">
     <div class="max-w-2xl" data-reveal>
-      <h2 class="text-3xl font-semibold sm:text-4xl">كيف نعمل</h2>
-      <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-600">{ROLE.weAre}</p>
+      <p class="chip-light">آلية العمل</p>
+      <h2 class="mt-5 text-[2rem] font-bold sm:text-[2.5rem]">كيف نعمل</h2>
+      <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-500">{ROLE.weAre}</p>
     </div>
 
-    <ol class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <ol class="relative mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- خط يربط الخطوات على الشاشات الكبيرة -->
+      <div class="pointer-events-none absolute inset-x-8 top-[3.25rem] hidden h-px bg-gradient-to-l from-transparent via-shifa-200 to-transparent lg:block" aria-hidden="true"></div>
       {steps.map((s) => (
-        <li class="card card-lift relative" data-reveal>
-          <span class="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-shifa-500 to-shifa-700 font-display text-lg font-semibold text-white">{s.n}</span>
-          <h3 class="mt-5 font-display text-lg font-semibold text-ink-900">{s.t}</h3>
-          <p class="mt-2 text-[0.9375rem] leading-relaxed text-ink-500">{s.d}</p>
+        <li class="card card-lift relative !p-7" data-reveal>
+          <span class="relative z-10 grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-shifa-400 to-shifa-700 font-display text-xl font-bold text-white shadow-glow">{s.n}</span>
+          <h3 class="mt-6 font-display text-[1.125rem] font-bold text-ink-900">{s.t}</h3>
+          <p class="mt-2.5 text-[0.9375rem] leading-relaxed text-ink-500">{s.d}</p>
         </li>
       ))}
     </ol>
   </section>
 
-  <!-- ===== الصراحة ===== -->
-  <section class="border-y border-shifa-100 bg-white">
-    <div class="wrap py-20 sm:py-24">
+  <!-- ══════════ الصراحة — قسم داكن للتباين ══════════ -->
+  <section class="relative overflow-hidden bg-deep-900 bg-grain py-24 sm:py-28">
+    <div class="pointer-events-none absolute inset-0 bg-grid" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute -left-40 top-10 h-[26rem] w-[26rem] rounded-full bg-shifa-500/15 blur-[110px] animate-breathe" aria-hidden="true"></div>
+
+    <div class="wrap relative">
       <div class="max-w-2xl" data-reveal>
-        <h2 class="text-3xl font-semibold sm:text-4xl">ثلاثة أشياء نقولها بصراحة</h2>
-        <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-600">
+        <p class="chip">الصدق قبل التسويق</p>
+        <h2 class="mt-5 text-[2rem] font-bold text-white sm:text-[2.5rem]">ثلاثة أشياء نقولها بصراحة</h2>
+        <p class="mt-4 text-[1.0625rem] leading-relaxed text-ink-300">
           قرار الزراعة ثقيل، ويستحق معلومة صادقة لا تسويقاً.
         </p>
       </div>
 
-      <div class="mt-12 grid gap-5 lg:grid-cols-3">
+      <div class="mt-14 grid gap-6 lg:grid-cols-3">
         {honesty.map((h) => (
-          <article class="card card-lift flex flex-col" data-reveal>
-            <h3 class="font-display text-xl font-semibold text-ink-900">{h.t}</h3>
-            <p class="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-ink-600">{h.d}</p>
-            <a href={h.href} class="mt-5 inline-flex items-center gap-2 font-display text-[0.9375rem] font-medium text-shifa-700 transition-colors hover:text-shifa-800">
+          <article class="card-dark group flex flex-col" data-reveal>
+            <h3 class="font-display text-xl font-bold text-white">{h.t}</h3>
+            <p class="mt-3.5 flex-1 text-[0.9375rem] leading-relaxed text-ink-300">{h.d}</p>
+            <a href={h.href} class="mt-6 inline-flex items-center gap-2 font-display text-[0.9375rem] font-semibold text-shifa-300 transition-colors hover:text-shifa-200">
               {h.cta}
-              <svg viewBox="0 0 24 24" class="h-4 w-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="h-4 w-4 rotate-180 transition-transform duration-300 group-hover:-translate-x-1.5" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
                 <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
@@ -201,21 +226,31 @@ const clusters = [
     </div>
   </section>
 
-  <!-- ===== أقسام أخرى ===== -->
-  <section id="clusters" class="wrap py-20 sm:py-24">
-    <h2 class="text-3xl font-semibold sm:text-4xl" data-reveal>ابدأ من سؤالك</h2>
-    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- ══════════ ابدأ من سؤالك ══════════ -->
+  <section id="clusters" class="wrap py-24 sm:py-28">
+    <div class="max-w-2xl" data-reveal>
+      <p class="chip-light">الأقسام</p>
+      <h2 class="mt-5 text-[2rem] font-bold sm:text-[2.5rem]">ابدأ من سؤالك</h2>
+    </div>
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {clusters.map((c) => (
-        <a href={c.href} class="group rounded-4xl border border-shifa-100 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-shifa-200 hover:shadow-lift" data-reveal>
-          <h3 class="font-display text-[1.0625rem] font-semibold text-ink-900 transition-colors group-hover:text-shifa-800">{c.t}</h3>
-          <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-500">{c.d}</p>
+        <a href={c.href} class="card card-lift group !p-6" data-reveal>
+          <div class="relative flex items-start justify-between gap-4">
+            <div>
+              <h3 class="font-display text-[1.0625rem] font-bold text-ink-900 transition-colors group-hover:text-shifa-800">{c.t}</h3>
+              <p class="mt-2 text-[0.875rem] leading-relaxed text-ink-500">{c.d}</p>
+            </div>
+            <svg viewBox="0 0 24 24" class="mt-1 h-4 w-4 shrink-0 rotate-180 text-shifa-500 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
         </a>
       ))}
     </div>
   </section>
 
-  <!-- ===== دعوة التواصل ===== -->
-  <section class="wrap pb-8">
+  <!-- ══════════ دعوة التواصل ══════════ -->
+  <section class="wrap pb-10">
     <Cta
       title="جاهز تبدأ خطوتك الأولى؟"
       body="أرسل تقاريرك الطبية عبر واتساب، ونوضّح لك ما ينقص الملف، ونوصلك إلى المنسق الدولي في المستشفى."

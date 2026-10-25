@@ -28,24 +28,28 @@ export default defineConfig({
     ? []
     : [sitemap({ filter: (page) => !page.includes("/404"), lastmod: new Date() })],
 
-  // خطوط مستضافة ذاتياً من حزم Fontsource — صفر طلبات لخوادم خارجية، وأسرع LCP.
+  /**
+   * خطوط مستضافة ذاتياً — صفر طلبات لخوادم خارجية.
+   * العناوين: Noto Kufi Arabic — كوفي هندسي له شخصية قوية وحضور بصري.
+   * النص: Tajawal — عربي دافئ وعالي القراءة على الشاشة.
+   */
   fonts: [
     {
       provider: fontProviders.local(),
-      name: "Readex Pro",
+      name: "Noto Kufi Arabic",
       cssVariable: "--font-display",
       fallbacks: ["system-ui", "sans-serif"],
       options: {
         variants: [
           {
-            src: ["@fontsource-variable/readex-pro/files/readex-pro-arabic-wght-normal.woff2"],
-            weight: "200 700",
+            src: ["@fontsource-variable/noto-kufi-arabic/files/noto-kufi-arabic-arabic-wght-normal.woff2"],
+            weight: "400 800",
             style: "normal",
             unicodeRange: [AR],
           },
           {
-            src: ["@fontsource-variable/readex-pro/files/readex-pro-latin-wght-normal.woff2"],
-            weight: "200 700",
+            src: ["@fontsource-variable/noto-kufi-arabic/files/noto-kufi-arabic-latin-wght-normal.woff2"],
+            weight: "400 800",
             style: "normal",
             unicodeRange: [LATIN],
           },
@@ -54,25 +58,31 @@ export default defineConfig({
     },
     {
       provider: fontProviders.local(),
-      name: "IBM Plex Sans Arabic",
+      name: "Tajawal",
       cssVariable: "--font-body",
       fallbacks: ["system-ui", "sans-serif"],
       options: {
         variants: [
           {
-            src: ["@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-400-normal.woff2"],
+            src: ["@fontsource/tajawal/files/tajawal-arabic-400-normal.woff2"],
             weight: 400,
             style: "normal",
             unicodeRange: [AR],
           },
           {
-            src: ["@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-600-normal.woff2"],
-            weight: 600,
+            src: ["@fontsource/tajawal/files/tajawal-arabic-500-normal.woff2"],
+            weight: 500,
             style: "normal",
             unicodeRange: [AR],
           },
           {
-            src: ["@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-latin-400-normal.woff2"],
+            src: ["@fontsource/tajawal/files/tajawal-arabic-700-normal.woff2"],
+            weight: 700,
+            style: "normal",
+            unicodeRange: [AR],
+          },
+          {
+            src: ["@fontsource/tajawal/files/tajawal-latin-400-normal.woff2"],
             weight: 400,
             style: "normal",
             unicodeRange: [LATIN],

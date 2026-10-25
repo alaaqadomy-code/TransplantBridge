@@ -13,9 +13,11 @@ interface Props {
   path: string;
   jsonLd?: string;
   noindex?: boolean;
+  /** ترويسة شفافة فوق قسم بطل داكن، تتحوّل إلى صلبة عند التمرير */
+  darkHeader?: boolean;
 }
 
-const { title, description, path, jsonLd, noindex } = Astro.props;
+const { title, description, path, jsonLd, noindex, darkHeader = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -32,7 +34,7 @@ const { title, description, path, jsonLd, noindex } = Astro.props;
       class="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-shifa-700 focus:px-5 focus:py-3 focus:text-white"
     >تخطَّ إلى المحتوى</a>
 
-    <Header />
+    <Header dark={darkHeader} />
 
     <main id="main">
       <slot />
