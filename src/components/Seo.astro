@@ -1,0 +1,42 @@
+---
+import { SITE, IS_LOCAL, abs } from "../lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  jsonLd?: string;
+  noindex?: boolean;
+}
+
+const { title, description, path, jsonLd, noindex = false } = Astro.props;
+
+// حرس الدومين: بلا PUBLIC_SITE_URL لا يُطبع canonical ولا og:url،
+// ويُمنع الفهرسة كلياً — فلا يدخل الموقع Google بالخطأ أثناء التطوير.
+const canonical = IS_LOCAL ? null : abs(path);
+const robots = IS_LOCAL || noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large";
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+
+{canonical && <link rel="canonical" href={canonical} />}
+{canonical && <link rel="alternate" hreflang="ar" href={canonical} />}
+{canonical && <link rel="alternate" hreflang="x-default" href={canonical} />}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:locale" content="ar_AR" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+{canonical && <meta property="og:url" content={canonical} />}
+<meta name="twitter:card" content="summary_large_image" />
+
+<meta name="theme-color" content="#0D9488" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+{jsonLd && <script type="application/ld+json" set:html={jsonLd} is:inline />}

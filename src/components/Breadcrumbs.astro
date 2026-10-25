@@ -1,0 +1,25 @@
+---
+interface Props {
+  items: { name: string; path: string }[];
+}
+const { items } = Astro.props;
+---
+
+<nav aria-label="مسار التنقل" class="mb-8">
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.8125rem] text-ink-400">
+    {items.map((it, i) => (
+      <li class="flex items-center gap-2">
+        {i < items.length - 1 ? (
+          <a href={it.path} class="transition-colors hover:text-shifa-700">{it.name}</a>
+        ) : (
+          <span class="text-ink-600" aria-current="page">{it.name}</span>
+        )}
+        {i < items.length - 1 && (
+          <svg viewBox="0 0 24 24" class="h-3 w-3 rotate-180 text-ink-300" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

@@ -1,0 +1,71 @@
+---
+import { Font } from "astro:assets";
+import { SITE } from "../lib/site";
+import Seo from "../components/Seo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  jsonLd?: string;
+  noindex?: boolean;
+}
+
+const { title, description, path, jsonLd, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE.lang} dir={SITE.dir}>
+  <head>
+    <Seo title={title} description={description} path={path} jsonLd={jsonLd} noindex={noindex} />
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-body" preload />
+  </head>
+
+  <body class="min-h-screen">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-shifa-700 focus:px-5 focus:py-3 focus:text-white"
+    >تخطَّ إلى المحتوى</a>
+
+    <Header />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+    <WhatsAppButton />
+
+    <script is:inline>
+      /* الظهور التدريجي عند التمرير — transform/opacity فقط، وبلا JS يبقى المحتوى ظاهراً.
+         يحترم prefers-reduced-motion عبر CSS. */
+      (() => {
+        const els = document.querySelectorAll("[data-reveal]");
+        if (!els.length) return;
+        if (!("IntersectionObserver" in window)) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        document.documentElement.classList.add("reveal-ready");
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e, i) => {
+              if (!e.isIntersecting) return;
+              e.target.style.setProperty("--d", `${Math.min(i * 70, 280)}ms`);
+              e.target.classList.add("is-in");
+              io.unobserve(e.target);
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+        );
+
+        els.forEach((el) => io.observe(el));
+      })();
+    </script>
+  </body>
+</html>

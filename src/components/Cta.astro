@@ -1,0 +1,55 @@
+---
+import { WHATSAPP, ROLE } from "../lib/site";
+
+interface Props {
+  /** سطر العنوان — يُخصَّص لكل صفحة ليطابق سياقها */
+  title?: string;
+  /** سطر الشرح */
+  body?: string;
+  /** نص رسالة الواتساب المعبّأة مسبقاً */
+  message?: string;
+  /** موضع الكتلة — للتمييز في التحليلات لاحقاً */
+  placement?: string;
+}
+
+const {
+  title = "اطلب تقييم حالتك",
+  body = "أرسل تقاريرك الطبية ونجهّز ملفك ونوصلك إلى المنسق الدولي في المستشفى.",
+  message = WHATSAPP.defaultMessage,
+  placement = "block",
+} = Astro.props;
+---
+
+<section class="relative overflow-hidden rounded-5xl border border-shifa-200/70 bg-gradient-to-bl from-shifa-50 via-white to-shifa-50/60 p-8 sm:p-10" data-reveal>
+  <!-- شكل عضوي خفيف يوحي بالتجدد -->
+  <div class="pointer-events-none absolute -left-16 -top-20 h-56 w-56 rounded-full bg-shifa-200/30 blur-3xl animate-drift" aria-hidden="true"></div>
+
+  <div class="relative">
+    <h2 class="font-display text-2xl font-semibold text-ink-900 sm:text-[1.75rem]">{title}</h2>
+    <p class="mt-3 max-w-xl text-[1.0625rem] leading-relaxed text-ink-600">{body}</p>
+
+    <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <a
+        href={WHATSAPP.link(message)}
+        target="_blank"
+        rel="noopener"
+        data-wa={placement}
+        class="btn-primary"
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
+          <path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.3-1.39a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.9-4.44 9.9-9.9 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.02a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.05-.2-.31a8.22 8.22 0 1 1 6.98 3.87Z"/>
+        </svg>
+        تواصل عبر واتساب
+      </a>
+      <a href="/request-evaluation" class="btn-ghost">كيف تُرسل ملفك؟</a>
+    </div>
+
+    <!-- سؤال التأهيل: لا يمنع أحداً من المراسلة، لكنه يوضّح الشرط مبكراً -->
+    <p class="mt-6 border-r-2 border-shifa-300 pr-4 text-[0.875rem] leading-relaxed text-ink-500">
+      يفيدنا أن تذكر في رسالتك: <strong class="font-semibold text-ink-700">هل يوجد متبرع من الأقارب؟</strong>
+      لأن المستشفى يشترط في الغالب متبرعاً حيّاً من ذوي القرابة، وهذا أول ما يسأل عنه الفريق الطبي.
+    </p>
+
+    <p class="mt-4 text-[0.8125rem] leading-relaxed text-ink-400">{ROLE.weAreNot}</p>
+  </div>
+</section>
