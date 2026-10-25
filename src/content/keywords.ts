@@ -149,11 +149,19 @@ export const KEYWORD_MAP: [string, string, Tier][] = [
   ["نسبة نجاح زراعة الكلى لكبار السن", "transplant-elderly", 1],
   ["زراعة الكبد لمريض السرطان", "liver-transplant-cancer", 2],
   ["زراعة الكبد لمرضى سرطان الكبد", "liver-transplant-cancer", 2],
-];
+
 
 /**
  * كلمات من البنك لا تُستهدف عمداً — موثّقة هنا كي لا يظنّ أحد أنها نُسيت.
- */
+ */  ["حكم زراعة الأعضاء في الإسلام", "islamic-ruling-organ-transplant", 1],
+  ["حكم بيع الكلى", "islamic-ruling-organ-transplant", 2],
+  ["الاتجار بالأعضاء", "organ-trafficking-warning", 1],
+  ["التبادل المزدوج للكلى", "paired-exchange", 2],
+  ["الزراعة المتقاطعة", "paired-exchange", 2],
+  ["أدوية مثبطات المناعة", "immunosuppressants-after-transplant", 1],
+  ["الحمل بعد زراعة الكلى", "kidney-transplant-fertility", 2],
+];
+
 export const EXCLUDED: [string, string][] = [
   ["مواقع التبرع بالكلى", "نية بيع/شراء عضو — محظورة (KEYWORDS-MASTER §محظورة)"],
   ["صفحة التبرع بالكلى", "نية بيع/شراء عضو — محظورة"],
