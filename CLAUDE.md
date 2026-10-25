@@ -49,13 +49,18 @@
 ### صفحات لا تُنشر قبل مراجعة طبية
 `/*-outcomes` · `/pediatric-liver-transplant` · `/immunosuppressants-after-transplant` · `/liver-transplant-cancer` · `/dialysis-vs-transplant` · `/donor-risks`
 
-## 5.1 حالة الإطلاق (25 أكتوبر 2026)
-- **مشروع Pages**: `transplantbridge` أُنشئ ونُشر عليه البناء (43 ملفاً). حيّ ومُتحقَّق منه على <https://transplantbridge.pages.dev> (كل المسارات 200، وصفحة غير موجودة 404، و`x-robots-tag: noindex` على نسخة pages.dev).
-- **الدومين المخصص**: `transplantbridge.com` و`www` **مرتبطان بالمشروع لكن حالتهما `pending`**، لأن **زون الدومين فارغ تماماً: لا يوجد أي سجل DNS**. فلا يفتح الدومين حتى يُنشأ السجل.
-  - المطلوب: `CNAME  transplantbridge.com  →  transplantbridge.pages.dev` (Proxied)، ومثله لـ`www`. أو إضافة الدومين من لوحة Pages فتنشئ Cloudflare السجل تلقائياً.
-  - توكن OAuth الخاص بـwrangler يملك `zone (read)` فقط بلا صلاحية DNS، فلا يمكن إنشاء السجل منه.
-- **GitHub**: الدفع إلى `origin/main` معلّق — 17 commit محلية. (رُفض `git push` تلقائياً في جلسة التنفيذ.)
-- **بعد فتح الدومين مباشرة**: رفع sitemap إلى Search Console + طلب فهرسة + IndexNow.
+## 5.1 حالة الإطلاق (25 أكتوبر 2026) — الموقع حيّ
+- **الدومين**: <https://transplantbridge.com> حيّ ومُتحقَّق منه (كل المسارات 200، صفحة غير موجودة 404).
+- **مشروع Pages**: `transplantbridge` (أُنشئ بـ`--force` لأن wrangler صار يفوّض Pages إلى Workers). النشر: `wrangler pages deploy dist --project-name transplantbridge --branch=main`. **ممنوع النشر إلى أي مشروع آخر في الحساب.**
+- **DNS** (الزون كان فارغاً تماماً — لا سجل واحد — وهذا ما كان يمنع فتح الدومين):
+  - `CNAME @ → transplantbridge.pages.dev` (Proxied)
+  - `CNAME www → transplantbridge.pages.dev` (Proxied)
+  - `TXT @ → google-site-verification=…` (إثبات ملكية Search Console)
+- **www**: قاعدة Single Redirect في Cloudflare (قالب «Redirect from WWW to root»، **301**، مع حفظ query string) → مُتحقَّق منها: `www/<مسار>` تعيد 301 إلى الجذر بنفس المسار.
+- **Search Console**: `sc-domain:transplantbridge.com` مُثبَتة الملكية بسجل TXT، و`sitemap-index.xml` أُرسل بنجاح.
+- **IndexNow**: المفتاح في `public/<key>.txt` والسكربت `scripts/indexnow.mjs` يقرأ الروابط من sitemap المبني. أُرسل 28 رابطاً (202 Accepted). **شغّله بعد كل نشر.**
+- **طلبات الفهرسة اليدوية**: الحصة اليومية لحساب Google كله كانت مستنفدة وقت الإطلاق («تم تجاوز الحصة»). **أعد المحاولة في اليوم التالي** لأهم الصفحات: `/` ثم صفحات المال الثمانية.
+- **GitHub**: الدفع إلى `origin/main` ما زال معلّقاً — رُفض `git push` تلقائياً في بيئة التنفيذ ويحتاج قاعدة صلاحية من المالك أو دفعاً يدوياً.
 
 ## 6. الستاك
 - **Astro 7** + **Tailwind 3**، عربي RTL. الحزم مثبتة (264 حزمة).
