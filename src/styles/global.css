@@ -152,10 +152,36 @@
 }
 
 @layer utilities {
+  /*
+    نصّ متدرّج اللون. ملاحظة أداء مهمة: الحركة على background-position مع
+    background-clip:text ليست حركة مركِّب (compositor) بل تُعيد رسم النص
+    قناعاً في كل إطار على الخيط الرئيسي — وكانت أكبر سبب لتأخّر رسم
+    العنوان الرئيسي (LCP). فجعلناها تبدأ بعد استقرار الصفحة وتتوقف.
+  */
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(100deg, theme("colors.shifa.300"), theme("colors.shifa.100") 30%, theme("colors.shifa.300") 55%, theme("colors.amal.light") 85%, theme("colors.shifa.300"));
     background-size: 220% auto;
+    background-position: 200% center;
+  }
+
+  /* يُضاف بـJS بعد الاستقرار: كنسة واحدة ثم سكون */
+  .shimmer-ready .text-gradient {
+    animation: shimmer 9s linear 2;
+    animation-fill-mode: forwards;
+  }
+
+  /*
+    توهّجات الخلفية — تدرّجات شعاعية بدل دوائر مموّهة بـblur(140px).
+    السبب: تمويه 140px على عنصر بعرض 44rem يكلّف الرسم مئات الملّي ثانية
+    على معالج هاتف، وكان يُعاد رسمه باستمرار بسبب الحركة اللانهائية.
+    التدرّج الشعاعي يعطي المظهر نفسه تقريباً بكلفة رسم شبه معدومة.
+  */
+  .bg-glow {
+    background-image:
+      radial-gradient(60rem 44rem at 92% -8%, rgba(20, 184, 166, 0.17), transparent 62%),
+      radial-gradient(44rem 34rem at -6% 36%, rgba(201, 162, 77, 0.07), transparent 60%),
+      radial-gradient(48rem 26rem at 28% 104%, rgba(45, 212, 191, 0.1), transparent 64%);
   }
 
   /* شبكة خفيفة — CSS خالص */
@@ -172,6 +198,18 @@
     opacity: 0.2;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /*
+    الصفحات هنا طويلة (الرئيسية ٢٧٠٠ كلمة)، وكان المتصفح يحسب تنسيق
+    وتخطيط كل أقسامها قبل أول رسم — 1.1 ثانية في styleLayout وحده.
+    content-visibility يؤجّل ذلك لما هو خارج الشاشة، و contain-intrinsic-size
+    يحجز ارتفاعاً تقديرياً فلا يحدث أي انزياح (CLS بقي صفراً).
+    لا يُطبَّق على أول قسمين حتى لا يتأخر رسم البطل نفسه.
+  */
+  .defer-paint {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
   }
 
   /* ===== الظهور عند التمرير ===== */

@@ -73,7 +73,7 @@ const REVIEW_LABEL: Record<string, string> = {
       <div class="panel mt-8">
         <div class="prose-ar">
           {page.sections.map((s, i) => (
-            <section>
+            <section class={i >= 2 ? "defer-paint" : undefined}>
               <h2>{headingOf(i, s.h2)}</h2>
               {s.body?.map((p) => <p set:html={p} />)}
               {s.list && (
@@ -142,7 +142,7 @@ const REVIEW_LABEL: Record<string, string> = {
       </div>
 
       {page.faqs?.length && (
-        <section class="mt-14">
+        <section class="defer-paint mt-14">
           <h2 class="font-display text-[1.625rem] font-bold text-white sm:text-[1.875rem]">أسئلة شائعة</h2>
           <div class="mt-7 space-y-3">
             {page.faqs.map((f) => (

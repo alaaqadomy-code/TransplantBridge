@@ -15,32 +15,67 @@ const enabled = !IS_LOCAL && /^G-[A-Z0-9]+$/.test(GA_ID);
 
 {
   enabled && (
-    <>
-      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
-      <script is:inline define:vars={{ GA_ID }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { window.dataLayer.push(arguments); }
-        window.gtag = gtag;
-        gtag("js", new Date());
-        gtag("config", GA_ID);
+    <script is:inline define:vars={{ GA_ID }}>
+      /*
+        gtag.js يزن ~177KB ويحجز الخيط الرئيسي ~370ms، فكان يؤخّر رسم
+        العنوان الرئيسي. فنؤجّل تحميله إلى ما بعد جاهزية الصفحة — أو إلى
+        أول تفاعل من الزائر أيهما أسبق — فلا يدخل المسار الحرج إطلاقاً.
+        والقياس لا يضيع: الأحداث تُدفَع إلى dataLayer قبل التحميل ويلتقطها
+        gtag عند إقلاعه، وزيارة الصفحة تُسجَّل كالمعتاد.
+      */
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag("js", new Date());
+      gtag("config", GA_ID);
 
-        /* نقرة واتساب = التحويل الوحيد في هذا الموقع.
-           مستمع مفوَّض يلتقط أي رابط يحمل data-wa مهما أُضيف لاحقاً،
-           ويعمل مع النقر بالزر الأوسط وفتح تبويب جديد أيضاً. */
-        document.addEventListener(
-          "click",
-          (e) => {
-            const a = e.target instanceof Element ? e.target.closest("a[data-wa]") : null;
-            if (!a) return;
-            gtag("event", "whatsapp_click", {
-              placement: a.getAttribute("data-wa") || "unknown",
-              page_path: location.pathname,
-              page_title: document.title,
-            });
-          },
-          { capture: true, passive: true },
-        );
-      </script>
-    </>
+      let loaded = false;
+      const load = () => {
+        if (loaded) return;
+        loaded = true;
+        const t = document.createElement("script");
+        t.async = true;
+        t.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+        document.head.appendChild(t);
+      };
+
+      /* أول تفاعل حقيقي يُحمّل القياس فوراً، حتى لا تضيع نقرة مبكرة.
+         ولا نُدرج "scroll" عمداً: التمرير يقع تلقائياً (وأدوات القياس تمرّر
+         الصفحة بنفسها)، فيُفقد الغرض من التأجيل كله. */
+      const once = { once: true, passive: true, capture: true };
+      for (const ev of ["pointerdown", "keydown", "touchstart"]) {
+        addEventListener(ev, load, once);
+      }
+      /* وإلا فبعد اكتمال التحميل بمهلة ثابتة ثم في أول فراغ.
+         ملاحظة: requestIdleCallback وحده لا يكفي لأنه يُطلق عند أول فراغ
+         لا عند انتهاء مهلته — فعلى صفحة سريعة يُحمَّل gtag فوراً تقريباً
+         ويعود إلى المسار الحرج. فالمهلة الثابتة أولاً ثم الفراغ. */
+      const idle = () =>
+        setTimeout(() => {
+          "requestIdleCallback" in window
+            ? requestIdleCallback(load, { timeout: 4000 })
+            : load();
+        }, 3000);
+      if (document.readyState === "complete") idle();
+      else addEventListener("load", idle, { once: true });
+
+      /* نقرة واتساب = التحويل الوحيد في هذا الموقع.
+         مستمع مفوَّض يلتقط أي رابط يحمل data-wa مهما أُضيف لاحقاً،
+         ويعمل مع النقر بالزر الأوسط وفتح تبويب جديد أيضاً. */
+      document.addEventListener(
+        "click",
+        (e) => {
+          const a = e.target instanceof Element ? e.target.closest("a[data-wa]") : null;
+          if (!a) return;
+          load();
+          gtag("event", "whatsapp_click", {
+            placement: a.getAttribute("data-wa") || "unknown",
+            page_path: location.pathname,
+            page_title: document.title,
+          });
+        },
+        { capture: true, passive: true },
+      )
+    </script>
   )
 }
