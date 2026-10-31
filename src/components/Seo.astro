@@ -7,16 +7,26 @@ interface Props {
   path: string;
   jsonLd?: string;
   noindex?: boolean;
+  /** تجاوز صورة المشاركة — للصفحات التي لا بطاقة خاصة لها */
+  ogImage?: string;
 }
 
-const { title, description, path, jsonLd, noindex = false } = Astro.props;
+const { title, description, path, jsonLd, noindex = false, ogImage: ogImageOverride } = Astro.props;
 
 // حرس الدومين: بلا PUBLIC_SITE_URL لا يُطبع canonical ولا og:url،
 // ويُمنع الفهرسة كلياً — فلا يدخل الموقع Google بالخطأ أثناء التطوير.
 const canonical = IS_LOCAL ? null : abs(path);
 const robots = IS_LOCAL || noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large";
-// صورة المشاركة تُولَّد بـ scripts/make-og.mjs من ثيم الموقع نفسه.
-const ogImage = IS_LOCAL ? null : abs("/og.png");
+/**
+ * صورة المشاركة — بطاقة خاصة بكل صفحة تحمل عنوانها، تُولَّد بـ
+ * scripts/make-og.mjs. والسبب أن قناة التوزيع هنا واتساب: حين يُعاد
+ * توجيه رابط في مجموعة عائلية فبطاقة تحمل عنوان الصفحة أنفع من بطاقة
+ * عامة متكررة. وتُمرَّر `ogImage` صراحةً حين لا تكون بطاقة الصفحة موجودة.
+ */
+const slug = path.replace(/^\//, "");
+const ogImage = IS_LOCAL
+  ? null
+  : abs(ogImageOverride ?? (slug ? `/og/${slug}.png` : "/og.png"));
 ---
 
 <meta charset="utf-8" />
