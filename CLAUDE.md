@@ -86,6 +86,8 @@
 - **`Disclaimer.astro`** صار يربط `/medical-disclaimer` من 29 صفحة محتوى (كانت بلا رابط داخل المحتوى، والفوتر وحده يربطها).
 - **`lastmod`**: كان `new Date()` أي وقت البناء على الروابط الـ33 كلها — إشارة مضلّلة تُسقط اعتداد المحركات بها. صار `serialize` يضع تاريخ تحديث الصفحة الحقيقي، والصفحات القائمة بذاتها بلا `lastmod` (إغفاله مسموح وأصدق من تاريخ لا نملكه). و`LINKS_DATE` في `index.ts` يحمل تاريخ طبقة الربط: **عند تعديل `links.ts` حدِّثه**.
 - **النتيجة**: الصفحات بروابط متن ≤ 2 من **17 إلى 2** (الخصوصية والرئيسية وحدهما)، والمحوريتان من 2 إلى 7، وصفحتا تركيا من 1 إلى 5 و6. التاريخ متطابق في ثلاثة مواضع: sitemap و«آخر تحديث» المعروض و`dateModified`.
+- **Search Console 31 أكتوبر** (يدوياً عبر Chrome — أداة MCP صارت للقراءة فقط: `Insufficient Permission`): أُعيد إرسال `sitemap-index.xml` بنجاح، وطُلبت الفهرسة لعشر صفحات: `kidney-transplant` · `liver-transplant` · `after-liver-transplant` · `kidney-transplant-turkey` · `liver-transplant-turkey` · `best-country-kidney-transplant` · `transplant-cost` · `kidney-donor-requirements` · `transplant-elderly` · `liver-donation`. **الحادية عشرة ردّت «تم تجاوز الحصة»** — فالحصة اليومية لحساب Google كله **عشرة بالضبط**. الباقية بالأولوية غداً: `living-donor-liver-transplant` · `kidney-donation` · `dialysis-vs-transplant` · `transplant-hospitals-turkey`.
+- **ملاحظة واجهة**: صفحة Search Console تتجمّد بعد تراكم نوافذ الفحص (تفشل اللقطات بـ`Page.captureScreenshot timed out`). الحل: العودة إلى رابط الخاصية الأساسي قبل كل فحص جديد، والعمل بـ`find` بلا لقطات.
 
 - **GitHub**: ~~الدفع معلّق~~ **أُنجز 31 أكتوبر 2026**: `git push` نجح ودُفع كل التاريخ إلى `origin/main` حتى `e34bda8`. المستودع صار مواكباً.
 
