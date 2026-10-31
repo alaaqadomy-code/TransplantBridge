@@ -1,0 +1,164 @@
+---
+/**
+ * رسوم توضيحية — SVG مضمّن، بلا أي ملف خارجي ولا طلب شبكة إضافي.
+ *
+ * قواعد هذه الرسوم:
+ *  - لا رقم ولا نسبة فيها. تشرح بنيةً أو علاقة، لا نتيجة.
+ *  - لا صورة جسم واقعية: أشكال مجرّدة تكفي للفهم ولا تُرعب مريضاً.
+ *  - كل رسم له <title> و<desc> ووصف نصي أسفله، فمن لا يراه يقرأه.
+ *  - ألوان الثيم نفسها عبر currentColor ومتغيّرات Tailwind.
+ *  - viewBox نسبي فيتمدد بلا انزياح (لا يلمس CLS).
+ *  - ⚠️ RTL: الصفحة عربية فينقلب معنى text-anchor داخل SVG — فـ"start"
+ *    يبدأ عند x ويمتد يساراً، و"end" ينتهي عنده ويمتد يميناً. وعكسهما
+ *    يقصّ النص خارج الإطار. و"middle" وحده لا يتأثر.
+ */
+interface Props {
+  kind: "kidney-position" | "liver-regen" | "kinship-degrees" | "paired-exchange";
+}
+const { kind } = Astro.props;
+
+const CAPTIONS: Record<Props["kind"], string> = {
+  "kidney-position":
+    "رسم توضيحي: الكليتان الأصليتان تبقيان في مكانهما أعلى البطن، وتوضع الكلية المزروعة أسفله وتُوصل بأوعية الحوض والمثانة.",
+  "liver-regen":
+    "رسم توضيحي: يُؤخذ فصّ من كبد المتبرع، فينمو الجزء المتبقي عنده وينمو الجزء المزروع عند المريض نحو الحجم الذي يحتاجه كلٌّ منهما.",
+  "kinship-degrees":
+    "رسم توضيحي: درجات القرابة الأربع كما تحسبها اللائحة — الوالدان والأبناء درجة أولى، والإخوة والأجداد والأحفاد درجة ثانية، والأعمام والأخوال وأبناء الإخوة درجة ثالثة، وأبناء العمومة والخؤولة درجة رابعة.",
+  "paired-exchange":
+    "رسم توضيحي: أسرتان لدى كلٍّ منهما متبرع غير متوافق مع مريضها، فيتبرع متبرع الأولى لمريض الثانية والعكس.",
+};
+
+const TITLES: Record<Props["kind"], string> = {
+  "kidney-position": "أين تُوضع الكلية المزروعة",
+  "liver-regen": "كيف يتجدد الكبد عند الطرفين",
+  "kinship-degrees": "درجات القرابة حتى الرابعة",
+  "paired-exchange": "كيف يعمل التبادل المزدوج",
+};
+
+const id = `dg-${kind}`;
+---
+
+<figure class="not-prose my-10">
+  <div class="rounded-3xl border border-white/[.07] bg-white/[.02] p-5 sm:p-7">
+    {
+      kind === "kidney-position" && (
+        <svg viewBox="0 0 520 300" class="h-auto w-full" role="img" aria-labelledby={`${id}-t ${id}-d`}>
+          <title id={`${id}-t`}>{TITLES[kind]}</title>
+          <desc id={`${id}-d`}>{CAPTIONS[kind]}</desc>
+          {/* حدّ الجذع */}
+          <path d="M150 20 h220 a40 40 0 0 1 40 40 v180 a40 40 0 0 1 -40 40 h-220 a40 40 0 0 1 -40 -40 v-180 a40 40 0 0 1 40 -40 z"
+            fill="none" stroke="rgb(148 163 184 / .28)" stroke-width="2" stroke-dasharray="5 6" />
+          {/* العمود الفقري */}
+          <line x1="260" y1="30" x2="260" y2="270" stroke="rgb(148 163 184 / .16)" stroke-width="2" />
+          {/* الكليتان الأصليتان */}
+          <g fill="rgb(148 163 184 / .22)" stroke="rgb(148 163 184 / .5)" stroke-width="2">
+            <path d="M212 70 c-22 0 -34 16 -34 34 c0 18 12 32 30 32 c10 0 16 -6 16 -14 c0 -10 -10 -12 -10 -22 c0 -12 12 -14 12 -22 c0 -5 -5 -8 -14 -8 z" />
+            <path d="M308 70 c22 0 34 16 34 34 c0 18 -12 32 -30 32 c-10 0 -16 -6 -16 -14 c0 -10 10 -12 10 -22 c0 -12 -12 -14 -12 -22 c0 -5 5 -8 14 -8 z" />
+          </g>
+          <text x="258" y="60" text-anchor="middle" font-size="13" fill="rgb(148 163 184 / .85)">الكليتان الأصليتان تبقيان</text>
+          {/* الكلية المزروعة */}
+          <path d="M214 196 c-24 0 -38 18 -38 38 c0 20 14 36 34 36 c11 0 18 -7 18 -16 c0 -11 -11 -13 -11 -24 c0 -13 13 -16 13 -25 c0 -6 -6 -9 -16 -9 z"
+            fill="rgb(45 212 191 / .22)" stroke="rgb(45 212 191)" stroke-width="2.5" />
+          {/* وصلات الأوعية والمثانة */}
+          <path d="M232 232 C 258 232, 268 236, 282 244" fill="none" stroke="rgb(45 212 191 / .75)" stroke-width="2.5" stroke-linecap="round" />
+          <circle cx="292" cy="248" r="16" fill="rgb(45 212 191 / .12)" stroke="rgb(45 212 191 / .7)" stroke-width="2" />
+          <text x="292" y="252" text-anchor="middle" font-size="11" fill="rgb(153 246 228)">المثانة</text>
+          <text x="150" y="286" text-anchor="middle" font-size="13" fill="rgb(94 234 212)">الكلية المزروعة</text>
+          <line x1="150" y1="272" x2="186" y2="246" stroke="rgb(45 212 191 / .55)" stroke-width="1.5" />
+        </svg>
+      )
+    }
+
+    {
+      kind === "liver-regen" && (
+        <svg viewBox="0 0 560 240" class="h-auto w-full" role="img" aria-labelledby={`${id}-t ${id}-d`}>
+          <title id={`${id}-t`}>{TITLES[kind]}</title>
+          <desc id={`${id}-d`}>{CAPTIONS[kind]}</desc>
+          <text x="470" y="26" text-anchor="middle" font-size="14" fill="rgb(203 213 225)">المتبرع</text>
+          <text x="90" y="26" text-anchor="middle" font-size="14" fill="rgb(203 213 225)">المريض</text>
+          {/* كبد المتبرع كاملاً */}
+          <path d="M400 56 h140 a16 16 0 0 1 16 16 v56 a16 16 0 0 1 -16 16 h-140 a16 16 0 0 1 -16 -16 v-56 a16 16 0 0 1 16 -16 z"
+            fill="rgb(45 212 191 / .14)" stroke="rgb(45 212 191 / .7)" stroke-width="2" />
+          <line x1="452" y1="56" x2="452" y2="144" stroke="rgb(45 212 191)" stroke-width="2.5" stroke-dasharray="6 5" />
+          <text x="500" y="106" text-anchor="middle" font-size="12" fill="rgb(153 246 228)">يبقى</text>
+          <text x="420" y="106" text-anchor="middle" font-size="12" fill="rgb(201 162 77)">الفصّ المأخوذ</text>
+          {/* سهم النقل */}
+          <path d="M376 100 H 212" fill="none" stroke="rgb(201 162 77 / .8)" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M218 93 L 206 100 L 218 107 z" fill="rgb(201 162 77)" />
+          {/* الجزء المزروع */}
+          <path d="M40 66 h120 a14 14 0 0 1 14 14 v40 a14 14 0 0 1 -14 14 h-120 a14 14 0 0 1 -14 -14 v-40 a14 14 0 0 1 14 -14 z"
+            fill="rgb(201 162 77 / .16)" stroke="rgb(201 162 77 / .8)" stroke-width="2" />
+          {/* أسهم النمو */}
+          <g stroke="rgb(94 234 212 / .85)" stroke-width="2" stroke-linecap="round" fill="none">
+            <path d="M470 160 v22" /><path d="M463 175 l7 8 l7 -8" />
+            <path d="M100 160 v22" /><path d="M93 175 l7 8 l7 -8" />
+          </g>
+          <text x="470" y="206" text-anchor="middle" font-size="13" fill="rgb(94 234 212)">ينمو نحو حجمه الوظيفي</text>
+          <text x="100" y="206" text-anchor="middle" font-size="13" fill="rgb(94 234 212)">ينمو نحو حجمه الوظيفي</text>
+          <text x="280" y="232" text-anchor="middle" font-size="12" fill="rgb(148 163 184 / .9)">خلال أسابيع إلى أشهر — والمدة يحددها الفريق</text>
+        </svg>
+      )
+    }
+
+    {
+      kind === "kinship-degrees" && (
+        <svg viewBox="0 0 560 300" class="h-auto w-full" role="img" aria-labelledby={`${id}-t ${id}-d`}>
+          <title id={`${id}-t`}>{TITLES[kind]}</title>
+          <desc id={`${id}-d`}>{CAPTIONS[kind]}</desc>
+          {[
+            { y: 44, n: "الدرجة الأولى", t: "الوالدان · الأبناء", o: 1 },
+            { y: 106, n: "الدرجة الثانية", t: "الإخوة · الأجداد · الأحفاد", o: 0.82 },
+            { y: 168, n: "الدرجة الثالثة", t: "الأعمام · الأخوال · أبناء الإخوة", o: 0.64 },
+            { y: 230, n: "الدرجة الرابعة", t: "أبناء العمومة · أبناء الخؤولة", o: 0.46 },
+          ].map((r) => (
+            <g>
+              <rect x="40" y={r.y - 22} width="480" height="44" rx="14"
+                fill={`rgb(45 212 191 / ${0.05 + r.o * 0.1})`} stroke={`rgb(45 212 191 / ${r.o * 0.75})`} stroke-width="2" />
+              <text x="498" y={r.y + 5} text-anchor="start" font-size="14" font-weight="600" fill="rgb(153 246 228)">{r.n}</text>
+              <text x="62" y={r.y + 5} text-anchor="end" font-size="13" fill="rgb(203 213 225)">{r.t}</text>
+            </g>
+          ))}
+          <text x="280" y="284" text-anchor="middle" font-size="12.5" fill="rgb(148 163 184 / .95)">
+            الزوج يدخل بشرط مضيّ سنتين — وما خرج عن الدائرة تنظر فيه لجنة الأخلاقيات
+          </text>
+        </svg>
+      )
+    }
+
+    {
+      kind === "paired-exchange" && (
+        <svg viewBox="0 0 560 280" class="h-auto w-full" role="img" aria-labelledby={`${id}-t ${id}-d`}>
+          <title id={`${id}-t`}>{TITLES[kind]}</title>
+          <desc id={`${id}-d`}>{CAPTIONS[kind]}</desc>
+          {/* الأسرة الأولى */}
+          <rect x="318" y="30" width="212" height="96" rx="18" fill="rgb(45 212 191 / .07)" stroke="rgb(45 212 191 / .35)" stroke-width="1.5" />
+          <text x="424" y="22" text-anchor="middle" font-size="13" fill="rgb(148 163 184)">الأسرة الأولى</text>
+          <circle cx="492" cy="78" r="26" fill="rgb(45 212 191 / .18)" stroke="rgb(45 212 191)" stroke-width="2" />
+          <text x="492" y="83" text-anchor="middle" font-size="12" fill="rgb(153 246 228)">متبرع ١</text>
+          <circle cx="358" cy="78" r="26" fill="rgb(148 163 184 / .14)" stroke="rgb(148 163 184 / .6)" stroke-width="2" />
+          <text x="358" y="83" text-anchor="middle" font-size="12" fill="rgb(203 213 225)">مريض ١</text>
+          <path d="M466 78 H 386" stroke="rgb(239 68 68 / .75)" stroke-width="2" stroke-dasharray="5 5" />
+          <path d="M418 66 l16 24 M434 66 l-16 24" stroke="rgb(239 68 68)" stroke-width="2.5" stroke-linecap="round" />
+          {/* الأسرة الثانية */}
+          <rect x="30" y="154" width="212" height="96" rx="18" fill="rgb(201 162 77 / .06)" stroke="rgb(201 162 77 / .3)" stroke-width="1.5" />
+          <text x="136" y="146" text-anchor="middle" font-size="13" fill="rgb(148 163 184)">الأسرة الثانية</text>
+          <circle cx="204" cy="202" r="26" fill="rgb(201 162 77 / .18)" stroke="rgb(201 162 77 / .9)" stroke-width="2" />
+          <text x="204" y="207" text-anchor="middle" font-size="12" fill="rgb(234 211 160)">متبرع ٢</text>
+          <circle cx="70" cy="202" r="26" fill="rgb(148 163 184 / .14)" stroke="rgb(148 163 184 / .6)" stroke-width="2" />
+          <text x="70" y="207" text-anchor="middle" font-size="12" fill="rgb(203 213 225)">مريض ٢</text>
+          <path d="M178 202 H 98" stroke="rgb(239 68 68 / .75)" stroke-width="2" stroke-dasharray="5 5" />
+          <path d="M130 190 l16 24 M146 190 l-16 24" stroke="rgb(239 68 68)" stroke-width="2.5" stroke-linecap="round" />
+          {/* التبادل */}
+          <path d="M486 106 C 420 150, 300 150, 230 186" fill="none" stroke="rgb(45 212 191)" stroke-width="2.5" stroke-linecap="round" />
+          <path d="M238 178 l-14 10 l16 6 z" fill="rgb(45 212 191)" />
+          <path d="M210 176 C 290 130, 410 130, 476 62" fill="none" stroke="rgb(201 162 77 / .95)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 0" />
+          <path d="M468 70 l16 -10 l-4 17 z" fill="rgb(201 162 77)" />
+          <text x="280" y="272" text-anchor="middle" font-size="12.5" fill="rgb(148 163 184 / .95)">
+            الخط الأحمر: عدم توافق — والمنحنيان: التبادل عبر نظام وزارة الصحة حصراً
+          </text>
+        </svg>
+      )
+    }
+  </div>
+  <figcaption class="mt-3 text-center text-[0.8125rem] leading-relaxed text-ink-400">{CAPTIONS[kind]}</figcaption>
+</figure>

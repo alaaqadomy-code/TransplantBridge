@@ -22,6 +22,8 @@ export type Section = {
    * يُسمح به في صفحات التكلفة والوجهة فقط.
    */
   priceTable?: "liver" | "kidney" | "countryLiver" | "countryKidney";
+  /** رسم توضيحي مضمّن — يشرح بنية أو علاقة، ولا يحمل رقماً ولا نسبة */
+  diagram?: "kidney-position" | "liver-regen" | "kinship-degrees" | "paired-exchange";
 };
 
 export type ContentPage = {

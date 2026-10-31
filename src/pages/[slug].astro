@@ -5,6 +5,7 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Disclaimer from "../components/Disclaimer.astro";
 import Cta from "../components/Cta.astro";
 import PriceTable from "../components/PriceTable.astro";
+import Diagram from "../components/Diagram.astro";
 import { LIVER_PRICES, KIDNEY_PRICES, COUNTRY_LIVER, COUNTRY_KIDNEY, COUNTRY_SOURCE } from "../content/prices";
 import { PAGES, bySlug, pageDates } from "../content";
 import { IS_LOCAL } from "../lib/site";
@@ -124,6 +125,7 @@ const REVIEW_LABEL: Record<string, string> = {
                   </table>
                 </div>
               )}
+              {s.diagram && <Diagram kind={s.diagram} />}
               {s.priceTable === "liver" && (
                 <PriceTable rows={LIVER_PRICES} caption="النطاقات المنشورة لتكلفة زرع الكبد في تركيا — منقولة عن مصادرها" />
               )}
