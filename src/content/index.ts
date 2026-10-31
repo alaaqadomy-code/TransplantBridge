@@ -9,6 +9,18 @@ import { KEYWORD_MAP, norm } from "./keywords";
 /** كل صفحات المحتوى — 18 صفحة. */
 export const PAGES: ContentPage[] = [...LIVER, ...KIDNEY, ...DECISION, ...EXTRA, ...WAVE2];
 
+/**
+ * تاريخ أول نشر حيّ للموقع — مؤكَّد من سجل git (أول نشر إلى الدومين).
+ * كل صفحة لم تُحدَّد لها `published` نُشرت في هذا التاريخ.
+ */
+export const DEFAULT_PUBLISHED = "2026-10-25";
+
+/** تاريخا الصفحة بعد تطبيق الافتراضات */
+export const pageDates = (p: ContentPage) => {
+  const published = p.published ?? DEFAULT_PUBLISHED;
+  return { published, updated: p.updated ?? published };
+};
+
 export const bySlug = (slug: string): ContentPage | undefined =>
   PAGES.find((p) => p.slug === slug);
 

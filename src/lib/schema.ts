@@ -88,3 +88,39 @@ export const faqPage = (qa: { q: string; a: string }[]): Json => ({
 /** يجمع العُقد في رسم واحد. */
 export const graph = (nodes: Json[]): string =>
   JSON.stringify({ "@context": "https://schema.org", "@graph": nodes });
+
+/**
+ * صفحة محتوى طبي معلوماتي.
+ *
+ * نستعمل `MedicalWebPage` لأنها النوع الذي يصف صفحة معلومات صحية —
+ * ولا نستعمل `MedicalClinic` ولا `Physician` ولا `reviewedBy`، لأن الموقع
+ * جهة تنسيق لا جهة طبية، ولأن المراجعة الطبية لم تحدث بعد (MEDICAL-REVIEW.md).
+ *
+ * `lastReviewed` متروكة عمداً: تعبئتها بلا مراجع حقيقي ادّعاء كاذب.
+ */
+export const medicalWebPage = (opts: {
+  path: string;
+  title: string;
+  description: string;
+  published: string;
+  updated: string;
+  /** اسم الإجراء أو الحالة التي تدور حولها الصفحة */
+  about?: string;
+  breadcrumbId?: string;
+}): Json => ({
+  "@type": ["MedicalWebPage", "WebPage"],
+  ...(IS_LOCAL ? {} : { "@id": `${abs(opts.path)}#webpage`, url: abs(opts.path) }),
+  name: opts.title,
+  description: opts.description,
+  inLanguage: SITE.locale,
+  isPartOf: { "@id": SITE_ID },
+  publisher: { "@id": ORG_ID },
+  datePublished: opts.published,
+  dateModified: opts.updated,
+  // جمهور الصفحة: المريض وذووه، لا الطبيب
+  audience: { "@type": "MedicalAudience", audienceType: "Patient" },
+  ...(opts.about
+    ? { about: { "@type": "MedicalProcedure", name: opts.about } }
+    : {}),
+  ...(opts.breadcrumbId ? { breadcrumb: { "@id": opts.breadcrumbId } } : {}),
+});

@@ -44,6 +44,14 @@ export type ContentPage = {
   sections: Section[];
   /** ترقيم عناوين H2 تلقائياً (١. ٢. ٣.) — لتسهيل استخراج المقتطفات */
   numbered?: boolean;
+  /**
+   * تاريخا النشر وآخر تحديث — ISO (YYYY-MM-DD).
+   * ⚠️ تواريخ حقيقية فقط، مأخوذة من سجل النشر الفعلي. لا تُحدَّث بلا تغيير
+   * حقيقي في المحتوى: تاريخ تحديث كاذب إشارة خادعة لا إشارة حداثة.
+   * الافتراض حين تُترك فارغة: DEFAULT_PUBLISHED أدناه.
+   */
+  published?: string;
+  updated?: string;
   faqs?: { q: string; a: string }[];
   /** slugs صفحات مرتبطة — تُعرض في «اقرأ أيضاً» */
   related?: string[];
