@@ -5,9 +5,74 @@ import { DECISION } from "./decision";
 import { EXTRA } from "./extra";
 import { WAVE2 } from "./wave2";
 import { KEYWORD_MAP, norm } from "./keywords";
+import { INLINE_LINKS, type InlineLink } from "./links";
 
-/** كل صفحات المحتوى — 18 صفحة. */
-export const PAGES: ContentPage[] = [...LIVER, ...KIDNEY, ...DECISION, ...EXTRA, ...WAVE2];
+const RAW: ContentPage[] = [...LIVER, ...KIDNEY, ...DECISION, ...EXTRA, ...WAVE2];
+
+/** ملاحظات طبقة الربط — تُدمج في `problems` أدناه فيفشل البناء بها */
+const linkProblems: string[] = [];
+
+/** أهداف روابط المتن المكتوبة داخل نصوص الصفحة أصلاً (href="/slug") */
+const hardLinks = (p: ContentPage): string[] => {
+  const text = [
+    ...p.sections.flatMap((s) => [
+      ...(s.body ?? []),
+      ...(s.list ?? []),
+      s.note ?? "",
+      ...(s.table ? s.table.rows.flat() : []),
+    ]),
+    ...(p.faqs ?? []).map((f) => f.a),
+  ].join(" ");
+  return [...text.matchAll(/href="\/([a-z0-9-]+)"/g)].map((m) => m[1]);
+};
+
+/**
+ * تطبيق طبقة الربط الداخلي (`links.ts`) على الأقسام بمطابقة نص الـH2.
+ *
+ * الطبقة **تكميلية لا بديلة**: تتخطى أي هدف يربطه متن الصفحة أصلاً، لأن
+ * رابطاً ثانياً من الصفحة نفسها إلى الهدف نفسه لا يضيف للزحف شيئاً (المصدر
+ * واحد) ويُثقل القراءة. فتبقى `links.ts` خطةً كاملة مقروءة، ويُطبَّق منها ما
+ * يسدّ نقصاً فعلياً — وتُستبعد تلقائياً المدخلات التي سبقها المتن إليها.
+ *
+ * ما لا يجد قسمه يُسجَّل خللاً يوقف البناء: فلا يسقط رابط بصمت ولا يُزرع في
+ * موضع خاطئ حين يُعاد تسمية قسم.
+ */
+const applyInlineLinks = (p: ContentPage): ContentPage => {
+  const plan = INLINE_LINKS[p.slug];
+  if (!plan?.length) return p;
+
+  /** أهداف مربوطة أصلاً + ما تضيفه هذه الطبقة — فلا تكرار بأي وجه */
+  const taken = new Set(hardLinks(p));
+  const placed = new Set<number>();
+
+  const sections = p.sections.map((s) => {
+    const mine: InlineLink[] = [];
+    plan.forEach((l, i) => {
+      if (l.at !== s.h2) return;
+      placed.add(i);
+      if (taken.has(l.to)) return;
+      taken.add(l.to);
+      mine.push(l);
+    });
+    if (!mine.length) return s;
+    return {
+      ...s,
+      links: [
+        ...(s.links ?? []),
+        ...mine.map(({ to, before, anchor, after }) => ({ to, before, anchor, after })),
+      ],
+    };
+  });
+
+  plan.forEach((l, i) => {
+    if (!placed.has(i))
+      linkProblems.push(`رابط متن في /${p.slug} يشير إلى قسم غير موجود: «${l.at}»`);
+  });
+  return { ...p, sections };
+};
+
+/** كل صفحات المحتوى بعد تطبيق طبقة الربط. */
+export const PAGES: ContentPage[] = RAW.map(applyInlineLinks);
 
 /**
  * تاريخ أول نشر حيّ للموقع — مؤكَّد من سجل git (أول نشر إلى الدومين).
@@ -53,6 +118,59 @@ for (const p of PAGES) {
   for (const r of p.related ?? []) {
     if (!slugs.has(r)) problems.push(`رابط «اقرأ أيضاً» في ${p.slug} يشير إلى صفحة غير موجودة: ${r}`);
   }
+}
+
+problems.push(...linkProblems);
+
+/**
+ * فحص روابط المتن.
+ *
+ * الخلفية: قياس 31 أكتوبر 2026 أظهر 17 صفحة بروابط متن ≤ 2، وصفحة يتيمة
+ * تماماً. روابط المتن — لا بطاقات «اقرأ أيضاً» التي تسكن `<nav>` — هي ما
+ * ينقل الدلالة بمرساته. فهذا الفحص يمنع رجوع الخلل:
+ *  1. كل هدف موجود، ولا صفحة تربط نفسها.
+ *  2. لا مرساة عامة: المرساة تحمل كلمة الصفحة الهدف لا كلمة «اضغط هنا».
+ *  3. لكل صفحة محتوى 3 روابط متن واردة على الأقل من صفحات محتوى أخرى.
+ */
+const GENERIC_ANCHORS = ["هنا", "اضغط", "المزيد", "اقرأ المزيد", "الرابط", "هذه الصفحة", "التفاصيل"];
+
+/**
+ * صفحات قائمة بذاتها في `src/pages/` فليست في `PAGES` — روابطها صحيحة
+ * وإن لم تكن صفحات محتوى، فلا تُحتسب هدفاً ناقصاً.
+ */
+const STANDALONE = new Set(["about", "request-evaluation", "privacy", "medical-disclaimer"]);
+
+const inbound = new Map<string, Set<string>>();
+for (const s of slugs) inbound.set(s, new Set());
+
+for (const p of PAGES) {
+  const targets = [
+    ...hardLinks(p),
+    ...p.sections.flatMap((s) => (s.links ?? []).map((l) => l.to)),
+  ];
+  for (const t of targets) {
+    if (STANDALONE.has(t)) continue;
+    if (!slugs.has(t)) {
+      problems.push(`رابط متن في ${p.slug} يشير إلى صفحة غير موجودة: ${t}`);
+      continue;
+    }
+    if (t === p.slug) problems.push(`رابط متن في ${p.slug} يشير إلى نفسه`);
+    else inbound.get(t)!.add(p.slug);
+  }
+
+  for (const s of p.sections)
+    for (const l of s.links ?? []) {
+      const a = l.anchor.trim();
+      if (a.length < 8 || GENERIC_ANCHORS.includes(a))
+        problems.push(`مرساة عامة أو قصيرة في ${p.slug} → ${l.to}: «${a}»`);
+    }
+}
+
+const MIN_INBOUND = 3;
+for (const p of PAGES) {
+  const n = inbound.get(p.slug)!.size;
+  if (n < MIN_INBOUND)
+    problems.push(`روابط المتن الواردة إلى /${p.slug} ${n} فقط (المطلوب ${MIN_INBOUND})`);
 }
 
 /**

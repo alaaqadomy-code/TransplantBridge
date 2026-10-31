@@ -7,5 +7,15 @@ import { DISCLAIMER } from "../lib/site";
     <circle cx="12" cy="12" r="9" />
     <path d="M12 8h.01M11 12h1v4h1" stroke-linecap="round" stroke-linejoin="round" />
   </svg>
-  <p>{DISCLAIMER}</p>
+  {/*
+    الرابط إلى النص الكامل: كان إخلاء المسؤولية يظهر على 28 صفحة بلا رابط
+    إلى صفحته، فكان الزائر يقرأ الموجز ولا يجد التفصيل، وكانت الصفحة
+    القانونية بلا رابط واحد داخل المحتوى.
+  */}
+  <p>
+    {DISCLAIMER}{" "}
+    <a href="/medical-disclaimer" class="font-semibold text-amal-light underline decoration-amal/40 underline-offset-4 transition-colors hover:decoration-amal-light"
+      >اقرأ إخلاء المسؤولية الطبية كاملاً</a
+    >.
+  </p>
 </aside>

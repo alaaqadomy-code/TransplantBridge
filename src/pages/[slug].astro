@@ -162,6 +162,15 @@ const REVIEW_LABEL: Record<string, string> = {
                   </p>
                 </figure>
               )}
+              {/*
+                روابط المتن (`links.ts`) — فقرة نصية عادية داخل النص لا بطاقة
+                في `<nav>`، فتُقرأ رابط متن تحمل مرساته دلالة الصفحة الهدف.
+                موضعها بعد القائمة والجدول وقبل التنبيه: فلا تفصل الشرح عن
+                قائمته، ولا تسبق تنبيهاً هو خلاصة القسم.
+              */}
+              {s.links?.map((l) => (
+                <p set:html={`${l.before}<a href="/${l.to}">${l.anchor}</a>${l.after}`} />
+              ))}
               {s.note && (
                 <p class="my-6 rounded-3xl border border-shifa-300/25 bg-shifa-400/[.07] p-5 text-[0.9375rem] leading-relaxed text-shifa-100">
                   <span set:html={s.note} />
