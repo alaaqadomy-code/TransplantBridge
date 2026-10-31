@@ -12,6 +12,16 @@ const RAW: ContentPage[] = [...LIVER, ...KIDNEY, ...DECISION, ...EXTRA, ...WAVE2
 /** ملاحظات طبقة الربط — تُدمج في `problems` أدناه فيفشل البناء بها */
 const linkProblems: string[] = [];
 
+/**
+ * تاريخ إضافة طبقة الربط (`links.ts`) — تغيير محتوى حقيقي لا تجميلي: الصفحة
+ * تكسب فقرات نصية يراها القارئ. فمن حُدِّثت فعلاً يحمل `updated` هذا التاريخ،
+ * ومن له تاريخ أحدث منه يبقى على تاريخه. وما لم تمسّه الطبقة لا يُلمس تاريخه.
+ *
+ * عند تعديل `links.ts` لاحقاً: حدِّث هذا التاريخ. وإن نُسي فالتاريخ يتأخر
+ * ولا يتقدّم — وهذا الاتجاه الآمن.
+ */
+const LINKS_DATE = "2026-10-31";
+
 /** أهداف روابط المتن المكتوبة داخل نصوص الصفحة أصلاً (href="/slug") */
 const hardLinks = (p: ContentPage): string[] => {
   const text = [
@@ -68,7 +78,11 @@ const applyInlineLinks = (p: ContentPage): ContentPage => {
     if (!placed.has(i))
       linkProblems.push(`رابط متن في /${p.slug} يشير إلى قسم غير موجود: «${l.at}»`);
   });
-  return { ...p, sections };
+
+  const gained = sections.some((s, i) => (s.links?.length ?? 0) > (p.sections[i].links?.length ?? 0));
+  const updated = gained && !(p.updated && p.updated > LINKS_DATE) ? LINKS_DATE : p.updated;
+
+  return { ...p, sections, ...(updated ? { updated } : {}) };
 };
 
 /** كل صفحات المحتوى بعد تطبيق طبقة الربط. */

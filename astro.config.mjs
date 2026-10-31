@@ -2,6 +2,21 @@
 import { defineConfig, fontProviders } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { loadEnv } from "vite";
+import { PAGES, pageDates } from "./src/content/index.ts";
+
+/**
+ * تواريخ `lastmod` في sitemap.
+ *
+ * كان `lastmod: new Date()` يضع وقت البناء على كل رابط، فيقول لـGoogle إن
+ * الصفحات الـ33 كلها تغيّرت في كل نشر — وهذا يخالف قاعدة المشروع في
+ * التواريخ (`types.ts`: «تاريخ تحديث كاذب إشارة خادعة لا إشارة حداثة»)،
+ * ومحركات البحث تُسقط الاعتداد بـlastmod حين تجده دائماً «الآن» للكل.
+ *
+ * فصار لكل صفحة محتوى تاريخُ تحديثها الحقيقي المعروض للزائر نفسه، أما
+ * الصفحات القائمة بذاتها (الرئيسية والقانونية) فلا `lastmod` لها: إغفاله
+ * مسموح في المعيار، وأصدق من تاريخ لا نملكه.
+ */
+const LASTMOD = new Map(PAGES.map((p) => [`/${p.slug}`, pageDates(p).updated]));
 
 /**
  * حرس الدومين (PLAN.md §6):
@@ -29,7 +44,18 @@ export default defineConfig({
   // لا sitemap قبل اعتماد الدومين
   integrations: IS_LOCAL
     ? []
-    : [sitemap({ filter: (page) => !page.includes("/404"), lastmod: new Date() })],
+    : [
+        sitemap({
+          filter: (page) => !page.includes("/404"),
+          serialize(item) {
+            const path = new URL(item.url).pathname.replace(/\/$/, "");
+            const updated = LASTMOD.get(path);
+            if (updated) item.lastmod = `${updated}T00:00:00.000Z`;
+            else delete item.lastmod;
+            return item;
+          },
+        }),
+      ],
 
   /**
    * خطوط مستضافة ذاتياً — صفر طلبات لخوادم خارجية.
