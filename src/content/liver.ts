@@ -1,5 +1,5 @@
 import type { ContentPage } from "./types";
-import { lawSection, lawForeignersSection, ethicsDocsSection } from "./law";
+import { lawSectionLiver } from "./law";
 
 /**
  * عنقود الكبد — 6 صفحات.
@@ -426,9 +426,7 @@ export const LIVER: ContentPage[] = [
         note:
           "<strong>لا نذكر هنا درجات قرابة محددة ولا نصوص مواد قانونية.</strong> المتطلبات تختلف بين الدول، وقد تتغير، والمصادر المنشورة على الإنترنت متناقضة في تفاصيلها. المرجع الوحيد هو المستشفى ومكتب المرضى الدوليين فيه، والجهة القانونية المختصة في بلد العملية.",
       },
-      lawSection(),
-      lawForeignersSection(),
-      ethicsDocsSection(),
+      lawSectionLiver(),
       {
         h2: "الشرط الطبي: صحة المتبرع",
         body: ["المتبرع إنسان سليم سيدخل جراحة لا يحتاجها، فالمعيار الحاكم هو ألا يتضرر. ومن أهم ما يُفحص:"],

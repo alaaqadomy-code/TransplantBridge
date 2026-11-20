@@ -54,7 +54,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "الرفض: ما هو ومتى يحدث؟",
       to: "immunosuppressants-after-transplant",
       before: "والسبب الأول للرفض المتأخر خللٌ في ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "الالتزام بمثبطات المناعة",
       after: " أو في تداخلاتها الدوائية والغذائية.",
     },
     {
@@ -81,6 +81,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   ],
 
   "liver-donation": [
+    {
+      at: "لماذا التبرع بالكبد ممكن أصلاً؟",
+      to: "liver-transplant",
+      before: "وما يحدث في الجهة المقابلة — جانب المريض المتلقي — تشرحه صفحة ",
+      anchor: "زرع الكبد",
+      after: " من دواعي العملية إلى التعافي.",
+    },
     {
       at: "لماذا التبرع بالكبد ممكن أصلاً؟",
       to: "living-donor-liver-transplant",
@@ -150,6 +157,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   ],
 
   "liver-donor-risks": [
+    {
+      at: "لماذا نتكلم عن المخاطر بصراحة؟",
+      to: "liver-transplant",
+      before: "ومن يوازن هذه المخاطر بما سيكسبه قريبه يحتاج أن يقرأ ",
+      anchor: "عملية زراعة الكبد",
+      after: " كاملةً قبل أن يحسم.",
+    },
     {
       at: "لماذا نتكلم عن المخاطر بصراحة؟",
       to: "organ-trafficking-warning",
@@ -269,7 +283,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "الرفض: ما هو ومتى يحدث؟",
       to: "immunosuppressants-after-transplant",
       before: "والوقاية منه تبدأ وتنتهي بالالتزام بـ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "أدوية منع الرفض",
       after: " بجرعتها وتوقيتها بلا استثناء.",
     },
     {
@@ -353,6 +367,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   "kidney-donor-risks": [
     {
       at: "لماذا نذكر المخاطر بوضوح؟",
+      to: "kidney-transplant",
+      before: "ومن يقرأ هذه المخاطر لأن قريبه مقبل على ",
+      anchor: "عملية زراعة الكلى",
+      after: " يجدر به أن يقرأ الصورة الكاملة للمريض أيضاً، لا جانب المتبرع وحده.",
+    },
+    {
+      at: "لماذا نذكر المخاطر بوضوح؟",
       to: "organ-trafficking-warning",
       before: "ومن يخفي عنك هذه المخاطر لا يحميك بل يستدرجك — وهذا ما تفصّله صفحة ",
       anchor: "الاتجار بالأعضاء",
@@ -379,7 +400,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "بقاء المريض أم بقاء العضو؟",
       to: "immunosuppressants-after-transplant",
       before: "وأكبر عامل في بقاء العضو ليس الجراحة بل الالتزام بـ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "مثبطات المناعة",
       after: " سنةً بعد سنة.",
     },
     {
@@ -410,7 +431,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "أدوية زراعة الكلى: التزام لا يُساوَم عليه",
       to: "immunosuppressants-after-transplant",
       before: "وتفصيل الجرعات والتداخلات وماذا تفعل إن نسيت جرعة في صفحة ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "الأدوية بعد الزراعة",
       after: ".",
     },
     {
@@ -425,6 +446,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   "repeat-kidney-transplant": [
     {
       at: "متى تُطرح إعادة الزراعة؟",
+      to: "kidney-transplant",
+      before: "ومن لم يمرّ بعد بالزراعة الأولى فالأساس كله في ",
+      anchor: "دليل زراعة الكلى",
+      after: "، وهذه الصفحة مكمّلة له لا بديلة عنه.",
+    },
+    {
+      at: "متى تُطرح إعادة الزراعة؟",
       to: "kidney-transplant-success-rate",
       before: "ولقراءة ما يُقال عن عمر الكلية المزروعة قراءةً صحيحة انظر ",
       anchor: "نسبة نجاح عملية زراعة الكلى",
@@ -434,7 +462,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "ما الذي يختلف عن الزراعة الأولى؟",
       to: "immunosuppressants-after-transplant",
       before: "ويختلف معها بروتوكول ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "تثبيط المناعة",
       after: " غالباً، لأن الجهاز المناعي صار متحسِّساً.",
     },
     {
@@ -481,6 +509,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   "liver-transplant-turkey": [
     {
       at: "الشرط الذي يسبق كل شيء",
+      to: "liver-transplant",
+      before: "وهذه الصفحة عن الوجهة لا عن العملية؛ وتفصيل الإجراء الطبي نفسه في ",
+      anchor: "دليل زراعة الكبد",
+      after: ".",
+    },
+    {
+      at: "الشرط الذي يسبق كل شيء",
       to: "living-donor-liver-transplant",
       before: "ولذلك فإن ",
       anchor: "زراعة الكبد من متبرع حي",
@@ -519,6 +554,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   "kidney-transplant-turkey": [
     {
       at: "ابدأ من هنا: هل معك متبرع؟",
+      to: "kidney-transplant",
+      before: "وقبل أي كلام عن وجهة أو مستشفى، الأساس الطبي للعملية نفسها في ",
+      anchor: "زرع الكلى خطوة بخطوة",
+      after: ".",
+    },
+    {
+      at: "ابدأ من هنا: هل معك متبرع؟",
       to: "kidney-donation",
       before: "وقبل أن يوافق قريبك، اجعله يقرأ صفحة ",
       anchor: "التبرع بالكلى",
@@ -549,7 +591,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "أول ٤٨ ساعة بعد العملية: ما يراقبه الفريق",
       to: "immunosuppressants-after-transplant",
       before: "ومن هذه الساعات تبدأ ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "رحلة الدواء مدى الحياة",
       after: " ولا تتوقف بعدها أبداً.",
     },
   ],
@@ -580,7 +622,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "ما يُستثنى عادةً فيفاجئ المرضى",
       to: "immunosuppressants-after-transplant",
       before: "وأثقل بند مستثنى على المدى الطويل هو ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "كلفة أدوية مثبطات المناعة",
       after: ": نفقة شهرية لا تنتهي، تُحسب قبل السفر لا بعده.",
     },
     {
@@ -657,7 +699,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "٢٠. فيروسات ما بعد الزراعة: نقطة تخصّ الأطفال أكثر من البالغين",
       to: "immunosuppressants-after-transplant",
       before: "والسبب في ذلك مستوى تثبيط المناعة نفسه — تفصيله في ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "صفحة مثبطات المناعة",
       after: ".",
     },
   ],
@@ -674,7 +716,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "٢. مثبطات المناعة: الالتزام الذي لا يُساوَم عليه",
       to: "immunosuppressants-after-transplant",
       before: "وتفصيل الجرعات والتداخلات الدوائية والغذائية في صفحة ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "أدوية ما بعد الزراعة",
       after: ".",
     },
     {
@@ -760,7 +802,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "٦. بعد الزراعة: نقطة دقيقة",
       to: "immunosuppressants-after-transplant",
       before: "ولذلك يُوازن مستوى ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "تثبيط المناعة ودوائه",
       after: " في هؤلاء المرضى بعناية خاصة.",
     },
   ],
@@ -864,6 +906,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   "kidney-transplant-fertility": [
     {
       at: "لماذا تعود الخصوبة بعد الزراعة؟",
+      to: "kidney-transplant",
+      before: "وعودة الخصوبة واحدة من مكاسب عدة تشرحها صفحة ",
+      anchor: "زراعة الكلى",
+      after: " من التقييم إلى ما بعد العملية.",
+    },
+    {
+      at: "لماذا تعود الخصوبة بعد الزراعة؟",
       to: "dialysis-vs-transplant",
       before: "وهذا من أوضح الفروق بين المسارين — انظر ",
       anchor: "هل زراعة الكلى افضل من الغسيل",
@@ -873,7 +922,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "الدواء أولاً: نقطة لا يصح تجاوزها",
       to: "immunosuppressants-after-transplant",
       before: "وتفصيل هذه الأدوية وتداخلاتها في صفحة ",
-      anchor: "أدوية مثبطات المناعة",
+      anchor: "مثبطات المناعة بعد الزراعة",
       after: ".",
     },
     {
