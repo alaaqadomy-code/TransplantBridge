@@ -227,9 +227,9 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
 
   "liver-transplant-success-rate": [
     {
-      at: "لماذا لا نعطيك رقماً؟",
+      at: "ما الذي لن تجده هنا — ولماذا",
       to: "liver-transplant",
-      before: "وما يحدث فعلاً في العملية وما بعدها مشروح في صفحة ",
+      before: "ومن يقرأ هذه الأرقام قبل أن يفهم العملية نفسها يقرأها بلا سياق؛ وما يحدث فيها وما بعدها مشروح في صفحة ",
       anchor: "زرع الكبد",
       after: ".",
     },

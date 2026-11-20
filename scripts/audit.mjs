@@ -21,6 +21,17 @@ const PRICE_ALLOWED = new Set(["transplant-cost", "liver-transplant-turkey", "ki
 const ATTRIBUTION = "منقول عن جهة نشرته";
 const SOURCE_MARK = "رُصد";
 
+/**
+ * نسب البقاء مسموحة في هاتين الصفحتين فقط، وبشرط الإسناد (قرار المالك
+ * 20 نوفمبر 2026). والسبب في رأس `src/content/survival.ts`.
+ *
+ * الشرط ليس شكلياً: الصفحة التي تذكر نسبة بلا اسم السجل وبلا الـDOI وبلا
+ * فوج الزراعة تخالف القاعدة ويُبلَّغ عنها هنا. وأي نسبة خارج هاتين الصفحتين
+ * تبقى خرقاً كما كانت.
+ */
+const PCT_ALLOWED = new Set(["kidney-transplant-success-rate", "liver-transplant-success-rate"]);
+const PCT_REQUIRED = ["DOI:", "الفوج:", "المصدر:"];
+
 const slugs = new Set(files.map((f) => "/" + f.replace(/\.html$/, "")));
 slugs.add("/"); slugs.add("/index");
 
@@ -79,7 +90,18 @@ for (const f of files) {
   }
 
   const pcts = text.match(/\d{1,3}\s?%|\d{1,2}٪/g) || [];
-  if (pcts.length) { pctHits += pcts.length; report.push(`  ⚠️ ${f}: نسبة مئوية → ${pcts.slice(0,2).join(" | ")}`); }
+  if (pcts.length) {
+    if (!PCT_ALLOWED.has(slug)) {
+      pctHits += pcts.length;
+      report.push(`  ⚠️ ${f}: نسبة مئوية في صفحة غير مصرّح بها → ${pcts.slice(0, 2).join(" | ")}`);
+    } else {
+      const missing = PCT_REQUIRED.filter((k) => !text.includes(k));
+      if (missing.length) {
+        pctHits += pcts.length;
+        report.push(`  ⚠️ ${f}: نسب بلا إسناد كامل — ينقصها ${missing.join(" و")}`);
+      }
+    }
+  }
 
   for (const m of html.matchAll(/href="(\/[^"#?]*)"/g)) {
     const href = m[1].replace(/\/$/, "") || "/";
