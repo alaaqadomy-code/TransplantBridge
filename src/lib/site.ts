@@ -28,7 +28,7 @@ export const WHATSAPP = {
   link: (text?: string) =>
     `https://wa.me/${WA_DIGITS}${text ? `?text=${encodeURIComponent(text)}` : ""}`,
   defaultMessage:
-    "السلام عليكم، أريد الاستفسار عن تقييم حالة لزرع الكبد أو زراعة الكلى.",
+    "السلام عليكم، وصلت إليكم من موقع TransplantBridge (transplantbridge.com)، أريد الاستفسار عن تقييم حالة لزرع الكبد أو زراعة الكلى.",
 } as const;
 
 /**
