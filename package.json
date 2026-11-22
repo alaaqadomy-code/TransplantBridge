@@ -7,7 +7,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "check:all": "node scripts/audit.mjs && node scripts/check-links.mjs && node scripts/audit-pages.mjs && node scripts/check-claims.mjs && node scripts/check-faq-schema.mjs && node scripts/check-arabic-typos.mjs src",
+    "check:report": "node scripts/check-h1-keyword.mjs; node scripts/check-page-quality.mjs; exit 0",
+    "verify:live": "node scripts/verify-live.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
