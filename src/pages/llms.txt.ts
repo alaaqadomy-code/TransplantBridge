@@ -18,7 +18,7 @@ export const GET: APIRoute = () => {
   const group = (cluster: string) => PAGES.filter((p) => p.cluster === cluster);
   const lines = (cluster: string) =>
     group(cluster)
-      .map((p) => `- [${p.h1}](${abs("/" + p.slug)}): ${p.lead.replace(/\s+/g, " ").trim()}`)
+      .map((p) => `- [${p.h1}](${abs("/" + p.slug)}): ${p.lead.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()}`)
       .join("\n");
 
   const body = `# ${SITE.name}
