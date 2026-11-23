@@ -10,7 +10,19 @@
     "check": "astro check",
     "check:all": "node scripts/audit.mjs && node scripts/check-links.mjs && node scripts/audit-pages.mjs && node scripts/check-claims.mjs && node scripts/check-faq-schema.mjs && node scripts/check-arabic-typos.mjs src",
     "check:report": "node scripts/check-h1-keyword.mjs; node scripts/check-page-quality.mjs; exit 0",
-    "verify:live": "node scripts/verify-live.mjs"
+    "verify:live": "node scripts/verify-live.mjs",
+    "alaa:check": "node scripts/alaa/check-all.mjs",
+    "alaa:report": "node scripts/alaa/check-report.mjs",
+    "alaa:selftest": "node scripts/alaa/selftest-checks.mjs",
+    "alaa:gsc": "node scripts/alaa/gsc-opportunities.mjs",
+    "alaa:measure": "node scripts/alaa/measure.mjs",
+    "alaa:need": "node scripts/alaa/new-article.mjs need",
+    "alaa:coverage": "node scripts/alaa/new-article.mjs coverage",
+    "alaa:verify": "node scripts/alaa/verify-live.mjs",
+    "alaa:index": "node scripts/alaa/index-sitemap.mjs",
+    "alaa:done": "node scripts/alaa/check-done.mjs",
+    "alaa:similarity": "node scripts/alaa/check-similarity.mjs",
+    "alaa:brief": "node scripts/alaa/serp-brief.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

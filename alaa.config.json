@@ -1,0 +1,47 @@
+{
+  "_note": "أنشأه install.mjs من حزمة علاء. عدّل القيم لموقعك. لا أسرار هنا.",
+  "mode": "dist",
+  "domain": "https://transplantbridge.com",
+  "dist": "dist",
+  "trailingSlash": false,
+  "contentPattern": "^/[^/]+$",
+  "contentExclude": "^/(privacy|medical-disclaimer|request-evaluation|about)$",
+  "locales": null,
+  "titleMax": 60,
+  "descMin": 120,
+  "descMax": 160,
+  "moneyPages": [
+    "/transplant-cost",
+    "/kidney-transplant-turkey",
+    "/liver-transplant-turkey",
+    "/transplant-hospitals-turkey",
+    "/request-evaluation"
+  ],
+  "minMoney": 8,
+  "h1Exempt": "^/(404|404/)$",
+  "claimsProfile": "generic",
+  "selftestPage": "/kidney-donor-requirements",
+  "touchGroups": [],
+  "typosPaths": [
+    "src"
+  ],
+  "liveAssets": [
+    "/favicon.svg",
+    "/llms.txt",
+    "/robots.txt"
+  ],
+  "bannedLive": [
+    "نضمن",
+    "AggregateRating",
+    "مضمونة"
+  ],
+  "anchorBoxes": null,
+  "content": {
+    "articles": null,
+    "services": null,
+    "noindex": null,
+    "layers": [],
+    "articlePrefix": "/",
+    "servicePrefix": "/__none__/"
+  }
+}
