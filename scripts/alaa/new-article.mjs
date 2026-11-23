@@ -11,7 +11,7 @@
  * بوابتا الحاجة (قرار علاء 23 نوفمبر 2026، «صفحة حسب الاحتياج لا حصة»):
  *   • الفهرسة: لا صفحة جديدة إن كانت المفهرسة < MIN_INDEX_RATIO (افتراضي 0.8) من روابط الخريطة، بشهادة
  *     content-plan/index-coverage.json عمرها ≤ 7 أيام. تُنتَج بـ `new-article.mjs coverage` (URL Inspection، قراءة فقط).
- *   • الوتيرة: لا أكثر من MAX_NEW_PER_WEEK صفحة جديدة (افتراضي 2، قرار علاء 23 نوفمبر 2026) في 7 أيام: مقال published خلال 7 أيام، أو ملف أُضيف إلى articles-wave10 في git
+ *   • الوتيرة: لا أكثر من weeklyCap صفحة جديدة في 7 أيام: 1 إن كان الظهور 100 إلى 300 في 28 يوماً، وإلا MAX_NEW_PER_WEEK (افتراضي 2)؛ قرارا علاء 23 و24 نوفمبر 2026: مقال published خلال 7 أيام، أو ملف أُضيف إلى articles-wave10 في git
  *     خلالها، أو ملف فيه لم يُحفظ بعد.
  *   node scripts/new-article.mjs coverage                → يكتب content-plan/index-coverage.json
  *   node scripts/new-article.mjs need                    → حكم الحاجة هذا الأسبوع (للمهمة الأسبوعية؛ قراءة فقط)
@@ -52,13 +52,17 @@ export function recentNewPages({ articles, now = Date.now(), recentFiles = recen
 // قاعدة الكتابة (قرار علاء 23 نوفمبر 2026): تُطبع مع كل موجز حتى لا تُنسى عند كتابة أي تحسين أو صفحة
 export const WRITING_NOTE = 'تذكير الكتابة: كل نص متوافق مع SEO وAEO وGEO وإجابات الذكاء الاصطناعي معاً: جواب مباشر في أول فقرة، عناوين بصيغة سؤال الباحث، فقرات قصيرة قابلة للاقتباس، جدول أو قائمة حين تفيد، حقائق بمصادر، أسئلة شائعة حقيقية، روابط داخلية طبيعية. ثم humanizer.';
 /** بوابتا الحاجة: تُرجع قائمة أسباب الرفض (فارغة = مسموح). `now` و`git` قابلان للحقن للاختبار. */
-export function needGates({ articles, coverage, now = Date.now(), recentFiles = recentWave10Files() }) {
+// قرار علاء 24 نوفمبر 2026 (نهائي): موقع ظهوره 100 إلى 300 في 28 يوماً ⇒ صفحة جديدة واحدة في الأسبوع؛ فوق 300 ⇒ MAX_NEW_PER_WEEK؛
+// وأقل من 100 ⇒ STOP (يرفضه add/need من measure.json). impressions = measure.json.impressions، أو undefined بلا قياس.
+export const weeklyCap = (impressions) => (impressions != null && impressions < 300 ? 1 : MAX_NEW_PER_WEEK);
+export function needGates({ articles, coverage, now = Date.now(), recentFiles = recentWave10Files(), impressions }) {
   const errs = [];
   if (!coverage) errs.push(`الفهرسة: لا ${COVERAGE}؛ شغّل new-article.mjs coverage`);
   else if (now - new Date(coverage.at) > 7 * DAY) errs.push(`الفهرسة: شهادة التغطية عمرها ${((now - new Date(coverage.at)) / DAY).toFixed(0)} يوماً (> 7)؛ أعد coverage`);
   else if (coverage.ratio < MIN_INDEX_RATIO) errs.push(`الفهرسة: ${coverage.indexed} من ${coverage.total} مفهرسة (${(coverage.ratio * 100).toFixed(0)}% < ${MIN_INDEX_RATIO * 100}%)؛ فهرس الموجود قبل أي صفحة جديدة`);
   const recent = recentNewPages({ articles, now, recentFiles });
-  if (recent.length >= MAX_NEW_PER_WEEK) errs.push(`الوتيرة: ${recent.length} صفحة جديدة خلال آخر 7 أيام (${recent.join('، ')})؛ لا أكثر من ${MAX_NEW_PER_WEEK} أسبوعياً`);
+  const cap = weeklyCap(impressions);
+  if (recent.length >= cap) errs.push(`الوتيرة: ${recent.length} صفحة جديدة خلال آخر 7 أيام (${recent.join('، ')})؛ لا أكثر من ${cap} أسبوعياً${cap === 1 ? ` (الظهور ${impressions} بين 100 و300 في 28 يوماً)` : ''}`);
   return errs;
 }
 function recentWave10Files() {
@@ -79,6 +83,9 @@ if (cmd === '--selftest-gates') {
     ['مقالان خلال الأسبوع: الثالث ممنوع', needGates({ articles: [{ slug: 'b', published: '2026-11-28' }, { slug: 'e', published: '2026-11-26' }], coverage: cov(0.9), now, recentFiles: [] }), 1],
     ['مقال منشور + ملف wave10 غير محفوظ: ممنوع', needGates({ articles: [{ slug: 'b', published: '2026-11-28' }], coverage: cov(0.9), now, recentFiles: ['c'] }), 1],
     ['المقال نفسه منشوراً وفي git لا يُعدّ مرتين', needGates({ articles: [{ slug: 'c', published: '2026-11-28' }], coverage: cov(0.9), now, recentFiles: ['c'] }), 0],
+    ['ظهور 122 ومقال قبل 3 أيام: الثاني ممنوع (صفحة واحدة أسبوعياً)', needGates({ articles: [{ slug: 'b', published: '2026-11-28' }], coverage: cov(0.9), now, recentFiles: [], impressions: 122 }), 1],
+    ['ظهور 122 ولا مقال خلال الأسبوع: مسموح', needGates({ articles: [{ slug: 'b', published: '2026-11-20' }], coverage: cov(0.9), now, recentFiles: [], impressions: 122 }), 0],
+    ['ظهور 1598 ومقال قبل 3 أيام: الثاني مسموح', needGates({ articles: [{ slug: 'b', published: '2026-11-28' }], coverage: cov(0.9), now, recentFiles: [], impressions: 1598 }), 0],
     ['البوابتان معاً', needGates({ articles: [{ slug: 'b', published: '2026-11-28' }, { slug: 'e', published: '2026-11-27' }], coverage: cov(0.5), now, recentFiles: [] }), 2],
   ];
   let bad = 0; for (const [n, e, want] of T) { const ok = e.length === want; bad += !ok; console.log(`${ok ? '✓' : '✗'} ${n}: ${e.length} رفض${e.length ? ' · ' + e.join(' | ') : ''}`); }
@@ -155,7 +162,7 @@ if (cmd === 'brief') {
 ## السبب البحثي
 ${gsc ? `GSC (${raw.startDate} → ${raw.endDate}): ${gsc.impr} ظهور، ${gsc.clicks} نقرة لاستعلامات قريبة، على الصفحات: ${[...gsc.pages].join('، ') || 'لا صفحة'}` : 'لا بيانات GSC (شغّل npm run gsc)'}
 ${measure ? `قاعدة STOP: الموقع عند ${measure.impressions} ظهور في 28 يوماً ⇒ ${measure.stop ? '⛔ لا محتوى جديد' : '✓ مسموح'}` : 'شغّل node scripts/measure.mjs أولاً'}
-بوابتا الحاجة: ${needGates({ articles: ARTICLES, coverage: coverageFile() }).join(' · ') || '✓ الفهرسة ≥ ' + MIN_INDEX_RATIO * 100 + '% ولا صفحة جديدة خلال 7 أيام'}
+بوابتا الحاجة: ${needGates({ articles: ARTICLES, coverage: coverageFile(), impressions: measure?.impressions }).join(' · ') || '✓ الفهرسة ≥ ' + MIN_INDEX_RATIO * 100 + '% ولا صفحة جديدة خلال 7 أيام'}
 
 ## التنافس مع الصفحات القائمة (يجب أن تكون النية مختلفة فعلاً، وإلا وسّع الأقرب بدل مقال جديد)
 ${near.map((p) => `- ${p.url} «${p.kw}» (تشابه ${(p.s * 100) | 0}%)`).join('\n') || '- لا صفحة قريبة'}
@@ -247,7 +254,7 @@ if (cmd === 'add') {
   if (measure?.stop) errs.push(`STOP: الموقع عند ${measure.impressions} ظهور في 28 يوماً (< 100)؛ لا محتوى جديد`);
   if (!measure) errs.push('لا content-plan/measure.json: شغّل measure.mjs لإثبات تجاوز STOP');
   else if (Date.now() - Date.parse(measure.date) > 7 * DAY) errs.push(`measure.json بتاريخ ${measure.date} أقدم من 7 أيام؛ أعد npm run measure`);
-  errs.push(...needGates({ articles: ARTICLES, coverage: coverageFile() }));
+  errs.push(...needGates({ articles: ARTICLES, coverage: coverageFile(), impressions: measure?.impressions }));
   const fq = freshQueries(); if (fq.why) errs.push(fq.why);
   const clustersSrc = readFileSync(CONFIG.content.clusters, 'utf8');
   // كل مصدر يُطلب فعلاً (HEAD ثم GET) بمهلة 15 ثانية؛ رد أقل من 400 = يرد
@@ -276,11 +283,11 @@ if (cmd === 'add') {
 }
 if (cmd === 'need') {
   // حكم الأسبوع: هل يُسمح بصفحة، وما المرشحات الحقيقية (استعلامات بلا صفحة مالكة في gsc-opportunities)؟ قراءة فقط.
-  const gates = [...(measure ? (measure.stop ? [`STOP: ${measure.impressions} ظهور (< 100)`] : []) : ['لا measure.json']), ...needGates({ articles: ARTICLES, coverage: coverageFile() })];
+  const gates = [...(measure ? (measure.stop ? [`STOP: ${measure.impressions} ظهور (< 100)`] : []) : ['لا measure.json']), ...needGates({ articles: ARTICLES, coverage: coverageFile(), impressions: measure?.impressions })];
   const opp = existsSync('content-plan/gsc-opportunities.md') ? readFileSync('content-plan/gsc-opportunities.md', 'utf8') : '';
   const cands = (opp.split(/^## 🆕.*$/m)[1] ?? '').split(/^## /m)[0].split('\n').filter((l) => /^\s*[-|]/.test(l) && !/---|الاستعلام/.test(l) && /\d/.test(l)).slice(0, 5);
-  const left = MAX_NEW_PER_WEEK - recentNewPages({ articles: ARTICLES }).length;
-  console.log(gates.length ? `⛔ لا صفحة جديدة هذا الأسبوع:\n  • ${gates.join('\n  • ')}` : `✓ مسموح ب${left === 1 ? 'صفحة واحدة' : left === 2 ? 'صفحتين' : `${left} صفحات`} هذا الأسبوع إن وُجدت حاجة حقيقية (الحد ${MAX_NEW_PER_WEEK} في كل 7 أيام).\nمرشحات بلا صفحة مالكة (من npm run gsc):\n${cands.join('\n') || '  لا مرشحات: لا حاجة هذا الأسبوع'}\nالتالي: new-article.mjs brief "<الاستعلام>" ثم الكتابة والمراجعة في جلسة.\n${WRITING_NOTE}`);
+  const cap = weeklyCap(measure?.impressions); const left = cap - recentNewPages({ articles: ARTICLES }).length;
+  console.log(gates.length ? `⛔ لا صفحة جديدة هذا الأسبوع:\n  • ${gates.join('\n  • ')}` : `✓ مسموح ب${left === 1 ? 'صفحة واحدة' : left === 2 ? 'صفحتين' : `${left} صفحات`} هذا الأسبوع إن وُجدت حاجة حقيقية (الحد ${cap} في كل 7 أيام${cap === 1 ? "، لأن الظهور بين 100 و300" : ""}).\nمرشحات بلا صفحة مالكة (من npm run gsc):\n${cands.join('\n') || '  لا مرشحات: لا حاجة هذا الأسبوع'}\nالتالي: new-article.mjs brief "<الاستعلام>" ثم الكتابة والمراجعة في جلسة.\n${WRITING_NOTE}`);
   process.exit(0);
 }
 if (!['brief', 'add', 'need'].includes(cmd)) { console.error('الاستخدام: new-article.mjs brief <استعلام> [--slug=x] | add <draft.json> [--apply] | need | coverage'); process.exit(1); }

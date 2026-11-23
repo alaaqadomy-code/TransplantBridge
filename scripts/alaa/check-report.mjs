@@ -8,7 +8,8 @@ import { dirname as __dn, join as __jn } from 'node:path';
 import { fileURLToPath as __fu } from 'node:url';
 const HERE = __dn(__fu(import.meta.url));
 
-const CHECKS = ['check-title-desc', 'check-h1-keyword', 'check-internal-links', 'check-cannibalization', 'check-similarity', 'check-page-quality', 'check-touch-targets'];
+// check-dashes: الشرطات الطويلة في نص القارئ (قاعدة علاء وhumanizer §8، 24 نوفمبر 2026)
+const CHECKS = ['check-title-desc', 'check-h1-keyword', 'check-internal-links', 'check-cannibalization', 'check-similarity', 'check-page-quality', 'check-dashes', 'check-touch-targets'];
 const sum = [];
 for (const c of CHECKS) {
   console.log(`\n━━ ${c}`);

@@ -13,6 +13,14 @@ import { CONFIG } from './_config.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url)); const DISTDIR = process.env.DIST || CONFIG.dist;
 
 // صفحة الزرع: من الإعداد، وإلا أول صفحة في البناء فيها <main> و<h1>
+// selftestPage مكتوبة بلا امتداد («articles/x» أو «/x/») تُطبَّع إلى x.html أو x/index.html؛ وإن لم توجد يفشل الإثبات بصوت
+// (كان يسقط صامتاً على صفحة مستثناة فيمرّ check-similarity بلا فحص: TransplantBridge، 24 نوفمبر 2026)
+if (CONFIG.selftestPage) {
+  const raw = String(CONFIG.selftestPage).replace(/^\/+/, '').replace(/\/$/, '');
+  const hit = [raw, `${raw}.html`, `${raw}/index.html`].find((c) => c && existsSync(join(DISTDIR, c)) && c.endsWith('.html'));
+  if (!hit) { console.error(`✗ selftestPage «${CONFIG.selftestPage}» غير موجودة في ${DISTDIR} (جُرّب ${raw}.html و${raw}/index.html): صحّحها في alaa.config.json`); process.exit(2); }
+  CONFIG.selftestPage = hit;
+}
 const PAGE = (() => { if (CONFIG.selftestPage && existsSync(join(DISTDIR, CONFIG.selftestPage))) return CONFIG.selftestPage;
   const walk = (d, o = []) => { for (const e of readdirSync(d, { withFileTypes: true })) { const p = join(d, e.name); e.isDirectory() ? walk(p, o) : e.name.endsWith('.html') && o.push(p); } return o; };
   // صفحة محتوى عادية: فيها <main> و<h1> وJSON-LD، ليست الرئيسية ولا 404 ولا noindex (كان يُختار 404 أولاً في رصد)
@@ -21,7 +29,9 @@ const PAGE = (() => { if (CONFIG.selftestPage && existsSync(join(DISTDIR, CONFIG
   // صفحة محتوى (بنمط contentPattern) أولاً: فواحص المحتوى (التشابه، الكلمة في H1) لا ترى غيرها؛ كان يُختار /about-baraa/ أبجدياً (براءة، 23 نوفمبر 2026)
   const CONTENT = CONFIG.contentPattern ? new RegExp(CONFIG.contentPattern) : null;
   const urlOf = (p) => { const r = p.replace(/\\/g, '/').slice(DISTDIR.replace(/\\/g, '/').length); return /\/index\.html$/.test(r) ? r.replace(/\/index\.html$/, CONFIG.trailingSlash ? '/' : '') || '/' : r.replace(/\.html$/, ''); };
-  const content = CONTENT ? cands.filter((p) => CONTENT.test(urlOf(p))) : [];
+  // ومع contentExclude كما في isContent: كانت «اتصل بنا» تُختار في رصد وهي مستثناة، فلا يراها check-similarity (24 نوفمبر 2026)
+  const EXCL = CONFIG.contentExclude ? new RegExp(CONFIG.contentExclude) : null;
+  const content = CONTENT ? cands.filter((p) => CONTENT.test(urlOf(p)) && !(EXCL && EXCL.test(urlOf(p)))) : [];
   const pool = content.length ? content : cands;
   const f = pool.find((p) => /application\/ld\+json/.test(readFileSync(p, 'utf8'))) ?? pool[0] ?? null;
   return f ? f.replace(/\\/g, '/').slice(DISTDIR.replace(/\\/g, '/').length + 1) : 'index.html'; })();
@@ -34,7 +44,9 @@ const CASES = [
   { s: 'check-h1-keyword', plant: (d) => edit(d, PAGE, /<h1([^>]*)>[^<]*/, '<h1$1>عنوان بلا كلمة') },
   { s: 'check-claims', plant: (d) => edit(d, PAGE, '<main', '<main><p>نضمن لك نتيجة مثالية ولا ألم بعد العملية.</p>') },
   { s: 'check-internal-links', env: { MIN_INBOUND: '999' } }, // رفع الحدّ يكشف أن العدّ يعمل
-  { s: 'check-page-quality', plant: () => {} }, // أحمر أصلاً على الموقع (استشاري)؛ يُثبت بفشل المجلد الفارغ
+  // صفحة محتوى طويلة بلا أي رابط خارجي: فقرة 500 كلمة وروابط https داخل <main> تُحوَّل داخلية
+  // (كان الزرع فارغاً فيفشل الإثبات حين يصير الموقع أخضر: unlockaccounts، 24 نوفمبر 2026)
+  { s: 'check-page-quality', plant: (d) => edit(d, PAGE, /<main([^>]*)>([\s\S]*?)<\/main>/, (_, a, body) => `<main${a}>${body.replace(/href="https?:\/\//g, 'href="/x/')}<p>${'نص مزروع لإثبات الفاحص '.repeat(125)}</p></main>`) },
   // Breadcrumb بموضع خاطئ يُضاف إلى <head>: يعمل على أي موقع، بسكيما أو بلا
   { s: 'check-schema-semantics', plant: (d) => edit(d, PAGE, '</head>', '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":7,"name":"مزروع","item":"https://example.invalid/x"}]}</script></head>') },
   { s: 'check-performance', plant: (d) => edit(d, PAGE, '</head>', '<script src="/blocking.js"></script></head>') },
@@ -46,7 +58,9 @@ const CASES = [
   { s: 'check-cross-site-dup', args: ['--changed'], plant: (d) => { const s = foreignSentence(); if (!s) throw new Error('لم يُزرع: لا موقع آخر ببناء في سجل المواقع'); edit(d, PAGE, '<main', `<main><script type="application/ld+json">{"dateModified":"${TODAY}"}</script><p>${s}.</p>`); } },
   // صفحة الزرع قابلة للضبط (touchSelftest) لموقع بلا index.html في الجذر (/ يحوّل إلى /en)
   // وفي موقع يرطّبه React (Next) يُزال العنصر المزروع في HTML، فالزرع يكون قاعدة CSS تصغّر روابط موجودة (touchSelftest.css)
-  { s: 'check-touch-targets', env: { }, plant: (d) => CONFIG.touchSelftest?.css ? appendCss(d, CONFIG.touchSelftest.css) : edit(d, CONFIG.touchSelftest?.file ?? 'index.html', '<main', '<main><a href="/about" style="display:inline-block;width:12px;height:12px">x</a>'), args: [`--pages=${CONFIG.touchSelftest?.path ?? '/'}`] },
+  // الافتراضي الآن قاعدة <style> في <head> تصغّر كل الروابط: لا يحذفها الترطيب، فلا يتذبذب الإثبات (كان رابطاً
+  // مزروعاً في <main> يحذفه React بعد التحميل أحياناً قبل القياس وأحياناً بعده: unlockaccounts، 24 نوفمبر 2026)
+  { s: 'check-touch-targets', env: { }, plant: (d) => CONFIG.touchSelftest?.css ? appendCss(d, CONFIG.touchSelftest.css) : edit(d, CONFIG.touchSelftest?.file ?? 'index.html', '</head>', '<style>a{display:inline-block!important;width:12px!important;height:12px!important;min-height:0!important;padding:0!important;overflow:hidden!important}</style></head>'), args: [`--pages=${CONFIG.touchSelftest?.path ?? '/'}`] },
 ];
 const TODAY = new Date().toISOString().slice(0, 10);
 // جملة حقيقية (10 كلمات فأكثر) من <main> موقع آخر في سجل المواقع، لزرعها في هذا الموقع

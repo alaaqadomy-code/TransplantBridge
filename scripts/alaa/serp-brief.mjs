@@ -28,7 +28,9 @@ async function analyse(url) {
     const r = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/130', 'Accept-Language': 'ar,en;q=0.8' }, redirect: 'follow', signal: AbortSignal.timeout(25000) });
     if (!r.ok) return { url, error: `HTTP ${r.status}` };
     const h = await r.text();
-    const main = h.match(/<main[\s\S]*?<\/main>/)?.[0] || h.match(/<article[\s\S]*?<\/article>/)?.[0] || h;
+    // القوائم الجانبية والتذييل والتنقل ليست محتوى المنافس: تُحذف قبل قراءة العناوين، حتى حين لا يوجد <main> ولا <article>
+    // (موجز «محذوف» في unlockaccounts التقط «مسلسلات» و«آيتونز» من قوائم جانبية، 24 نوفمبر 2026)
+    const main = (h.match(/<main[\s\S]*?<\/main>/)?.[0] || h.match(/<article[\s\S]*?<\/article>/)?.[0] || h).replace(/<(aside|nav|footer|header|form)\b[\s\S]*?<\/\1>/gi, ' ').replace(/<(div|section|ul)\b[^>]*(class|id)="[^"]*(sidebar|widget|related|footer|menu|comments?)[^"]*"[\s\S]*?<\/\1>/gi, ' ');
     const heads = [...main.matchAll(/<h([1-3])[^>]*>([\s\S]*?)<\/h\1>/g)].map((m) => ({ lvl: +m[1], text: strip(m[2]) })).filter((x) => x.text && x.text.length < 160 && !/^(related|faq|share|comments?|subscribe|menu|contact|categor|tags?|recent posts|.*tourism$|مقالات ذات صلة|منشورات ذات صلة|ذات صلة|اقرأ أيضا|الأسئلة الشائعة|شارك|التعليقات|القائمة|التصنيفات|أحدث المقالات|похожие|комментарии)/i.test(x.text));
     const words = strip(main).split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
     const schema = [...h.matchAll(/"@type"\s*:\s*"([^"]+)"/g)].map((m) => m[1]);

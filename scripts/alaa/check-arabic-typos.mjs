@@ -81,8 +81,8 @@ const RULES = [
   //    «a standard todo list» في مقال إنجليزي، و«no placeholder content ("Lorem Ipsum")
   //    remains» — وهي **تعليمةُ تحقّقٍ تنهى عن النائب**، لا نائبًا. إيجابيتان كاذبتان
   //    من إيجابيتين. و`TODO` وَحدها بحروفٍ كبيرة لا ترد في نثرٍ إنجليزي طبيعي.
-  // TransplantBridge: `define:vars={{ X }}` صيغة Astro لتمرير متغيّرات إلى سكربت، لا نائب قالب
-  { re: /((?<!define:vars=)\{\{[^}\n]*\}\}|\bTODO\b|\bFIXME\b|lorem ipsum)/gu,
+  // `attr={{ … }}` تعبير Astro/JSX عادي لا نائب قالب: define:vars={{ X }} (TransplantBridge)، service={{ name: … }} وstyle={{ … }} (رصد، 24 نوفمبر 2026)
+  { re: /((?<!=\s*)\{\{[^}\n]*\}\}|\bTODO\b|\bFIXME\b|lorem ipsum)/gu,
     msg: '🔴 نائب قالب لم يُملأ' },
 
   // ٨) 🗑 **قاعدتان حُذفتا بعد القياس، ولا تُعادا:**

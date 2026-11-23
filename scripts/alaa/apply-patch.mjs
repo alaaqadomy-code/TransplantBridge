@@ -9,6 +9,8 @@
  *   • ≥ 14 يوماً بين تاريخ الدفعة وآخر دفعة قبلها، ولا تاريخ في المستقبل (قرار علاء 23 نوفمبر 2026 بعد استشارة مستقلة).
  *   • لا صفحة في الدفعة عُدّلت في دفعة خلال آخر 28 يوماً: كل صفحة تُقاس وحدها 28 يوماً قبل أن تُمسّ ثانية.
  *   • إقرار المراجعة في الملف: "_review": { "humanizer": true, "date": "YYYY-MM-DD" } (ولا يُعدّ صفحة).
+ *   node scripts/apply-patch.mjs <patch.json> --check   → يفحص البوابات فقط (رمز 1 عند أي رفض، 0 عند القبول) بلا أي كتابة؛
+ *     وهو السلوك الأوتوماتيكي في مواقع وضع dist (تُعدَّل يدوياً، فلا كتابة من الأداة) حتى يُفحص التزامها بالدفعة قبل التعديل اليدوي (24 نوفمبر 2026)
  *   node scripts/apply-patch.mjs --selftest   → 7 حالات مزروعة لبوابات الدفعة (13)
  */
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
@@ -64,14 +66,17 @@ if (process.argv.includes('--selftest')) {
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const file = process.argv[2]; const dry = process.argv.includes('--dry');
-  if (!file) { console.error('الاستخدام: node scripts/apply-patch.mjs <patch.json> [--dry] | --selftest'); process.exit(1); }
+  if (!file) { console.error('الاستخدام: node scripts/apply-patch.mjs <patch.json> [--dry|--check] | --selftest'); process.exit(1); }
   const { _review, ...patches } = JSON.parse(readFileSync(file, 'utf8')); const today = localDay();
   const dir = dirname(file); const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => ({ name: f, slugs: (() => { const j = JSON.parse(readFileSync(`${dir}/${f}`, 'utf8')); return [...Object.keys(j).filter((k) => !k.startsWith('_')), ...(j._pages ?? []).map((u) => String(u).split('/').pop())]; })() })) : [];
   if (!files.some((f) => f.name === basename(file))) files.push({ name: basename(file), slugs: Object.keys(patches) });
   const inPatches = resolve(dir).toLowerCase() === resolve('content-plan/patches').toLowerCase();
   const gate = batchGate(files, file, _review, today, inPatches);
   if (gate.length) { console.log('✗ بوابات الدفعة:'); gate.forEach((e) => console.log('  ✗ ' + e)); process.exit(1); }
-  (await import('./_config.mjs')).requireFull('apply-patch');
+  // --check أو وضع dist: البوابات اجتازت، لا كتابة (كان requireFull يخرج بـ2 فلا يُعرف أن الدفعة سليمة)
+  const cfg = await import('./_config.mjs');
+  if (process.argv.includes('--check') || !cfg.isFull()) { console.log(`✓ بوابات الدفعة كلها مقبولة (${basename(file)}: ${Object.keys(patches).length} صفحة) · فحص بلا كتابة`); process.exit(0); }
+  cfg.requireFull('apply-patch');
   const { writePage, readPage } = await import('./_content.mjs');
   let pages = 0, edits = 0;
   for (const [slug, patch] of Object.entries(patches)) {

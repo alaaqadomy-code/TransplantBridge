@@ -3,7 +3,7 @@
  * الموقع، لا <meta keywords> التي تحمل القائمة الكاملة). الصفحات الأخرى: أول عنصر في <meta keywords>.
  * مطابقة بجذر تقريبي (بادئة ≥4 أحرف، تطبيع الهمزات والتاء المربوطة) كما في حزمة حسن.
  */
-import { pages, text, requireChecked, keywordMap } from './_dist.mjs';
+import { pages, text, requireChecked, keywordMap, isContent } from './_dist.mjs';
 import { loadContent } from './_ts.mjs';
 import { CONFIG } from './_config.mjs';
 const { ARTICLES, SERVICES } = await loadContent();
@@ -23,8 +23,10 @@ function match(a, b) {
 }
 const cover = (h1, kw) => { const have = words(h1), want = words(kw); return want.length ? want.filter((w) => have.some((h) => match(h, w))).length / want.length : 1; };
 const fails = []; let ok = 0, checked = 0;
+// صفحات المحتوى والصفحات التجارية والرئيسية فقط (24 نوفمبر 2026، tikorax): صفحات الخصوصية والشروط تحمل كلمة عامة فتخرج فجوات كاذبة
+const MEASURED = (url) => url === '/' || isContent(url) || CONFIG.moneyPages.includes(url);
 for (const { url, html, noindex } of pages()) {
-  if (noindex || EXEMPT.test(url)) continue;
+  if (noindex || EXEMPT.test(url) || !MEASURED(url)) continue;
   const kw = KW.get(url) ?? html.match(/name="keywords" content="([^"،,]+)/)?.[1]?.trim();
   const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? '');
   if (!kw || !h1) { fails.push({ url, h1, kw: kw ?? '(بلا كلمة)', r: 0 }); continue; }

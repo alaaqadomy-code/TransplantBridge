@@ -58,7 +58,8 @@ if (onlyLive.length || onlyLocal.length) fail(`الخريطة الحية تخت�
 console.log(`✓ الخريطة الحية ${live.length} = المحلية`);
 
 // آخر commit غيّر المصدر (لا HEAD: قد يكون HEAD تغييراً في السكربتات فقط)
-const LAST_SRC = spawnSync('git', ['log', '-1', '--format=%H', '--', ...SRC], { encoding: 'utf8' }).stdout.trim();
+// quotepath=false: git يقتبس المسارات العربية بترميز ثماني فينهار الفحص (24 نوفمبر 2026)
+const LAST_SRC = spawnSync('git', ['-c', 'core.quotepath=false', 'log', '-1', '--format=%H', '--', ...SRC], { encoding: 'utf8' }).stdout.trim();
 // 4) الإرسال
 if (dry) { console.log(`○ تجربة: كان سيُرسَل ${SITEMAP} إلى ${gscProperty(HOST)}`); process.exit(0); }
 const info = await submitSitemap(gscProperty(HOST), SITEMAP);
@@ -68,7 +69,7 @@ if (!process.argv.includes('--no-indexnow')) {
   const keyFile = readdirSync('public').find((f) => /^[0-9a-f]{32}\.txt$/.test(f));
   if (!keyFile) fail('لا مفتاح IndexNow في public/');
   const KEY = keyFile.replace('.txt', '');
-  const changed = spawnSync('git', ['diff', '--name-only', `${LAST_SRC}~1`, LAST_SRC, '--', ...SRC], { encoding: 'utf8' }).stdout.split('\n').filter(Boolean);
+  const changed = spawnSync('git', ['-c', 'core.quotepath=false', 'diff', '--name-only', `${LAST_SRC}~1`, LAST_SRC, '--', ...SRC], { encoding: 'utf8' }).stdout.split('\n').filter(Boolean);
   // كل صفحة تغيّر مصدرها أو قالبها: المقالات بـslug، والقوالب تعني كل صفحات النوع
   const slugs = new Set(); for (const f of changed) { const src = readFileSync(f, 'utf8'); for (const m of src.matchAll(/"?slug"?\s*:\s*"([a-z0-9-]+)"/g)) slugs.add(m[1]); }
   const urls = URLS_ARG.length ? URLS_ARG : local.filter((u) => [...slugs].some((s) => u.endsWith(`/${s}`)) || changed.some((f) => /pages\/|components\/|layouts\//.test(f) && !/\[slug\]/.test(f) && u === BASE + '/'));
@@ -81,7 +82,7 @@ if (!process.argv.includes('--no-indexnow')) {
 
 if (process.argv.includes('--inspect')) {
   const { inspectUrl } = await import('./_gsc.mjs');
-  const changed = spawnSync('git', ['diff', '--name-only', `${LAST_SRC}~1`, LAST_SRC, '--', ...SRC], { encoding: 'utf8' }).stdout.split(/\r?\n/).filter(Boolean);
+  const changed = spawnSync('git', ['-c', 'core.quotepath=false', 'diff', '--name-only', `${LAST_SRC}~1`, LAST_SRC, '--', ...SRC], { encoding: 'utf8' }).stdout.split(/\r?\n/).filter(Boolean);
   const slugs = new Set(); for (const f of changed) { const src = readFileSync(f, 'utf8'); for (const m of src.matchAll(/"?slug"?\s*:\s*"([a-z0-9-]+)"/g)) slugs.add(m[1]); }
   const urls = URLS_ARG.length ? URLS_ARG : local.filter((u) => [...slugs].some((s) => u.endsWith(`/${s}`)));
   const out = []; let indexed = 0;

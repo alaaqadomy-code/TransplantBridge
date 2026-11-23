@@ -27,6 +27,9 @@ export function patchFaults(files) {
   return files.filter(([f, j]) => !(/^\d{4}-\d{2}-\d{2}/.test(f) && f.slice(0, 10) < REVIEW_SINCE) && !(j?._review?.humanizer === true || /^غير منطبق.{10,}/.test(j?._review?.humanizer ?? ''))).map(([f]) => `${f}: بلا "_review": {"humanizer": true} (أو «غير منطبق: <السبب>» لتعديل بلا نص للقارئ)`);
 }
 
+/** «، منها N غير منطبق» للسطر الأخير: بنود صفرية لا ✓ ولا ✗ لكنها تُذكر (24 نوفمبر 2026) */
+export const naText = (rows) => { const n = rows.filter(([, , na]) => na).length; return n ? `، منها ${n} غير منطبق` : ''; };
+
 if (process.argv.includes('--selftest')) {
   const now = Date.parse('2026-12-01T12:00:00Z'); const ok = { at: '2026-12-01T11:30:00Z', base: 'https://x.com', urls: 10, checked: 10, errors: 0 };
   const cases = [
@@ -40,6 +43,8 @@ if (process.argv.includes('--selftest')) {
     ['دفعة بلا إقرار', patchFaults([['a.json', { x: 1 }], ['2026-12-01-b.json', { _review: { humanizer: false } }]]).length, 2],
     ['علامة قالب «غير منطبق» بسبب', patchFaults([['2026-12-01-t.json', { _review: { humanizer: 'غير منطبق: لا نص جديد للقارئ' } }]]).length, 0],
     ['«غير منطبق» بلا سبب', patchFaults([['2026-12-01-t.json', { _review: { humanizer: 'غير منطبق' } }]]).length, 1],
+    ['بندان غير منطبقين يُذكران في السطر الأخير', naText([['a', null, true], ['b', null, false], ['c', null, true]]), '، منها 2 غير منطبق'],
+    ['لا غير منطبق: لا إضافة', naText([['a', null, false]]), ''],
     ['دفعة قبل بدء الشرط', patchFaults([['2026-11-22-batch1.json', { x: 1 }]]).length, 0],
   ];
   let bad = 0; for (const [n, got, want] of cases) { const p = got === want; if (!p) bad++; console.log(`${p ? '✓' : '✗'} ${n}`); }
@@ -49,7 +54,8 @@ if (process.argv.includes('--selftest')) {
 const { CONFIG } = await import('./_config.mjs'); // بلا alaa.config.json يرفض هنا (رمز 2): الحزمة لم تُركَّب
 const { siteUrl } = await import('./_site-url.mjs');
 const run = (f, args = []) => spawnSync(process.execPath, [join(HERE, f), ...args], { encoding: 'utf8', timeout: 900000 });
-const rows = []; const add = (name, fault, note = '') => { rows.push([name, fault]); console.log(`${fault ? '✗' : '✓'} ${name}${fault ? ` — ${fault}` : note ? ` · ${note}` : ''}`); };
+// na: بند صفره لا يثبت شيئاً (0 دفعة/0 صفحة): «○ غير منطبق» لا ✓ ولا ✗، ويُذكر في السطر الأخير (24 نوفمبر 2026)
+const rows = []; const add = (name, fault, note = '', na = false) => { rows.push([name, fault, na]); console.log(`${na ? '○' : fault ? '✗' : '✓'} ${name}${na ? ` — غير منطبق: ${note}` : fault ? ` — ${fault}` : note ? ` · ${note}` : ''}`); };
 const last = (s, re) => (s.split('\n').filter((l) => re.test(l)).pop() ?? '').trim();
 console.log(`━━ إتمام حزمة علاء على ${siteUrl()} (وضع ${CONFIG.mode})`);
 
@@ -61,7 +67,7 @@ const v = existsSync('content-plan/verify-live.json') ? JSON.parse(readFileSync(
 add('التحقق الحي بعد آخر نشر (verify-live)', certFault(v, siteUrl()));
 const m = run('index-sitemap.mjs', ['--dry']); add('الخريطة الحية = المحلية (index-sitemap --dry)', m.status === 0 ? null : last(m.stdout + m.stderr, /⛔/) || `رمز ${m.status}`);
 const dir = 'content-plan/patches'; const pf = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => { try { return [f, JSON.parse(readFileSync(join(dir, f), 'utf8'))]; } catch { return [f, null]; } }) : [];
-const pfl = patchFaults(pf); add('كل دفعة تحسين بإقرار مراجعة humanizer', pfl.length ? pfl.slice(0, 3).join('؛ ') : null, `${pf.length} دفعة`);
+const pfl = patchFaults(pf); add('كل دفعة تحسين بإقرار مراجعة humanizer', pfl.length ? pfl.slice(0, 3).join('؛ ') : null, pf.length ? `${pf.length} دفعة` : 'لا دفعات', pf.length === 0);
 // التشابه بحزم: الصفحات المعدّلة أو المنشورة خلال 28 يوماً (دفعات + تواريخ الصفحات) لا تشبه صفحة أخرى في الموقع
 // ولا تشارك جملة مع مواقع صاحبه الأخرى. الفاحصان حارسان في check-all أيضاً؛ هنا يُذكر كل منهما بنداً بدليله.
 const day = (f) => f.slice(0, 10);
@@ -73,12 +79,15 @@ add('لا جملة مشتركة مع مواقع صاحب الموقع الأخر
 const GAP_SINCE = '2026-11-24';
 const needBrief = [...new Set(pf.filter(([f, j]) => /^\d{4}-\d{2}-\d{2}/.test(f) && day(f) >= GAP_SINCE && !j?._template).flatMap(([, j]) => Object.keys(j ?? {}).filter((k) => !k.startsWith('_'))).map((k) => k.split('/').pop()))];
 const noBrief = needBrief.filter((s) => { const f = `content-plan/briefs/${s}.md`; return !existsSync(f) || !readFileSync(f, 'utf8').includes('الناقص في صفحتنا'); });
-add('موجز «الناقص» لكل صفحة في دفعة (serp-brief --page)', noBrief.length ? `${noBrief.length} صفحة بلا موجز: ${noBrief.slice(0, 4).join('، ')}` : null, `${needBrief.length} صفحة`);
-const gs = spawnSync('git', ['status', '--porcelain', '--untracked-files=no'], { encoding: 'utf8' });
-add('لا تعديلات غير محفوظة في git', gs.status !== 0 ? 'ليس مستودع git' : gs.stdout.trim() ? `${gs.stdout.trim().split('\n').length} ملفاً معدّلاً بلا commit` : null);
+add('موجز «الناقص» لكل صفحة في دفعة (serp-brief --page)', noBrief.length ? `${noBrief.length} صفحة بلا موجز: ${noBrief.slice(0, 4).join('، ')}` : null, needBrief.length ? `${needBrief.length} صفحة` : 'لا صفحات', needBrief.length === 0);
+const gs = spawnSync('git', ['-c', 'core.quotepath=false', 'status', '--porcelain', '--untracked-files=no'], { encoding: 'utf8' });
+// مخرجات البناء المتتبَّعة بالخطأ (.next وdist…) ليست تعديلات محتوى: لا تُعدّ (unlockaccounts، 24 نوفمبر 2026)؛ gitIgnoreDirty في الإعداد يضيف غيرها
+const BUILD = new RegExp(`^"?(${['.next', '.astro', '.open-next', '.alaa-dist', 'node_modules', CONFIG.dist, ...(CONFIG.gitIgnoreDirty ?? [])].filter(Boolean).map((x) => String(x).replace(/[.*+?^$(){}|[\]\\]/g, '\\$&').replace(/\/$/, '')).join('|')})/`);
+const dirty = gs.stdout.split('\n').filter(Boolean).map((l) => l.slice(3)).filter((f) => !BUILD.test(f));
+add('لا تعديلات غير محفوظة في git', gs.status !== 0 ? 'ليس مستودع git' : dirty.length ? `${dirty.length} ملفاً معدّلاً بلا commit (مثل ${dirty[0]})` : null);
 if (CONFIG.stateFile) { const { localDay } = await import('./apply-patch.mjs'); const t = existsSync(CONFIG.stateFile) ? readFileSync(CONFIG.stateFile, 'utf8') : '';
   add('سطر اليوم في ملف الحالة (stateFile)', t.includes(localDay()) ? null : `لا ${localDay()} في ${CONFIG.stateFile}`); }
 
-const bad = rows.filter(([, f]) => f);
-console.log(bad.length ? `\n✗ غير مكتمل: ${bad.length} من ${rows.length} بنداً ناقصاً. لا تقل «اكتمل» قبل أن يصير هذا الأمر أخضر.` : `\n✓ مكتمل: ${rows.length} من ${rows.length} بنداً. التالي: برومبت «تدقيق-بعد-العمل.md» بوكيل مستقل.`);
+const bad = rows.filter(([, f]) => f); const naTxt = naText(rows);
+console.log(bad.length ? `\n✗ غير مكتمل: ${bad.length} من ${rows.length} بنداً ناقصاً${naTxt}. لا تقل «اكتمل» قبل أن يصير هذا الأمر أخضر.` : `\n✓ مكتمل: ${rows.length} بنداً${naTxt}. التالي: برومبت «تدقيق-بعد-العمل.md» بوكيل مستقل.`);
 process.exit(bad.length ? 1 : 0);

@@ -41,8 +41,11 @@ await send('Page.enable'); await send('Emulation.setDeviceMetricsOverride', { wi
 const MEASURE = `(() => { const r = (e) => e.getBoundingClientRect(); const inProse = (e) => !!e.closest('p, li, td, th, dd, figcaption, blockquote, aside[role=note]');
   const small = [...document.querySelectorAll('a, button, [role=button], input, select')].filter((e) => { const b = r(e); return b.width > 2 && b.height > 2 && (b.height < 40 || b.width < 40) && !inProse(e) /* ≤2px = مخفي بصرياً مثل رابط التخطي */ && getComputedStyle(e).visibility !== 'hidden'; }).map((e) => (e.textContent || e.getAttribute('aria-label') || e.tagName).trim().slice(0, 30) + ' ' + Math.round(r(e).width) + 'x' + Math.round(r(e).height));
   const tables = [...document.querySelectorAll('table')].filter((t) => Math.round(r(t).width) > Math.round(r(t.parentElement).width) + 1 && getComputedStyle(t.parentElement).overflowX !== 'auto' && getComputedStyle(t.parentElement).overflowX !== 'scroll').length;
-  const h1 = document.querySelector('h1'); const hero = h1 ? h1.closest('section, header, div') : null;
-  return { overflowX: document.documentElement.scrollWidth > innerWidth + 1, scrollW: document.documentElement.scrollWidth, small, tables, h1Lines: h1 ? Math.round(r(h1).height / parseFloat(getComputedStyle(h1).lineHeight)) : null, heroRatio: hero ? +(r(hero).height / innerHeight).toFixed(2) : null }; })()`;
+  // الهيرو فعلي فقط إن حوى صورة/فيديو كبيراً (≥120px) أو خلفية (صورة/تدرّج) تغطي نصفه فأكثر: صفحة نصية بلا هيرو لا تُحكم بنسبة (tikorax /articles أعطت 22.8، 24 نوفمبر 2026)
+  const big = (x, h) => r(x).height >= 0.5 * r(h).height && r(x).width >= 0.5 * r(h).width;
+  const hasMedia = (h) => [...h.querySelectorAll('img, video, picture, svg, canvas')].some((m) => r(m).height >= 120 && r(m).width >= 120) || [h, ...h.querySelectorAll('*')].some((x) => getComputedStyle(x).backgroundImage !== 'none' && big(x, h));
+  const h1 = document.querySelector('h1'); const hero = h1 ? (h1.closest('section, header') || h1.closest('div')) : null; // القسم لا أقرب div: الصورة تُجاور النص لا تحتويه (24 نوفمبر 2026)
+  return { overflowX: document.documentElement.scrollWidth > innerWidth + 1, scrollW: document.documentElement.scrollWidth, small, tables, h1Lines: h1 ? Math.round(r(h1).height / parseFloat(getComputedStyle(h1).lineHeight)) : null, heroRatio: hero && hasMedia(hero) ? +(r(hero).height / innerHeight).toFixed(2) : null }; })()`;
 const issues = []; let checked = 0;
 for (const u of PAGES) {
   if ((await fetch(`http://127.0.0.1:${port}${u}`)).status !== 200) { issues.push(`${u} :: الصفحة غير موجودة في dist`); continue; }

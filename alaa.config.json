@@ -43,11 +43,23 @@
     "noindex": null,
     "layers": [],
     "articlePrefix": "/",
-    "servicePrefix": "/__none__/"
+    "servicePrefix": "/__none__/",
+    "keywordSources": {
+      "/": [
+        "src/content/decision.ts",
+        "src/content/extra.ts",
+        "src/content/kidney.ts",
+        "src/content/law.ts",
+        "src/content/liver.ts",
+        "src/content/prices.ts",
+        "src/content/survival.ts",
+        "src/content/wave2.ts"
+      ]
+    }
   },
   "_limits": {
-    "check-h1-keyword": "غير منطبق: وضع dist يرجع loadContent فارغاً، والتصدير هنا اسمه PAGES لا ARTICLES. لا يُعدّ نجاحاً.",
-    "check-cannibalization": "غير مُثبت على هذا الموقع: في وضع dist يأخذ الكلمة من meta keywords، والبناء لا يطبعها، فلا يمكن أن يفشل. والوظيفة مغطّاة بآلية أقوى: src/content/index.ts يُفشل البناء نفسه عند تكرار أي keyword بين صفحتين.",
+    "check-h1-keyword": "فُعِّل في 24 نوفمبر 2026 بـkeywordSources. كان يفحص صفر صفحة.",
+    "check-cannibalization": "فُعِّل في 24 نوفمبر 2026 بـkeywordSources بعد تحديث الحزمة (289808f). كان أعمى في وضع dist لغياب meta keywords.",
     "check-page-quality": "أحمر أصلاً (54 ثغرة حقيقية: صفحات بلا رابط خارجي موثوق). استشاري لا يحجب، وإصلاحه يحتاج دفعات متتالية.",
     "_audited": "وثّقها المدقق المستقل في 24 نوفمبر 2026."
   }

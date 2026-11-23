@@ -10,8 +10,21 @@ import { CONFIG } from './_config.mjs';
 const MIN_INBOUND = Number(process.env.MIN_INBOUND || 2), MIN_MONEY = CONFIG.minMoney;
 const MONEY = CONFIG.moneyPages;
 const all = pages(); const urls = new Set(all.map((p) => p.url));
+// صناديق الروابط القالبية في الإعداد (linkBoxes): tikorax يضع «من الموضوع نفسه» في <div> لا <aside> فكان يُحسب متناً (24 نوفمبر 2026)
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function dropByClass(h, cls) { // العنصر الحامل للصنف حتى إغلاقه المتوازن (div داخل div)
+  const re = new RegExp(`<([a-z][a-z0-9]*)\\b[^>]*\\bclass="(?:[^"]*\\s)?${esc(cls)}(?:\\s[^"]*)?"[^>]*>`, 'i');
+  for (let m; (m = h.match(re));) {
+    const tag = new RegExp(`<(/?)${m[1]}\\b[^>]*>`, 'gi'); tag.lastIndex = m.index + m[0].length; let depth = 1, end = h.length;
+    for (let t; depth && (t = tag.exec(h));) { depth += t[1] ? -1 : 1; if (!depth) end = t.index + t[0].length; }
+    h = h.slice(0, m.index) + ' ' + h.slice(end);
+  }
+  return h;
+}
+const dropBoxes = (h) => (CONFIG.linkBoxes ?? []).reduce((s, b) => b.startsWith('.') ? dropByClass(s, b.slice(1))
+  : s.replace(new RegExp(`<h([2-6])\\b[^>]*>\\s*${esc(b)}\\s*</h\\1>\\s*<(ul|ol)\\b[\\s\\S]*?</\\2>`, 'g'), ' '), h);
 const body = (html) => {
-  const art = html.match(/<article[\s\S]*?<\/article>/)?.[0] ?? html.match(/<main[\s\S]*?<\/main>/)?.[0] ?? '';
+  const art = dropBoxes(html.match(/<article[\s\S]*?<\/article>/)?.[0] ?? html.match(/<main[\s\S]*?<\/main>/)?.[0] ?? '');
   // فقرة «ضمن قسم … الدليل الشامل» قالبية على كل مقال (كالتنقل)، فلا تدخل في عدّ المراسي
   return art.replace(/<aside(?![^>]*للتوسع)[\s\S]*?<\/aside>/g, ' ').replace(/<nav[\s\S]*?<\/nav>/g, ' ').replace(/<p[^>]*>ضمن قسم[\s\S]*?<\/p>/g, ' ');
 };

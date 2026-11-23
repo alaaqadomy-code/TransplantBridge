@@ -30,11 +30,26 @@ export function pages() {
 }
 /** كلمة كل مقال من مصدره (content.keywordSources: بادئة رابط ← ملفات TS فيها slug ثم حقل الكلمة content.keywordField، افتراضياً primaryKeyword أو keyword). */
 const KW_RE = () => new RegExp(String.raw`slug:\s*"([^"]+)"[\s\S]{0,1500}?(?:` + (CONFIG.content?.keywordField ?? 'primaryKeyword|keyword') + String.raw`):\s*"([^"]+)"`, 'g');
+// ملفات .md/.mdx أو مجلد منها (24 نوفمبر 2026، tafseeljo: الكلمة في frontmatter فكان check-h1-keyword يفحص صفراً):
+// الـslug من حقل slug في frontmatter وإلا من اسم الملف، والكلمة من أول حقل في keywordField (primaryKeyword ثم keyword).
+const MD = /\.mdx?$/;
+const fmKeyword = (src, file) => {
+  const fm = src.match(/^\uFEFF?---\r?\n([\s\S]*?)\r?\n---/)?.[1]; if (!fm) return null;
+  const field = (k) => fm.match(new RegExp(`^${k}:[ \\t]*["']?(.*?)["']?[ \\t]*$`, 'm'))?.[1]?.trim() || null;
+  const kw = (CONFIG.content?.keywordField ?? 'primaryKeyword|keyword').split('|').map(field).find(Boolean);
+  return kw ? [field('slug') ?? file.replace(/\\/g, '/').split('/').pop().replace(MD, ''), kw] : null;
+};
 export function keywordMap() {
-  const map = new Map();
+  const map = new Map(), end = CONFIG.trailingSlash ? '/' : ''; // روابط بشرطة أخيرة تطابق مسارات pages()
   for (const [prefix, files] of Object.entries(CONFIG.content?.keywordSources ?? {})) for (const f of files) {
     if (!existsSync(f)) { console.error(`✗ keywordSources: لا ملف ${f}`); process.exit(1); }
-    for (const m of readFileSync(f, 'utf8').matchAll(KW_RE())) map.set(`${prefix}${m[1]}`, m[2]);
+    if (statSync(f).isDirectory() || MD.test(f)) {
+      for (const file of statSync(f).isDirectory() ? readdirSync(f).filter((e) => MD.test(e)).map((e) => join(f, e)) : [f]) {
+        const r = fmKeyword(readFileSync(file, 'utf8'), file); if (r) map.set(`${prefix}${r[0]}${end}`, r[1]);
+      }
+      continue;
+    }
+    for (const m of readFileSync(f, 'utf8').matchAll(KW_RE())) map.set(`${prefix}${m[1]}${end}`, m[2]);
   }
   return map;
 }

@@ -33,6 +33,9 @@ export const DEFAULTS = {
   liveAssets: [],
   bannedLive: [],
   anchorBoxes: null,
+  // صناديق روابط قالبية خارج <aside>/<nav> تُستثنى من «المتن» في check-internal-links (24 نوفمبر 2026، tikorax: «من الموضوع نفسه»
+  // داخل <div> كان يضخّم الوارد إلى 13.9). ".صنف" = العنصر الحامل للصنف كاملاً؛ وغير ذلك = نص عنوان الصندوق (h2–h6) مع القائمة التي تليه
+  linkBoxes: [],
   typosPaths: ['src'], // مصادر المحتوى لفاحص الأخطاء العربية (md/mdx/ts/astro)
   trailingSlash: false, // روابط الموقع بشرطة أخيرة («/x/») تُقارن بها صفحات x/index.html
   // موقع متعدد اللغات: بادئة الرابط ← [lang, dir]، مثل {"/en": ["en","ltr"], "/ar": ["ar","rtl"]}. null = عربي فقط (ar/rtl)
