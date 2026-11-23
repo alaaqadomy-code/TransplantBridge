@@ -31,9 +31,10 @@
     "/robots.txt"
   ],
   "bannedLive": [
-    "نضمن",
     "AggregateRating",
-    "مضمونة"
+    "aggregateRating",
+    "احجز استشارة",
+    "احجز موعدك"
   ],
   "anchorBoxes": null,
   "content": {
