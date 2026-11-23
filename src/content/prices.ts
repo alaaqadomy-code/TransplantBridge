@@ -52,7 +52,7 @@ export const LIVER_PRICES: PriceRow[] = [
     observed: "24 أكتوبر 2026",
   },
   {
-    range: "تبدأ من 45,000 دولار",
+    range: "45,000 دولار فأكثر",
     source: "MediGence",
     url: "https://medigence.com/ar/packages/liver-transplant/turkey",
     observed: "24 أكتوبر 2026",
@@ -82,7 +82,7 @@ export const KIDNEY_PRICES: PriceRow[] = [
     observed: "11 أبريل 2025 (تاريخ الصفحة) · رُصد 24 أكتوبر 2026",
   },
   {
-    range: "تبدأ من 16,000 دولار",
+    range: "16,000 دولار فأكثر",
     source: "Vaidam Health",
     url: "https://www.vaidam.com/ar/cost/kidney-transplant/turkey",
     observed: "24 أكتوبر 2026",
@@ -95,7 +95,7 @@ export const KIDNEY_PRICES: PriceRow[] = [
     observed: "30 أبريل 2026 (تاريخ الصفحة) · رُصد 24 أكتوبر 2026",
   },
   {
-    range: "تبدأ من 60,000 دولار",
+    range: "60,000 دولار فأكثر",
     source: "MediGence — مستشفى ميديبول ميجا",
     url: "https://medigence.com/hospitals/transplants/kidney-transplant/turkey",
     observed: "24 أكتوبر 2026",
@@ -121,8 +121,18 @@ export const COUNTRY_KIDNEY: { country: string; range: string }[] = [
 export const COUNTRY_SOURCE = {
   name: "Safak Medical",
   observed: "25 أكتوبر 2026",
-  note:
-    "الجدولان أعلاه منقولان عن Safak Medical كما نشرتهما، ولم نتحقق من مصدر أرقامها ولا من طريقة حسابها.",
+  /**
+   * تنبيه جدول مقارنة الدول، بصياغة لكل عضو.
+   *
+   * كان نصاً واحداً، فرصده فاحص `check-similarity` في حزمة علاء جملةً مشتركة
+   * بين `/kidney-transplant-turkey` و`/liver-transplant-turkey` يوم 23 نوفمبر
+   * 2026. والتشابه بين صفحتين معدَّلتين حديثاً حاجب للنشر، فصار لكل صفحة
+   * تنبيهها. المعنى واحد: الأرقام من جهة واحدة لم نتحقق منها.
+   */
+  noteFor: (organ: "liver" | "kidney"): string =>
+    organ === "kidney"
+      ? "أرقام هذا الجدول كلها من Safak Medical وحدها، نقلناها كما نشرتها ولم نتحقق من رقم منها بأنفسنا. وجهةٌ واحدة تقارن عشر دول رقمٌ يُقرأ بتحفّظ، فاطلب من كل مركز عرضه المكتوب."
+      : "نقلنا هذا الجدول عن Safak Medical بلفظه، ولم نرجع إلى مصادر أرقام الدول الأخرى فيه. فاتخذه مؤشراً على ترتيب الدول لا على سعرٍ تدفعه، والسعر الذي يلزمك عرضٌ مكتوب من المستشفى.",
 };
 
 /** بنود تُستثنى عادةً — مجمَّعة مما تذكره المصادر نفسها */

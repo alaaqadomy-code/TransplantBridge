@@ -158,7 +158,7 @@ const REVIEW_LABEL: Record<string, string> = {
                     </table>
                   </div>
                   <p class="mt-4 text-[0.8125rem] leading-relaxed text-ink-400">
-                    {COUNTRY_SOURCE.note} رُصد: {COUNTRY_SOURCE.observed}.
+                    {COUNTRY_SOURCE.noteFor(s.priceTable === "countryKidney" ? "kidney" : "liver")} رُصد: {COUNTRY_SOURCE.observed}.
                   </p>
                 </figure>
               )}

@@ -23,8 +23,11 @@ const { title, description, path, jsonLd, noindex } = Astro.props;
 <html lang={SITE.lang} dir={SITE.dir}>
   <head>
     <Seo title={title} description={description} path={path} jsonLd={jsonLd} noindex={noindex} />
+    {/* preload لخط العناوين وحده (ملفان): الـLCP نصّ H1، وقاعدة web.dev تحصر
+        preload في الخطوط الحرجة. خط المتن أربعة ملفات، فكان المجموع 6 preload
+        والحدّ 3 (فاحص الأداء، 23 نوفمبر 2026). ويُحمَّل بعدها بـfont-display. */}
     <Font cssVariable="--font-display" preload />
-    <Font cssVariable="--font-body" preload />
+    <Font cssVariable="--font-body" />
     <Analytics />
   </head>
 

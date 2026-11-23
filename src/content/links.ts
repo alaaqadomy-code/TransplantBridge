@@ -30,6 +30,20 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   // ── محور الكبد ───────────────────────────────────────────────────────────
   "liver-transplant": [
     {
+      at: "من أين يأتي الكبد: متبرع حيّ أم متوفى؟",
+      to: "transplant-hospitals-turkey",
+      before: "واختيار المركز أثقل في النتيجة من اختيار الدولة، ومعاييره في ",
+      anchor: "كيف تختار مستشفى الزراعة",
+      after: ".",
+    },
+    {
+      at: "من هو المرشّح لزرع الكبد؟",
+      to: "transplant-cost",
+      before: "والنطاقات المنشورة لكلفتها، منسوبةً لجهاتها وبتاريخ رصدها، في ",
+      anchor: "كم تكلفة زرع الكبد",
+      after: ".",
+    },
+    {
       at: "متى يصبح زرع الكبد ضرورياً؟",
       to: "liver-transplant-cancer",
       before: "ومن الحالات التي تُطرح فيها الزراعة علاجاً لا إنقاذاً فقط ",
@@ -82,6 +96,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
 
   "liver-donation": [
     {
+      at: "ماذا يحدث للمتبرع بعد العملية؟",
+      to: "liver-transplant-turkey",
+      before: "وما ينتظر المتبرع في المركز التركي تحديداً، من مستندات وإقامة، في ",
+      anchor: "مسار زرع الكبد في تركيا",
+      after: ".",
+    },
+    {
       at: "لماذا التبرع بالكبد ممكن أصلاً؟",
       to: "liver-transplant",
       before: "وما يحدث في الجهة المقابلة — جانب المريض المتلقي — تشرحه صفحة ",
@@ -120,6 +141,20 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
 
   "liver-donor-requirements": [
     {
+      at: "شرط حرية القرار",
+      to: "liver-transplant-turkey",
+      before: "وما يُطلب من المتبرع عملياً عند بوابة المستشفى التركي في ",
+      anchor: "زرع الكبد في تركيا خطوة بخطوة",
+      after: ".",
+    },
+    {
+      at: "موانع شائعة تستبعد المتبرع",
+      to: "transplant-cost",
+      before: "وتقييم المتبرع وعمليته وإقامته كلها بنود تدخل الفاتورة، وتفصيلها في ",
+      anchor: "ما يشمله عرض السعر",
+      after: ".",
+    },
+    {
       at: "من هو متبرع الكبد المؤهَّل؟",
       to: "liver-donation",
       before: "وللصورة من جهة المتبرع نفسه — لماذا هو ممكن أصلاً وكيف يتم خطوة بخطوة — انظر ",
@@ -130,7 +165,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "الشرط الطبي: صحة المتبرع",
       to: "living-donor-liver-transplant",
       before: "وكيف يُقسَّم الكبد بين المتبرع والمريض، وكم يتجدد لكلٍّ منهما، مشروح في ",
-      anchor: "زراعة الكبد من متبرع حي",
+      anchor: "كيف يتجدد الكبد بعد التبرع",
       after: ".",
     },
     {
@@ -192,7 +227,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "لماذا هي الخيار العملي للمريض الأجنبي؟",
       to: "liver-transplant-turkey",
       before: "وما يترتب على ذلك عملياً من مستندات وإجراءات في ",
-      anchor: "زرع الكبد في تركيا",
+      anchor: "إجراءات الزراعة في تركيا",
       after: ".",
     },
     {
@@ -227,6 +262,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
 
   "liver-transplant-success-rate": [
     {
+      at: "أول سؤال: نجاح لمن؟ بقاء المريض أم بقاء العضو؟",
+      to: "liver-transplant-turkey",
+      before: "ومن يدرس تركيا تحديداً يجد شروطها ومستنداتها في ",
+      anchor: "شروط زرع الكبد في تركيا",
+      after: ".",
+    },
+    {
       at: "ما الذي لن تجده هنا — ولماذا",
       to: "liver-transplant",
       before: "ومن يقرأ هذه الأرقام قبل أن يفهم العملية نفسها يقرأها بلا سياق؛ وما يحدث فيها وما بعدها مشروح في صفحة ",
@@ -255,7 +297,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "متى تصبح الزراعة هي الخيار؟",
       to: "kidney-transplant-turkey",
       before: "وإن كنت تدرس السفر فصفحة ",
-      anchor: "زراعة الكلى في تركيا",
+      anchor: "مسار الزراعة في تركيا",
       after: " تبدأ من السؤال الذي يسبق كل شيء: هل معك متبرع؟",
     },
     {
@@ -296,6 +338,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   ],
 
   "kidney-donation": [
+    {
+      at: "ماذا بعد التبرع؟",
+      to: "kidney-transplant-turkey",
+      before: "ومن كان المريض سيُزرع في تركيا فعلى المتبرع أن يقرأ ",
+      anchor: "ما تطلبه تركيا من المتبرع",
+      after: " قبل أن يحجز تذكرة.",
+    },
     {
       at: "كيف يمكن العيش بكلية واحدة؟",
       to: "kidney-donor-risks",
@@ -352,7 +401,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "رحلة المتبرع خطوة بخطوة",
       to: "kidney-transplant-turkey",
       before: "والمسار الكامل للمريض والمتبرع معاً، بالمستندات والتأشيرة، في ",
-      anchor: "زراعة الكلى في تركيا",
+      anchor: "الزراعة في المراكز التركية",
       after: ".",
     },
     {
@@ -396,6 +445,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   ],
 
   "kidney-transplant-success-rate": [
+    {
+      at: "بقاء المريض أم بقاء العضو؟",
+      to: "kidney-transplant-turkey",
+      before: "ورقم المركز الذي ستُزرع فيه هو ما يعنيك، ومعايير اختياره في ",
+      anchor: "زراعة الكلى في تركيا",
+      after: ".",
+    },
     {
       at: "بقاء المريض أم بقاء العضو؟",
       to: "immunosuppressants-after-transplant",
@@ -445,6 +501,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
 
   "repeat-kidney-transplant": [
     {
+      at: "ما الذي يختلف عن الزراعة الأولى؟",
+      to: "transplant-cost",
+      before: "وكلفة الزراعة الثانية كلفة الأولى نفسها، والنطاقات المنشورة في ",
+      anchor: "نطاقات تكلفة الزراعة",
+      after: ".",
+    },
+    {
       at: "متى تُطرح إعادة الزراعة؟",
       to: "kidney-transplant",
       before: "ومن لم يمرّ بعد بالزراعة الأولى فالأساس كله في ",
@@ -477,6 +540,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   // ── عنقود القرار والوجهة ─────────────────────────────────────────────────
   "best-country-kidney-transplant": [
     {
+      at: "المعيار الثاني: خبرة المركز لا شهرة الدولة",
+      to: "kidney-transplant-turkey",
+      before: "وتركيا أكثر ما يُسأل عنه بين هذه الدول، وتفصيل مسارها في ",
+      anchor: "المسار التركي لزراعة الكلى",
+      after: ".",
+    },
+    {
       at: "المعيار الأول وأهمها: القانون وصلة القرابة",
       to: "paired-exchange",
       before: "ومن فروق القوانين التي تُغفل: هل تسمح الدولة بـ",
@@ -494,7 +564,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "المعيار الثالث: ماذا يحدث بعد أن تعود؟",
       to: "after-kidney-transplant",
       before: "وما تحتاجه فعلاً في هذه المرحلة مفصَّل في ",
-      anchor: "فترة العزل بعد زراعة الكلى",
+      anchor: "الحياة بعد زراعة الكلى",
       after: ".",
     },
     {
@@ -730,6 +800,13 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
 
   "transplant-elderly": [
     {
+      at: "٣. ما الذي يُدقَّق فيه عند كبار السن تحديداً؟",
+      to: "transplant-hospitals-turkey",
+      before: "وخبرة المركز في الأعمار المتقدمة تحديداً سؤال تطرحه عليه، ومعايير التقييم كلها في ",
+      anchor: "معايير اختيار المركز",
+      after: ".",
+    },
+    {
       at: "٤. هل تختلف النتائج؟",
       to: "kidney-transplant-success-rate",
       before: "ولقراءة الأرقام المنشورة قراءةً صحيحة انظر ",
@@ -753,6 +830,20 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
   ],
 
   "dialysis-vs-transplant": [
+    {
+      at: "٣. متى تكون الزراعة قبل الغسيل خياراً؟",
+      to: "kidney-transplant-turkey",
+      before: "ومن حسم الأمر للزراعة وكانت تركيا وجهته يبدأ من ",
+      anchor: "شرط المتبرع في تركيا",
+      after: "، فهو الذي يحسم جدوى المسار كله.",
+    },
+    {
+      at: "٢. مقارنة صريحة",
+      to: "transplant-cost",
+      before: "والكلفة أحد وجوه هذه الموازنة: ",
+      anchor: "تكلفة زراعة الكلى في تركيا",
+      after: " تشرح لماذا تتناقض الأرقام المنشورة أربعة أضعاف لنفس العملية.",
+    },
     {
       at: "١. ما الذي يفعله كل خيار؟",
       to: "kidney-transplant",
@@ -795,7 +886,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "٤. العلاج الجسري: الانتظار ليس فراغاً",
       to: "liver-transplant-turkey",
       before: "ومع متبرع حيّ يقصر الانتظار كثيراً، وتفصيل ذلك في ",
-      anchor: "زرع الكبد في تركيا",
+      anchor: "المسار التركي لزرع الكبد",
       after: ".",
     },
     {
@@ -812,7 +903,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "كيف ينطبق شرط التجدد على الكبد والكلى؟",
       to: "living-donor-liver-transplant",
       before: "وتفصيل تجدد الكبد عملياً في صفحة ",
-      anchor: "زراعة الكبد من متبرع حي",
+      anchor: "تجدّد الكبد بعد أخذ الفصّ",
       after: ".",
     },
     {
@@ -929,7 +1020,7 @@ export const INLINE_LINKS: Record<string, InlineLink[]> = {
       at: "متى يُسمح بالحمل؟ وما الذي يُقيَّم قبله",
       to: "after-kidney-transplant",
       before: "ويُقاس استقرار الوظيفة بما هو مفصَّل في ",
-      anchor: "فترة العزل بعد زراعة الكلى",
+      anchor: "استقرار وظيفة الكلية المزروعة",
       after: ".",
     },
   ],

@@ -1,0 +1,76 @@
+{
+  "_note": "سجل الدفعة. وضع الحزمة هنا dist، فـapply-patch لا يكتب في المحتوى: التعديلات طُبِّقت يدوياً في مصدر الموقع (src/content و src/pages و src/layouts) وهذا الملف سجلّها للقياس بعد 28 يوماً.",
+  "_review": {
+    "humanizer": true,
+    "date": "2026-11-23",
+    "corrected": [
+      "تباين مصطنع وخاتمة رنانة في organ-trafficking-warning: «ليس تشديداً إدارياً… تسدّ عليه الباب من أوله» صار سبباً مباشراً",
+      "تمهيد قبل المعلومة في رابط التكلفة من liver-transplant: «ومن يسأل عن المال قبل أي شيء» حُذف",
+      "حشو في رابط التكلفة من repeat-kidney-transplant: «ولا تنقص عنها» تكرار للشطر الأول",
+      "تباين ملتوٍ في رابط التكلفة من liver-donor-requirements: «بنود في الفاتورة لا خارجها» صار «كلها بنود تدخل الفاتورة»"
+    ],
+    "kept": [
+      "التباينات التي تصحّح اعتقاداً يحمله القارئ فعلاً: «لا رقم مركز بعينه ولا رقمك أنت»، «لا من عندنا ولا هو وعد»",
+      "العناوين العريضة في قسم القانون: كل واحد يحمل رقم مادة قانونية، فهو معلومة لا زخرفة، وهو نمط الموقع القائم"
+    ],
+    "verified": "لم تُغيَّر المراجعة أي رقم ولا اسم مصدر ولا رقم مادة قانونية. وصفر شرطة طويلة في النص الجديد."
+  },
+  "_why": "أول دفعة بعد تركيب حزمة علاء (23 نوفمبر 2026). كانت الحرّاس حمراء بثلاثة فواحص، وهي حاجبة للنشر.",
+  "_gates_before": {
+    "check-claims": "7 مطابقات، كلها إنذارات كاذبة مصنَّفة بالسياق",
+    "check-similarity": "4 أزواج، 23 جملة مكررة",
+    "check-performance": "6 preload للخطوط والحدّ 3",
+    "check-title-desc": "7 أوصاف تحت 120 حرفاً",
+    "check-internal-links": "4 صفحات مال تحت الحدّ 8، و3 مراسٍ مهيمنة",
+    "check-touch-targets": "هيرو /404 بـ1.11 من الشاشة، و5 أهداف لمس 29px في الرئيسية"
+  },
+  "_gates_after": {
+    "check-all": "خضراء (10 حرّاس)",
+    "check-claims": "0",
+    "check-similarity": "0 بلا أي استثناء في similarityAllow",
+    "check-performance": "2 preload",
+    "check-title-desc": "0",
+    "check-internal-links": "صفحات المال 8 لكل واحدة، 0 مرساة مهيمنة",
+    "check-touch-targets": "0"
+  },
+  "pages": {
+    "organ-trafficking-warning": {
+      "_what": "المادة 12/2 والمادة 12/11 أُعيدت صياغتهما بزاوية الاتجار بدل نقل LAW حرفياً (كانت 4 جمل مشتركة مع kidney-donor-requirements). و«يَضمن لك القبول» صار «يزعم أنه يَضمن»، فالوسيط يزعم ولا يضمن، وهو أصحّ تحريرياً ويُعفيه فاحص الادعاءات."
+    },
+    "liver-donor-requirements": {
+      "_what": "lawSectionLiver أُعيدت صياغته كاملاً بزاوية متبرع الكبد: أربع مواد بألفاظنا لا بنقل LAW، وسطر إسناد خاص يقول صراحةً إن الصياغة ليست ترجمة رسمية. وسؤال «التبرع لغير قريب» أُعيدت صياغته. ورابط جديد إلى transplant-cost وآخر إلى liver-transplant-turkey."
+    },
+    "kidney-transplant-turkey": {
+      "_what": "ملاحظة الشرط القانوني أُعيدت صياغتها (كانت مشتركة مع صفحة الكبد). ووصف الصفحة من 116 إلى 130 حرفاً. وثلاثة روابط واردة جديدة من dialysis-vs-transplant و kidney-transplant-success-rate و best-country و kidney-donation."
+    },
+    "liver-transplant-turkey": {
+      "_what": "ملاحظة الشرط القانوني أُعيدت صياغتها. وتنبيه جدول الدول صار noteFor('liver') بصياغة خاصة. والوصف من 119 إلى 134 حرفاً. وروابط واردة جديدة من liver-donor-requirements و liver-transplant-success-rate و liver-donation."
+    },
+    "kidney-transplant-success-rate": {
+      "_what": "readFirst('kidney') و noTurkishRegistry('kidney') و TAIL.kidney بصياغة الكلى بدل ثوابت مشتركة (كانت 8 جمل مشتركة مع صفحة الكبد). واسم السجل صار «فصل الكلى من التقرير السنوي…» فيختلف أول عشر كلمات. ورابط جديد إلى kidney-transplant-turkey."
+    },
+    "liver-transplant-success-rate": {
+      "_what": "readFirst('liver') و noTurkishRegistry('liver') و TAIL.liver بصياغة الكبد. واسم السجل «فصل الكبد في التقرير السنوي…». ورابط جديد إلى liver-transplant-turkey."
+    },
+    "transplant-cost": {
+      "_what": "تنبيه جدول الدول صار noteFor('kidney'). وأربعة روابط واردة جديدة من dialysis-vs-transplant و liver-transplant و liver-donor-requirements و repeat-kidney-transplant."
+    },
+    "transplant-hospitals-turkey": {
+      "_what": "رابطان واردان جديدان من liver-transplant و transplant-elderly."
+    },
+    "kidney-transplant": {
+      "_what": "الوصف من 117 إلى 128 حرفاً."
+    },
+    "kidney-donation": {
+      "_what": "الوصف من 110 إلى 127 حرفاً. ورابط جديد إلى kidney-transplant-turkey."
+    },
+    "about": { "_what": "الوصف من 111 إلى 141 حرفاً." },
+    "privacy": { "_what": "الوصف من 116 إلى 144 حرفاً." },
+    "request-evaluation": { "_what": "الوصف من 110 إلى 129 حرفاً." },
+    "index": { "_what": "رابطا cta رُفعا إلى min-h-2.5rem (كانا 29px والحدّ 40px)." },
+    "404": { "_what": "حشو الجوال خُفِّض: الهيرو كان 1.11 من ارتفاع الشاشة بعرض 375." },
+    "_sitewide": {
+      "_what": "preload لخط العناوين وحده في Layout.astro (كان الخطان، فستة ملفات preload والحدّ 3). وستة مراسٍ نُوّعت في links.ts لرفع الهيمنة عن ثلاثة أهداف."
+    }
+  }
+}
