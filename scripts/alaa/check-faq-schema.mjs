@@ -13,11 +13,12 @@ for (const { url, html } of all) {
   const schema = [];
   for (const b of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
     let j; try { j = JSON.parse(b[1]); } catch { continue; }
-    for (const n of j['@graph'] ?? [j]) if (n['@type'] === 'FAQPage') for (const q of n.mainEntity ?? []) schema.push(text(q.name ?? ''));
+    for (const n of [].concat(j).flatMap((x) => x?.['@graph'] ?? [x])) if ([].concat(n?.['@type']).includes('FAQPage')) for (const q of n.mainEntity ?? []) schema.push(text(q.name ?? ''));
   }
-  if (!shown.length && !schema.length) continue;
+  // <summary> بلا «؟» (زر «أضف تفاصيل الرحلة» في نموذج) ليس سؤالاً: صفحة كهذه بلا FAQPage ليست مخالفة (jordangrandway، 23 نوفمبر 2026)
+  if (!asked.length && !schema.length) continue;
   withFaq++; questions += schema.length;
-  if (!schema.length) errors.push(`${url} :: ${shown.length} سؤال ظاهر بلا FAQPage`);
+  if (!schema.length) errors.push(`${url} :: ${asked.length} سؤال ظاهر بلا FAQPage`);
   else {
     for (const q of schema) if (!shown.some((s) => s.includes(q)) && !body.includes(q)) errors.push(`${url} :: سؤال في السكيما غير ظاهر «${q.slice(0, 50)}»`);
     for (const s of asked) if (!schema.some((q) => s.includes(q) || q.includes(s))) errors.push(`${url} :: سؤال ظاهر خارج السكيما «${s.slice(0, 50)}»`);

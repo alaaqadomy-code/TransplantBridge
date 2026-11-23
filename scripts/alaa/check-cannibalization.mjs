@@ -13,7 +13,7 @@ const words = (s) => new Set(norm(s).split(' ').filter((w) => w.length > 1 && !S
 const jac = (a, b) => { const i = [...a].filter((x) => b.has(x)).length; return i / (a.size + b.size - i || 1); };
 const { articlePrefix: AP, servicePrefix: SP } = CONFIG.content;
 // وضع الفحص فقط: الكلمة من أول <meta keywords> والعنوان من <title> في البناء
-const fromDist = async () => { const { pages, isContent, keywordMap } = await import('./_dist.mjs'); const KM = keywordMap(); return pages().filter((p) => !p.noindex && isContent(p.url)).map((p) => { const kws = (p.html.match(/name="keywords"\s+content="([^"]*)"/)?.[1] ?? '').split(',').map((k) => k.trim()).filter(Boolean); const kw = KM.get(p.url) ?? kws[0] ?? ''; return { url: p.url, kw, title: p.html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '', kws: kws.length ? kws : kw ? [kw] : [] }; }); };
+const fromDist = async () => { const { pages, isContent, keywordMap } = await import('./_dist.mjs'); const KM = keywordMap(); return pages().filter((p) => !p.noindex && isContent(p.url)).map((p) => { const kws = (p.html.match(/name="keywords"\s+content="([^"]*)"/)?.[1] ?? '').split(/[,،]/).map((k) => k.trim()).filter(Boolean); const kw = KM.get(p.url) ?? kws[0] ?? ''; return { url: p.url, kw, title: p.html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '', kws: kws.length ? kws : kw ? [kw] : [] }; }); };
 const items = [...(isFull() ? [...ARTICLES.filter((a) => !NOINDEX_SLUGS.includes(a.slug)).map((a) => ({ url: `${AP}${a.slug}`, kw: a.keyword, title: a.title, kws: a.keywords })),
   ...SERVICES.map((s) => ({ url: `${SP}${s.slug}`, kw: s.keyword, title: s.h1, kws: s.keywords }))] : await fromDist())]
   .map((x) => ({ ...x, p: norm(x.kw), tw: words(x.title), ks: new Set(x.kws.map(norm)) }));

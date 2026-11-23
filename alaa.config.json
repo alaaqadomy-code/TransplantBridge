@@ -20,7 +20,7 @@
   "minMoney": 8,
   "h1Exempt": "^/(404|404/)$",
   "claimsProfile": "generic",
-  "selftestPage": "/kidney-donor-requirements",
+  "selftestPage": "/kidney-donor-requirements.html",
   "touchGroups": [],
   "typosPaths": [
     "src"
@@ -44,5 +44,11 @@
     "layers": [],
     "articlePrefix": "/",
     "servicePrefix": "/__none__/"
+  },
+  "_limits": {
+    "check-h1-keyword": "غير منطبق: وضع dist يرجع loadContent فارغاً، والتصدير هنا اسمه PAGES لا ARTICLES. لا يُعدّ نجاحاً.",
+    "check-cannibalization": "غير مُثبت على هذا الموقع: في وضع dist يأخذ الكلمة من meta keywords، والبناء لا يطبعها، فلا يمكن أن يفشل. والوظيفة مغطّاة بآلية أقوى: src/content/index.ts يُفشل البناء نفسه عند تكرار أي keyword بين صفحتين.",
+    "check-page-quality": "أحمر أصلاً (54 ثغرة حقيقية: صفحات بلا رابط خارجي موثوق). استشاري لا يحجب، وإصلاحه يحتاج دفعات متتالية.",
+    "_audited": "وثّقها المدقق المستقل في 24 نوفمبر 2026."
   }
 }

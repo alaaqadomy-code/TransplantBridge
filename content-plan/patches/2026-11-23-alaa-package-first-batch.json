@@ -1,5 +1,14 @@
 {
-  "_note": "سجل الدفعة. وضع الحزمة هنا dist، فـapply-patch لا يكتب في المحتوى: التعديلات طُبِّقت يدوياً في مصدر الموقع (src/content و src/pages و src/layouts) وهذا الملف سجلّها للقياس بعد 28 يوماً.",
+  "_note": "سجل الدفعة. وضع الحزمة هنا dist، فـapply-patch لا يكتب في المحتوى: التعديلات طُبِّقت يدوياً في مصدر الموقع (src/content و src/pages و src/layouts) وهذا الملف سجلّها ليقرأه measure.mjs بعد 28 يوماً. الصفحات مفاتيح عليا لأن measure.mjs يأخذ Object.keys ويستثني ما يبدأ بشرطة سفلية.",
+
+  "_violation": {
+    "_why_here": "وثّقها المدقق المستقل في 24 نوفمبر 2026. تُكتب ولا تُخفى: التعديلات نُفِّذت ونُشرت فعلاً، وتقسيمها الآن إلى ملفات بتواريخ مختلفة تزويرٌ للتاريخ لا التزام.",
+    "batch_size": "15 صفحة في دفعة واحدة، والحدّ 5. لم تمسكها البوابة لأن الوضع dist والتطبيق يدوي، ولأن الصيغة الأولى غلّفت الصفحات داخل مفتاح pages فعدّها batchGate صفحةً واحدة.",
+    "28_day_rule": "ثلاث صفحات على الأقل عُدّل نصّها مرتين في ثلاثة أيام: kidney-transplant-success-rate و liver-transplant-success-rate و liver-donor-requirements (في 20 نوفمبر ضمن commit debb0ef و15bc1d8، ثم في 23 نوفمبر ضمن 62a1123). والقاعدة ألا تُمسّ صفحة عُدّلت خلال 28 يوماً.",
+    "consequence": "نتيجة القياس بعد 28 يوماً لا تُقرأ على أنها أثر دفعة واحدة: الصفحات الثلاث تحمل أثر تعديلين متتاليين. ولا تُمسّ هذه الصفحات قبل قياسها.",
+    "context": "الدفعة لم تُبنَ على ثغرة من SERP بل على تخضير حرّاس حاجبة للنشر (تشابه وادعاءات وأداء)، بأمر صاحب الموقع بعد تقرير فحص. ولا مجلد content-plan/briefs لأن GAP_SINCE في check-done يبدأ من 24 نوفمبر 2026."
+  },
+
   "_review": {
     "humanizer": true,
     "date": "2026-11-23",
@@ -13,9 +22,10 @@
       "التباينات التي تصحّح اعتقاداً يحمله القارئ فعلاً: «لا رقم مركز بعينه ولا رقمك أنت»، «لا من عندنا ولا هو وعد»",
       "العناوين العريضة في قسم القانون: كل واحد يحمل رقم مادة قانونية، فهو معلومة لا زخرفة، وهو نمط الموقع القائم"
     ],
-    "verified": "لم تُغيَّر المراجعة أي رقم ولا اسم مصدر ولا رقم مادة قانونية. وصفر شرطة طويلة في النص الجديد."
+    "verified": "لم تُغيَّر المراجعة أي رقم ولا اسم مصدر ولا رقم مادة قانونية. وصفر شرطة طويلة في النص الجديد.",
+    "fixed_after_audit": "المدقق المستقل وجد أن استثناء المادة 12/2 («وإن شُخِّص المرض بعد الزواج فلا يُشترط مضيّ السنتين») وكلمة «ضمناً» ضاعا عند الاستغناء عن ${LAW.kinship}. أُعيدا في 24 نوفمبر 2026 بصياغة تخصّ كل صفحة: law.ts و wave2.ts و decision.ts في موضعين."
   },
-  "_why": "أول دفعة بعد تركيب حزمة علاء (23 نوفمبر 2026). كانت الحرّاس حمراء بثلاثة فواحص، وهي حاجبة للنشر.",
+
   "_gates_before": {
     "check-claims": "7 مطابقات، كلها إنذارات كاذبة مصنَّفة بالسياق",
     "check-similarity": "4 أزواج، 23 جملة مكررة",
@@ -33,44 +43,42 @@
     "check-internal-links": "صفحات المال 8 لكل واحدة، 0 مرساة مهيمنة",
     "check-touch-targets": "0"
   },
-  "pages": {
-    "organ-trafficking-warning": {
-      "_what": "المادة 12/2 والمادة 12/11 أُعيدت صياغتهما بزاوية الاتجار بدل نقل LAW حرفياً (كانت 4 جمل مشتركة مع kidney-donor-requirements). و«يَضمن لك القبول» صار «يزعم أنه يَضمن»، فالوسيط يزعم ولا يضمن، وهو أصحّ تحريرياً ويُعفيه فاحص الادعاءات."
-    },
-    "liver-donor-requirements": {
-      "_what": "lawSectionLiver أُعيدت صياغته كاملاً بزاوية متبرع الكبد: أربع مواد بألفاظنا لا بنقل LAW، وسطر إسناد خاص يقول صراحةً إن الصياغة ليست ترجمة رسمية. وسؤال «التبرع لغير قريب» أُعيدت صياغته. ورابط جديد إلى transplant-cost وآخر إلى liver-transplant-turkey."
-    },
-    "kidney-transplant-turkey": {
-      "_what": "ملاحظة الشرط القانوني أُعيدت صياغتها (كانت مشتركة مع صفحة الكبد). ووصف الصفحة من 116 إلى 130 حرفاً. وثلاثة روابط واردة جديدة من dialysis-vs-transplant و kidney-transplant-success-rate و best-country و kidney-donation."
-    },
-    "liver-transplant-turkey": {
-      "_what": "ملاحظة الشرط القانوني أُعيدت صياغتها. وتنبيه جدول الدول صار noteFor('liver') بصياغة خاصة. والوصف من 119 إلى 134 حرفاً. وروابط واردة جديدة من liver-donor-requirements و liver-transplant-success-rate و liver-donation."
-    },
-    "kidney-transplant-success-rate": {
-      "_what": "readFirst('kidney') و noTurkishRegistry('kidney') و TAIL.kidney بصياغة الكلى بدل ثوابت مشتركة (كانت 8 جمل مشتركة مع صفحة الكبد). واسم السجل صار «فصل الكلى من التقرير السنوي…» فيختلف أول عشر كلمات. ورابط جديد إلى kidney-transplant-turkey."
-    },
-    "liver-transplant-success-rate": {
-      "_what": "readFirst('liver') و noTurkishRegistry('liver') و TAIL.liver بصياغة الكبد. واسم السجل «فصل الكبد في التقرير السنوي…». ورابط جديد إلى liver-transplant-turkey."
-    },
-    "transplant-cost": {
-      "_what": "تنبيه جدول الدول صار noteFor('kidney'). وأربعة روابط واردة جديدة من dialysis-vs-transplant و liver-transplant و liver-donor-requirements و repeat-kidney-transplant."
-    },
-    "transplant-hospitals-turkey": {
-      "_what": "رابطان واردان جديدان من liver-transplant و transplant-elderly."
-    },
-    "kidney-transplant": {
-      "_what": "الوصف من 117 إلى 128 حرفاً."
-    },
-    "kidney-donation": {
-      "_what": "الوصف من 110 إلى 127 حرفاً. ورابط جديد إلى kidney-transplant-turkey."
-    },
-    "about": { "_what": "الوصف من 111 إلى 141 حرفاً." },
-    "privacy": { "_what": "الوصف من 116 إلى 144 حرفاً." },
-    "request-evaluation": { "_what": "الوصف من 110 إلى 129 حرفاً." },
-    "index": { "_what": "رابطا cta رُفعا إلى min-h-2.5rem (كانا 29px والحدّ 40px)." },
-    "404": { "_what": "حشو الجوال خُفِّض: الهيرو كان 1.11 من ارتفاع الشاشة بعرض 375." },
-    "_sitewide": {
-      "_what": "preload لخط العناوين وحده في Layout.astro (كان الخطان، فستة ملفات preload والحدّ 3). وستة مراسٍ نُوّعت في links.ts لرفع الهيمنة عن ثلاثة أهداف."
-    }
+
+  "organ-trafficking-warning": {
+    "_what": "المادة 12/2 والمادة 12/11 أُعيدت صياغتهما بزاوية الاتجار بدل نقل LAW حرفياً (كانت 4 جمل مشتركة مع kidney-donor-requirements). و«يَضمن لك القبول» صار «يزعم أنه يَضمن»، فالوسيط يزعم ولا يضمن، وهو أصحّ تحريرياً ويُعفيه فاحص الادعاءات. وأُعيد استثناء السنتين في 24 نوفمبر."
+  },
+  "liver-donor-requirements": {
+    "_what": "lawSectionLiver أُعيدت صياغته كاملاً بزاوية متبرع الكبد: أربع مواد بألفاظنا لا بنقل LAW، وسطر إسناد يقول صراحةً إن الصياغة ليست ترجمة رسمية. وسؤال «التبرع لغير قريب» أُعيدت صياغته. ورابط جديد إلى transplant-cost وآخر إلى liver-transplant-turkey. وأُعيد استثناء السنتين وكلمة «ضمناً» في 24 نوفمبر."
+  },
+  "kidney-transplant-turkey": {
+    "_what": "ملاحظة الشرط القانوني أُعيدت صياغتها (كانت مشتركة مع صفحة الكبد). والوصف من 116 إلى 130 حرفاً. وأربعة روابط واردة جديدة من dialysis-vs-transplant و kidney-transplant-success-rate و best-country و kidney-donation."
+  },
+  "liver-transplant-turkey": {
+    "_what": "ملاحظة الشرط القانوني أُعيدت صياغتها. وتنبيه جدول الدول صار noteFor('liver'). والوصف من 119 إلى 134 حرفاً. وثلاثة روابط واردة جديدة من liver-donor-requirements و liver-transplant-success-rate و liver-donation."
+  },
+  "kidney-transplant-success-rate": {
+    "_what": "readFirst('kidney') و noTurkishRegistry('kidney') و TAIL.kidney بصياغة الكلى بدل ثوابت مشتركة (كانت 8 جمل مشتركة مع صفحة الكبد). واسم السجل صار «فصل الكلى من التقرير السنوي…» فيختلف أول عشر كلمات. ورابط جديد إلى kidney-transplant-turkey.",
+    "_warning": "عُدّلت أيضاً في 20 نوفمبر (نشر أرقام البقاء). القياس يحمل أثر تعديلين."
+  },
+  "liver-transplant-success-rate": {
+    "_what": "readFirst('liver') و noTurkishRegistry('liver') و TAIL.liver بصياغة الكبد. واسم السجل «فصل الكبد في التقرير السنوي…». ورابط جديد إلى liver-transplant-turkey.",
+    "_warning": "عُدّلت أيضاً في 20 نوفمبر (نشر أرقام البقاء). القياس يحمل أثر تعديلين."
+  },
+  "transplant-cost": {
+    "_what": "تنبيه جدول الدول صار noteFor('kidney'). وأربعة روابط واردة جديدة من dialysis-vs-transplant و liver-transplant و liver-donor-requirements و repeat-kidney-transplant."
+  },
+  "transplant-hospitals-turkey": {
+    "_what": "رابطان واردان جديدان من liver-transplant و transplant-elderly."
+  },
+  "kidney-transplant": { "_what": "الوصف من 117 إلى 128 حرفاً." },
+  "kidney-donation": { "_what": "الوصف من 110 إلى 127 حرفاً. ورابط جديد إلى kidney-transplant-turkey." },
+  "about": { "_what": "الوصف من 111 إلى 141 حرفاً." },
+  "privacy": { "_what": "الوصف من 116 إلى 144 حرفاً." },
+  "request-evaluation": { "_what": "الوصف من 110 إلى 129 حرفاً." },
+  "index": { "_what": "رابطا cta رُفعا إلى min-h-2.5rem (كانا 29px والحدّ 40px)." },
+  "404": { "_what": "حشو الجوال خُفِّض: الهيرو كان 1.11 من ارتفاع الشاشة بعرض 375." },
+
+  "_sitewide": {
+    "_what": "preload لخط العناوين وحده في Layout.astro (كان الخطان، فستة ملفات preload والحدّ 3). وثمانية مراسٍ نُوّعت في links.ts لرفع الهيمنة عن ثلاثة أهداف."
   }
 }

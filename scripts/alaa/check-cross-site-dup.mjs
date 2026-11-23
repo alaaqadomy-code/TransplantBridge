@@ -30,8 +30,9 @@ if (!others.length) { console.error('لا مواقع للمقارنة'); process
 const walk = (d, o = []) => { for (const e of readdirSync(d)) { if (e === 'node_modules' || e === '.git') continue; const p = join(d, e); statSync(p).isDirectory() ? walk(p, o) : e.endsWith('.html') && o.push(p); } return o; };
 const norm = (s) => s.replace(/[\u064B-\u0652\u0640\u0670]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/[ؤئ]/g, 'ء').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[^\u0621-\u064Aa-zA-Z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
 function sents(site) {
-  // مواقع Next بتصدير ثابت تبني في out لا dist
-  const dist = ['dist', 'out'].map((d) => join(site, d)).find((d) => existsSync(d)); const out = new Set();
+  // مجلد البناء من alaa.config.json الموقع إن وُجد (tikorax: .alaa-dist)، وإلا dist أو out (Next بتصدير ثابت)
+  let cfgDist = null; try { cfgDist = JSON.parse(readFileSync(join(site, 'alaa.config.json'), 'utf8')).dist; } catch {}
+  const dist = [cfgDist, 'dist', 'out'].filter(Boolean).map((d) => join(site, d)).find((d) => existsSync(d)); const out = new Set();
   if (!dist) return null;
   for (const f of walk(dist)) addSents(readFileSync(f, 'utf8'), out);
   return out;

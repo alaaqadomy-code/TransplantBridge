@@ -25,7 +25,7 @@ const cover = (h1, kw) => { const have = words(h1), want = words(kw); return wan
 const fails = []; let ok = 0, checked = 0;
 for (const { url, html, noindex } of pages()) {
   if (noindex || EXEMPT.test(url)) continue;
-  const kw = KW.get(url) ?? html.match(/name="keywords" content="([^"،]+)/)?.[1]?.trim();
+  const kw = KW.get(url) ?? html.match(/name="keywords" content="([^"،,]+)/)?.[1]?.trim();
   const h1 = text(html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? '');
   if (!kw || !h1) { fails.push({ url, h1, kw: kw ?? '(بلا كلمة)', r: 0 }); continue; }
   checked++; const r = cover(h1, kw); if (r >= 1) ok++; else fails.push({ url, h1, kw, r });

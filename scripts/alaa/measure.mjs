@@ -37,11 +37,15 @@ const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String
 const r = await searchAnalytics(gscProperty(new URL(siteUrl()).host), { dimensions: ['page', 'query'] });
 const dp = (u) => { try { return decodeURIComponent(new URL(u).pathname); } catch { return new URL(u).pathname; } }; // مسار مفكوك الترميز (روابط عربية)
 const agg = (rows) => { const m = new Map(); for (const x of rows) { const p = dp(x.keys[0]); const o = m.get(p) ?? { impr: 0, clicks: 0, posW: 0 }; o.impr += x.impressions; o.clicks += x.clicks; o.posW += x.position * x.impressions; m.set(p, o); } return m; };
-const snap = { date: today, period: [r.startDate, r.endDate], rows: r.rows };
+// المجموع وحكم STOP من بُعد الصفحة وحده: جوجل يُخفي الاستعلامات النادرة (anonymized) من صفوف «صفحة+استعلام»،
+// فموقع صغير قد يرجع صفر صف بالاستعلام وظهوره حقيقي (unlockaccounts: 0 صف استعلام، 23 صفحة و49 ظهوراً، 23 نوفمبر 2026).
+// مقارنة الصفحات قبل/بعد تبقى على صفوف «صفحة+استعلام» كاللقطات السابقة، فلا تختلط صيغتان.
+const rp = await searchAnalytics(gscProperty(new URL(siteUrl()).host), { dimensions: ['page'] });
+const snap = { date: today, period: [r.startDate, r.endDate], rows: r.rows, pageTotals: { impressions: rp.rows.reduce((s, x) => s + x.impressions, 0), clicks: rp.rows.reduce((s, x) => s + x.clicks, 0), pages: rp.rows.length } };
 writeFileSync(`${DIR}/${today}.json`, JSON.stringify(snap));
-const total = r.rows.reduce((s, x) => s + x.impressions, 0), clicks = r.rows.reduce((s, x) => s + x.clicks, 0);
-console.log(`لقطة ${today} (${r.startDate} → ${r.endDate}): ${total} ظهور · ${clicks} نقرة · ${agg(r.rows).size} صفحة`);
-if (!r.rows.length) { console.error('✗ صفر صف من GSC'); process.exit(1); }
+const total = snap.pageTotals.impressions, clicks = snap.pageTotals.clicks;
+console.log(`لقطة ${today} (${r.startDate} → ${r.endDate}): ${total} ظهور · ${clicks} نقرة · ${rp.rows.length} صفحة (بُعد الصفحة)${r.rows.length ? '' : ' · كل الاستعلامات مخفية من جوجل (صفر صف بالاستعلام)'}`);
+if (!rp.rows.length && !r.rows.length) console.log('⚠ صفر ظهور في 28 يوماً من GSC (لا صف بالصفحة ولا بالاستعلام): الحكم STOP');
 const stop = total < 100;
 console.log(stop ? '⛔ STOP: أقل من 100 ظهور في 28 يوماً — لا محتوى جديد؛ المشكلة في الطلب/السلطة لا في عدد الصفحات' : '✓ فوق حد STOP (100 ظهور): التوليد مسموح من حيث القاعدة');
 // الصفحات المحسَّنة: كل slug في ملفات الدفعات بتاريخ دفعته من اسم الملف، ومساره الحقيقي (دليل الإجراء /services/، وإلا /blog/)
